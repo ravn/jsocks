@@ -3,5 +3,7 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry excluding="com/runjva/sourceforge/jsocks/helpers/SocksTest.java|com/runjva/sourceforge/jsocks/helpers/SocksUDPEcho.java|com/runjva/sourceforge/jsocks/helpers/TestClient.java" kind="src" path="helpers"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="third-party/slf4j-api-1.5.8.jar"/>
+	<classpathentry kind="lib" path="third-party/slf4j-simple-1.5.8.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
