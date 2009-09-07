@@ -3,6 +3,7 @@ import java.awt.event.*;
 import java.net.*;
 import java.io.*;
 import socks.*;
+import socks.Proxy;
 
 public class SocksEcho extends Frame
                        implements ActionListener, 

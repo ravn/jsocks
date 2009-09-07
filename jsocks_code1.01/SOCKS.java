@@ -3,6 +3,7 @@ import java.io.*;
 import java.net.*;
 import socks.server.*;
 import socks.*;
+import socks.Proxy;
 
 public class SOCKS{
 
