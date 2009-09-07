@@ -5,13 +5,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InterruptedIOException;
 import java.io.OutputStream;
-import java.io.PrintStream;
 import java.io.PushbackInputStream;
 import java.net.ConnectException;
 import java.net.InetAddress;
 import java.net.NoRouteToHostException;
 import java.net.ServerSocket;
 import java.net.Socket;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.runjva.sourceforge.jsocks.server.ServerAuthenticator;
 
@@ -53,7 +55,7 @@ public class ProxyServer implements Runnable {
 	static int iddleTimeout = 180000; // 3 minutes
 	static int acceptTimeout = 180000; // 3 minutes
 
-	static PrintStream log = null;
+	static Logger log = LoggerFactory.getLogger(ProxyServer.class);
 	static Proxy proxy;
 
 	// Public Constructors
@@ -80,19 +82,6 @@ public class ProxyServer implements Runnable {
 
 	// Public methods
 	// ///////////////
-
-	/**
-	 * Set the logging stream. Specifying null disables logging.
-	 */
-	public static void setLog(OutputStream out) {
-		if (out == null) {
-			log = null;
-		} else {
-			log = new PrintStream(out, true);
-		}
-
-		UDPRelayServer.log = log;
-	}
 
 	/**
 	 * Set proxy.
@@ -177,12 +166,12 @@ public class ProxyServer implements Runnable {
 	public void start(int port, int backlog, InetAddress localIP) {
 		try {
 			ss = new ServerSocket(port, backlog, localIP);
-			log("Starting SOCKS Proxy on:"
+			log.info("Starting SOCKS Proxy on:"
 					+ ss.getInetAddress().getHostAddress() + ":"
 					+ ss.getLocalPort());
 			while (true) {
 				final Socket s = ss.accept();
-				log("Accepted from:" + s.getInetAddress().getHostName() + ":"
+				log.info("Accepted from:" + s.getInetAddress().getHostName() + ":"
 						+ s.getPort());
 				final ProxyServer ps = new ProxyServer(auth, s);
 				(new Thread(ps)).start();
@@ -221,7 +210,7 @@ public class ProxyServer implements Runnable {
 				if (auth != null) {
 					auth.endSession();
 				}
-				log("Main thread(client->remote)stopped.");
+				log.info("Main thread(client->remote)stopped.");
 			}
 			break;
 		case ACCEPT_MODE:
@@ -237,7 +226,7 @@ public class ProxyServer implements Runnable {
 				handleException(ioe);
 			} finally {
 				abort();
-				log("Accept thread(remote->client) stopped");
+				log.info("Accept thread(remote->client) stopped");
 			}
 			break;
 		case PIPE_MODE:
@@ -246,13 +235,13 @@ public class ProxyServer implements Runnable {
 			} catch (final IOException ioe) {
 			} finally {
 				abort();
-				log("Support thread(remote->client) stopped");
+				log.info("Support thread(remote->client) stopped");
 			}
 			break;
 		case ABORT_MODE:
 			break;
 		default:
-			log("Unexpected MODE " + mode);
+			log.warn("Unexpected MODE " + mode);
 		}
 	}
 
@@ -264,13 +253,13 @@ public class ProxyServer implements Runnable {
 		try {
 			auth = auth.startSession(sock);
 		} catch (final IOException ioe) {
-			log("Auth throwed exception:" + ioe);
+			log.warn("Auth throwed exception:", ioe);
 			auth = null;
 			return;
 		}
 
 		if (auth == null) { // Authentication failed
-			log("Authentication failed");
+			log.info("Authentication failed");
 			return;
 		}
 
@@ -354,7 +343,7 @@ public class ProxyServer implements Runnable {
 			s = new SocksSocket(proxy, msg.ip, msg.port);
 		}
 
-		log("Connected to " + s.getInetAddress() + ":" + s.getPort());
+		log.info("Connected to " + s.getInetAddress() + ":" + s.getPort());
 
 		if (msg instanceof Socks5Message) {
 			response = new Socks5Message(Proxy.SOCKS_SUCCESS, s
@@ -379,7 +368,7 @@ public class ProxyServer implements Runnable {
 
 		ss.setSoTimeout(acceptTimeout);
 
-		log("Trying accept on " + ss.getInetAddress() + ":" + ss.getLocalPort());
+		log.info("Trying accept on " + ss.getInetAddress() + ":" + ss.getLocalPort());
 
 		if (msg.version == 5) {
 			response = new Socks5Message(Proxy.SOCKS_SUCCESS, ss
@@ -438,7 +427,7 @@ public class ProxyServer implements Runnable {
 		if (msg.ip.getHostAddress().equals("0.0.0.0")) {
 			msg.ip = sock.getInetAddress();
 		}
-		log("Creating UDP relay server for " + msg.ip + ":" + msg.port);
+		log.info("Creating UDP relay server for " + msg.ip + ":" + msg.port);
 		relayServer = new UDPRelayServer(msg.ip, msg.port, Thread
 				.currentThread(), sock, auth);
 
@@ -501,7 +490,7 @@ public class ProxyServer implements Runnable {
 		// Set timeout
 		remote_sock.setSoTimeout(iddleTimeout);
 
-		log("Accepted from " + s.getInetAddress() + ":" + s.getPort());
+		log.info("Accepted from " + s.getInetAddress() + ":" + s.getPort());
 
 		ProxyMessage response;
 
@@ -571,7 +560,7 @@ public class ProxyServer implements Runnable {
 		}
 		mode = ABORT_MODE;
 		try {
-			log("Aborting operation");
+			log.info("Aborting operation");
 			if (remote_sock != null) {
 				remote_sock.close();
 			}
@@ -594,17 +583,11 @@ public class ProxyServer implements Runnable {
 		}
 	}
 
-	static final void log(String s) {
-		if (log != null) {
-			log.println(s);
-			log.flush();
-		}
-	}
 
 	static final void log(ProxyMessage msg) {
-		log("Request version:" + msg.version + "\tCommand: "
+		log.debug("Request version:" + msg.version + "\tCommand: "
 				+ command2String(msg.command));
-		log("IP:" + msg.ip + "\tPort:" + msg.port
+		log.debug("IP:" + msg.ip + "\tPort:" + msg.port
 				+ (msg.version == 4 ? "\tUser:" + msg.user : ""));
 	}
 

@@ -5,11 +5,16 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Hashtable;
 import java.util.Properties;
 import java.util.StringTokenizer;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.runjva.sourceforge.jsocks.protocol.InetRange;
 import com.runjva.sourceforge.jsocks.protocol.Proxy;
@@ -17,6 +22,9 @@ import com.runjva.sourceforge.jsocks.protocol.ProxyServer;
 import com.runjva.sourceforge.jsocks.server.IdentAuthenticator;
 
 public class SOCKS {
+
+	private static final int DEFAULT_LISTENING_PORT = 1080;
+	final private static Logger log = LoggerFactory.getLogger(SOCKS.class);
 
 	static public void usage() {
 		System.out.println("Usage: java SOCKS [inifile1 inifile2 ...]\n"
@@ -26,12 +34,12 @@ public class SOCKS {
 	static public void main(String[] args) {
 
 		String[] file_names;
-		int port = 1080;
+		int port = DEFAULT_LISTENING_PORT;
 		String logFile = null;
 		String host = null;
 
 		final IdentAuthenticator auth = new IdentAuthenticator();
-		OutputStream log = null;
+
 		InetAddress localIP = null;
 
 		if (args.length == 0) {
@@ -80,16 +88,7 @@ public class SOCKS {
 		}
 
 		if (logFile != null) {
-			if (logFile.equals("-")) {
-				log = System.out;
-			} else {
-				try {
-					log = new FileOutputStream(logFile);
-				} catch (final IOException ioe) {
-					System.err.println("Can't open log file " + logFile);
-					return;
-				}
-			}
+			System.err.println("log property not supported anymore.");
 		}
 		if (host != null) {
 			try {
@@ -102,7 +101,6 @@ public class SOCKS {
 
 		inform("Using Ident Authentication scheme:\n" + auth + "\n");
 		final ProxyServer server = new ProxyServer(auth);
-		ProxyServer.setLog(log);
 		server.start(port, 5, localIP);
 	}
 
@@ -265,7 +263,7 @@ public class SOCKS {
 	// /////////////////
 
 	static void inform(String s) {
-		System.out.println(s);
+		log.info(s);
 	}
 
 	static void exit(String msg) {
