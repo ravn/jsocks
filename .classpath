@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry excluding="test/" kind="src" path="jsocks_code1.01"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry excluding="com/runjva/sourceforge/jsocks/helpers/SocksTest.java|com/runjva/sourceforge/jsocks/helpers/SocksUDPEcho.java|com/runjva/sourceforge/jsocks/helpers/TestClient.java" kind="src" path="helpers"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
