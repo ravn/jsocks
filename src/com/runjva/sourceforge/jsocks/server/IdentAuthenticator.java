@@ -140,8 +140,8 @@ public class IdentAuthenticator extends ServerAuthenticatorNone {
 		String s = "";
 
 		for (int i = 0; i < hosts.size(); ++i) {
-			s += "Range:" + hosts.elementAt(i) + "\nUsers:" + userNames(i)
-					+ "\n";
+			s += "(Range:" + hosts.elementAt(i) + "," + //
+					" Users:" + userNames(i) + ") ";
 		}
 		return s;
 	}

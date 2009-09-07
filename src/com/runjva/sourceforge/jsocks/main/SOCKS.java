@@ -99,7 +99,7 @@ public class SOCKS {
 			}
 		}
 
-		inform("Using Ident Authentication scheme:\n" + auth + "\n");
+		inform("Using Ident Authentication scheme: " + auth);
 		final ProxyServer server = new ProxyServer(auth);
 		server.start(port, 5, localIP);
 	}
