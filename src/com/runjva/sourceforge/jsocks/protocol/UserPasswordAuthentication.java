@@ -1,4 +1,4 @@
-package com.runjva.sourceforge.jsocks;
+package com.runjva.sourceforge.jsocks.protocol;
 
 /**
  * SOCKS5 User Password authentication scheme.

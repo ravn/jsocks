@@ -6,8 +6,8 @@ import java.io.OutputStream;
 import java.io.PushbackInputStream;
 import java.net.Socket;
 
-import com.runjva.sourceforge.jsocks.ProxyMessage;
-import com.runjva.sourceforge.jsocks.UDPEncapsulation;
+import com.runjva.sourceforge.jsocks.protocol.ProxyMessage;
+import com.runjva.sourceforge.jsocks.protocol.UDPEncapsulation;
 
 /**
  * An implementation of ServerAuthenticator, which does <b>not</b> do any

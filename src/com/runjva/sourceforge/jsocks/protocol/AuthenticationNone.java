@@ -1,4 +1,4 @@
-package com.runjva.sourceforge.jsocks;
+package com.runjva.sourceforge.jsocks.protocol;
 
 /**
  * SOCKS5 none authentication. Dummy class does almost nothing.

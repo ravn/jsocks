@@ -1,4 +1,4 @@
-package com.runjva.sourceforge.jsocks;
+package com.runjva.sourceforge.jsocks.protocol;
 
 /**
  * Exception thrown by various socks classes to indicate errors with protocol or

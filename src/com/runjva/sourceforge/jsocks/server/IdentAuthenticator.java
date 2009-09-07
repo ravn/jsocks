@@ -9,8 +9,8 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
 
-import com.runjva.sourceforge.jsocks.InetRange;
-import com.runjva.sourceforge.jsocks.ProxyMessage;
+import com.runjva.sourceforge.jsocks.protocol.InetRange;
+import com.runjva.sourceforge.jsocks.protocol.ProxyMessage;
 
 /**
  * An implementation of socks.ServerAuthentication which provides simple

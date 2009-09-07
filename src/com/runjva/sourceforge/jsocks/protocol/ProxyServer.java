@@ -1,4 +1,4 @@
-package com.runjva.sourceforge.jsocks;
+package com.runjva.sourceforge.jsocks.protocol;
 
 import java.io.EOFException;
 import java.io.IOException;

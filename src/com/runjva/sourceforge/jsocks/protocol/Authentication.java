@@ -1,4 +1,4 @@
-package com.runjva.sourceforge.jsocks;
+package com.runjva.sourceforge.jsocks.protocol;
 
 /**
  * The Authentication interface provides for performing method specific

@@ -2,7 +2,7 @@ package com.runjva.sourceforge.jsocks.helpers;
 
 import java.net.Socket;
 
-import com.runjva.sourceforge.jsocks.ProxyServer;
+import com.runjva.sourceforge.jsocks.protocol.ProxyServer;
 import com.runjva.sourceforge.jsocks.server.UserPasswordAuthenticator;
 import com.runjva.sourceforge.jsocks.server.UserValidation;
 

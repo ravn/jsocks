@@ -1,4 +1,4 @@
-package com.runjva.sourceforge.jsocks;
+package com.runjva.sourceforge.jsocks.protocol;
 
 /**
  * This interface provides for datagram encapsulation for SOCKSv5 protocol.

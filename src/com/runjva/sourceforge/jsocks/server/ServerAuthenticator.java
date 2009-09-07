@@ -6,8 +6,8 @@ import java.io.OutputStream;
 import java.net.DatagramPacket;
 import java.net.Socket;
 
-import com.runjva.sourceforge.jsocks.ProxyMessage;
-import com.runjva.sourceforge.jsocks.UDPEncapsulation;
+import com.runjva.sourceforge.jsocks.protocol.ProxyMessage;
+import com.runjva.sourceforge.jsocks.protocol.UDPEncapsulation;
 
 /**
  * Classes implementing this interface should provide socks server with
