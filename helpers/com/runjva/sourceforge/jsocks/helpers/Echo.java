@@ -13,19 +13,19 @@ import java.net.UnknownHostException;
 
 public class Echo implements Runnable {
 
-	private int port;
+	//private int port;
 	private InetAddress peerIp;
 
 	private final Socket ss;
 	private final InputStream in;
 	private final OutputStream out;
 
-	private static final int BUF_SIZE = 1024;
+	//private static final int BUF_SIZE = 1024;
 
 	public Echo(String host, int port, String peerHost, int peerPort)
 			throws IOException, UnknownHostException {
 		this.peerIp = InetAddress.getByName(peerHost);
-		this.port = port;
+		//this.port = port;
 
 		ss = new Socket(host, port, peerIp, peerPort);
 		out = ss.getOutputStream();

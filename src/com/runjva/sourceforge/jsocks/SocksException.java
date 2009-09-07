@@ -6,6 +6,10 @@ package com.runjva.sourceforge.jsocks;
  */
 public class SocksException extends java.io.IOException {
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	/**
 	 * Construct a SocksException with given errorcode.
 	 * <p>
 	 * Tries to look up message which corresponds to this error code.

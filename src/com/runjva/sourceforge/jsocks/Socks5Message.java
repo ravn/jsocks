@@ -180,7 +180,7 @@ class Socks5Message extends ProxyMessage {
 			throw new SocksException(command);
 		}
 
-		final int reserved = di.readUnsignedByte();
+		di.readUnsignedByte();
 		addrType = di.readUnsignedByte();
 
 		byte addr[];

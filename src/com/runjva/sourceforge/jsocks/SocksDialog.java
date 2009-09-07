@@ -31,6 +31,10 @@ import java.awt.event.WindowListener;
 public class SocksDialog extends Dialog implements WindowListener,
 		ItemListener, ActionListener, Runnable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	// GUI components
 	TextField host_text, port_text, user_text, password_text, direct_text;
 	Button add_button, remove_button, cancel_button, ok_button, dismiss_button;
@@ -124,7 +128,7 @@ public class SocksDialog extends Dialog implements WindowListener,
 	public Proxy getProxy() {
 		mode = COMMAND_MODE;
 		pack();
-		show();
+		setVisible(true);
 		return proxy;
 	}
 
@@ -141,10 +145,9 @@ public class SocksDialog extends Dialog implements WindowListener,
 		}
 		mode = COMMAND_MODE;
 		pack();
-		show();
+		setVisible(true);
 		return proxy;
 	}
-
 	// WindowListener Interface
 	// ///////////////////////////////
 	public void windowActivated(java.awt.event.WindowEvent e) {
@@ -439,18 +442,34 @@ public class SocksDialog extends Dialog implements WindowListener,
 		warning_label.invalidate();
 		warning_dialog.setTitle(title);
 		warning_dialog.pack();
-		warning_dialog.show();
+		warning_dialog.setVisible(true);
 	}
 
 	/*
 	 * ======================================================================
-	 * Form: Table: +---+-------+---+---+ | | | | | +---+-------+---+---+ | | |
-	 * +---+-------+-------+ | | | | +---+-------+-------+ | | | |
-	 * +---+-------+-------+ | | | +-----------+-------+ | | | | +---+---+ | | |
-	 * | +-----------+---+---+ | | | | +---+---+---+---+---+ | | | | | |
-	 * +---+---+---+---+---+
+	 * Form: Table: 
 	 */
-
+//          +---+-------+---+---+
+//          |   |       |   |   |
+//          +---+-------+---+---+
+//          |           |       |
+//          +---+-------+-------+
+//          |   |       |       |
+//          +---+-------+-------+
+//          |   |       |       |
+//          +---+-------+-------+
+//          |           |       |
+//          +-----------+-------+
+//          |           |       |
+//          |           +---+---+
+//          |           |   |   |
+//          +-----------+---+---+
+//          |           |   |   |
+//          +---+---+---+---+---+
+//          |   |   |   |   |   |
+//          +---+---+---+---+---+
+//          
+ 
 	void guiInit() {
 		// Some default names used
 		Label label;
