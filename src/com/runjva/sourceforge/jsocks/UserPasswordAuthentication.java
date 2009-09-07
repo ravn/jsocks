@@ -52,19 +52,22 @@ public class UserPasswordAuthentication implements Authentication {
 	public Object[] doSocksAuthentication(int methodId,
 			java.net.Socket proxySocket) throws java.io.IOException {
 
-		if (methodId != METHOD_ID)
+		if (methodId != METHOD_ID) {
 			return null;
+		}
 
-		java.io.InputStream in = proxySocket.getInputStream();
-		java.io.OutputStream out = proxySocket.getOutputStream();
+		final java.io.InputStream in = proxySocket.getInputStream();
+		final java.io.OutputStream out = proxySocket.getOutputStream();
 
 		out.write(request);
-		int version = in.read();
-		if (version < 0)
+		final int version = in.read();
+		if (version < 0) {
 			return null; // Server closed connection
-		int status = in.read();
-		if (status != 0)
+		}
+		final int status = in.read();
+		if (status != 0) {
 			return null; // Server closed connection, or auth failed.
+		}
 
 		return new Object[] { in, out };
 	}
@@ -74,8 +77,8 @@ public class UserPasswordAuthentication implements Authentication {
 
 	/** Convert UserName password in to binary form, ready to be send to server */
 	private void formRequest() {
-		byte[] user_bytes = userName.getBytes();
-		byte[] password_bytes = password.getBytes();
+		final byte[] user_bytes = userName.getBytes();
+		final byte[] password_bytes = password.getBytes();
 
 		request = new byte[3 + user_bytes.length + password_bytes.length];
 		request[0] = (byte) 1;

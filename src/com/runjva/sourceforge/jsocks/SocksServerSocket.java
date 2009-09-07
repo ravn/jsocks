@@ -50,8 +50,9 @@ public class SocksServerSocket extends ServerSocket {
 			throws SocksException, UnknownHostException, IOException {
 
 		super(0);
-		if (p == null)
+		if (p == null) {
 			throw new SocksException(Proxy.SOCKS_NO_PROXY);
+		}
 		// proxy=p;
 		proxy = p.copy();
 		if (proxy.isDirect(host)) {
@@ -92,8 +93,9 @@ public class SocksServerSocket extends ServerSocket {
 			throws SocksException, IOException {
 		super(0);
 
-		if (p == null)
+		if (p == null) {
 			throw new SocksException(Proxy.SOCKS_NO_PROXY);
+		}
 		this.proxy = p.copy();
 
 		if (proxy.isDirect(ip)) {
@@ -111,10 +113,11 @@ public class SocksServerSocket extends ServerSocket {
 		Socket s;
 
 		if (!doing_direct) {
-			if (proxy == null)
+			if (proxy == null) {
 				return null;
+			}
 
-			ProxyMessage msg = proxy.accept();
+			final ProxyMessage msg = proxy.accept();
 			s = msg.ip == null ? new SocksSocket(msg.host, msg.port, proxy)
 					: new SocksSocket(msg.ip, msg.port, proxy);
 			// Set timeout back to 0
@@ -129,8 +132,9 @@ public class SocksServerSocket extends ServerSocket {
 					// got the connection from the right host
 					// Close listenning socket.
 					break;
-				} else
+				} else {
 					s.close(); // Drop all connections from other hosts
+				}
 			}
 
 		}
@@ -146,8 +150,9 @@ public class SocksServerSocket extends ServerSocket {
 	 */
 	public void close() throws IOException {
 		super.close();
-		if (proxy != null)
+		if (proxy != null) {
 			proxy.endSession();
+		}
 		proxy = null;
 	}
 
@@ -172,7 +177,7 @@ public class SocksServerSocket extends ServerSocket {
 		if (localIP == null) {
 			try {
 				localIP = InetAddress.getByName(localHost);
-			} catch (UnknownHostException e) {
+			} catch (final UnknownHostException e) {
 				return null;
 			}
 		}
@@ -197,8 +202,9 @@ public class SocksServerSocket extends ServerSocket {
 	 */
 	public void setSoTimeout(int timeout) throws SocketException {
 		super.setSoTimeout(timeout);
-		if (!doing_direct)
+		if (!doing_direct) {
 			proxy.proxySocket.setSoTimeout(timeout);
+		}
 	}
 
 	// Private Methods

@@ -95,7 +95,7 @@ public class Socks4Proxy extends Proxy implements Cloneable {
 	 * affect this object.
 	 */
 	public Object clone() {
-		Socks4Proxy newProxy = new Socks4Proxy(proxyIP, proxyPort, user);
+		final Socks4Proxy newProxy = new Socks4Proxy(proxyIP, proxyPort, user);
 		newProxy.directHosts = (InetRange) directHosts.clone();
 		newProxy.chainProxy = chainProxy;
 		return newProxy;
@@ -108,7 +108,7 @@ public class Socks4Proxy extends Proxy implements Cloneable {
 	// =================
 
 	protected Proxy copy() {
-		Socks4Proxy copy = new Socks4Proxy(proxyIP, proxyPort, user);
+		final Socks4Proxy copy = new Socks4Proxy(proxyIP, proxyPort, user);
 		copy.directHosts = this.directHosts;
 		copy.chainProxy = chainProxy;
 		return copy;

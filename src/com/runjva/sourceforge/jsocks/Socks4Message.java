@@ -63,16 +63,16 @@ class Socks4Message extends ProxyMessage {
 
 		byte[] addr;
 
-		if (ip != null)
+		if (ip != null) {
 			addr = ip.getAddress();
-		else {
+		} else {
 			addr = new byte[4];
 			addr[0] = addr[1] = addr[2] = addr[3] = 0;
 		}
 		System.arraycopy(addr, 0, msgBytes, 4, 4);
 
 		if (user != null) {
-			byte[] buf = user.getBytes();
+			final byte[] buf = user.getBytes();
 			System.arraycopy(buf, 0, msgBytes, 8, buf.length);
 			msgBytes[msgBytes.length - 1] = 0;
 		}
@@ -92,28 +92,29 @@ class Socks4Message extends ProxyMessage {
 	}
 
 	public void read(InputStream in, boolean clientMode) throws IOException {
-		DataInputStream d_in = new DataInputStream(in);
+		final DataInputStream d_in = new DataInputStream(in);
 		version = d_in.readUnsignedByte();
 		command = d_in.readUnsignedByte();
-		if (clientMode && command != REPLY_OK) {
+		if (clientMode && (command != REPLY_OK)) {
 			String errMsg;
-			if (command > REPLY_OK && command < REPLY_BAD_IDENTD)
+			if ((command > REPLY_OK) && (command < REPLY_BAD_IDENTD)) {
 				errMsg = replyMessage[command - REPLY_OK];
-			else
+			} else {
 				errMsg = "Unknown Reply Code";
+			}
 			throw new SocksException(command, errMsg);
 		}
 		port = d_in.readUnsignedShort();
-		byte[] addr = new byte[4];
+		final byte[] addr = new byte[4];
 		d_in.readFully(addr);
 		ip = bytes2IP(addr);
 		host = ip.getHostName();
 		if (!clientMode) {
 			int b = in.read();
 			// Hope there are no idiots with user name bigger than this
-			byte[] userBytes = new byte[256];
+			final byte[] userBytes = new byte[256];
 			int i = 0;
-			for (i = 0; i < userBytes.length && b > 0; ++i) {
+			for (i = 0; (i < userBytes.length) && (b > 0); ++i) {
 				userBytes[i] = (byte) b;
 				b = in.read();
 			}
@@ -123,8 +124,8 @@ class Socks4Message extends ProxyMessage {
 
 	public void write(OutputStream out) throws IOException {
 		if (msgBytes == null) {
-			Socks4Message msg = new Socks4Message(version, command, ip, port,
-					user);
+			final Socks4Message msg = new Socks4Message(version, command, ip,
+					port, user);
 			msgBytes = msg.msgBytes;
 			msgLength = msg.msgLength;
 		}
@@ -133,10 +134,10 @@ class Socks4Message extends ProxyMessage {
 
 	// Class methods
 	static InetAddress bytes2IP(byte[] addr) {
-		String s = bytes2IPV4(addr, 0);
+		final String s = bytes2IPV4(addr, 0);
 		try {
 			return InetAddress.getByName(s);
-		} catch (UnknownHostException uh_ex) {
+		} catch (final UnknownHostException uh_ex) {
 			return null;
 		}
 	}

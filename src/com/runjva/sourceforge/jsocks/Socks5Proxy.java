@@ -103,7 +103,7 @@ public class Socks5Proxy extends Proxy implements Cloneable {
 	 * @return Previous settings.
 	 */
 	public boolean resolveAddrLocally(boolean doResolve) {
-		boolean old = resolveAddrLocally;
+		final boolean old = resolveAddrLocally;
 		resolveAddrLocally = doResolve;
 		return old;
 	}
@@ -128,8 +128,9 @@ public class Socks5Proxy extends Proxy implements Cloneable {
 	 * @see Authentication
 	 */
 	public boolean setAuthenticationMethod(int methodId, Authentication method) {
-		if (methodId < 0 || methodId > 255)
+		if ((methodId < 0) || (methodId > 255)) {
 			return false;
+		}
 		if (method == null) {
 			// Want to remove a particular method
 			return (authMethods.remove(new Integer(methodId)) != null);
@@ -147,9 +148,10 @@ public class Socks5Proxy extends Proxy implements Cloneable {
 	 * @return Implementation for given method or null, if one was not set.
 	 */
 	public Authentication getAuthenticationMethod(int methodId) {
-		Object method = authMethods.get(new Integer(methodId));
-		if (method == null)
+		final Object method = authMethods.get(new Integer(methodId));
+		if (method == null) {
 			return null;
+		}
 		return (Authentication) method;
 	}
 
@@ -157,7 +159,7 @@ public class Socks5Proxy extends Proxy implements Cloneable {
 	 * Creates a clone of this Proxy.
 	 */
 	public Object clone() {
-		Socks5Proxy newProxy = new Socks5Proxy(proxyIP, proxyPort);
+		final Socks5Proxy newProxy = new Socks5Proxy(proxyIP, proxyPort);
 		newProxy.authMethods = (Hashtable) this.authMethods.clone();
 		newProxy.directHosts = (InetRange) directHosts.clone();
 		newProxy.resolveAddrLocally = resolveAddrLocally;
@@ -172,7 +174,7 @@ public class Socks5Proxy extends Proxy implements Cloneable {
 	// =================
 
 	protected Proxy copy() {
-		Socks5Proxy copy = new Socks5Proxy(proxyIP, proxyPort);
+		final Socks5Proxy copy = new Socks5Proxy(proxyIP, proxyPort);
 		copy.authMethods = this.authMethods; // same Hash, no copy
 		copy.directHosts = this.directHosts;
 		copy.chainProxy = this.chainProxy;
@@ -187,28 +189,30 @@ public class Socks5Proxy extends Proxy implements Cloneable {
 	protected void startSession() throws SocksException {
 		super.startSession();
 		Authentication auth;
-		Socket ps = proxySocket; // The name is too long
+		final Socket ps = proxySocket; // The name is too long
 
 		try {
 
-			byte nMethods = (byte) authMethods.size(); // Number of methods
+			final byte nMethods = (byte) authMethods.size(); // Number of
+																// methods
 
-			byte[] buf = new byte[2 + nMethods]; // 2 is for VER,NMETHODS
+			final byte[] buf = new byte[2 + nMethods]; // 2 is for VER,NMETHODS
 			buf[0] = (byte) version;
 			buf[1] = nMethods; // Number of methods
 			int i = 2;
 
-			Enumeration ids = authMethods.keys();
-			while (ids.hasMoreElements())
+			final Enumeration ids = authMethods.keys();
+			while (ids.hasMoreElements()) {
 				buf[i++] = (byte) ((Integer) ids.nextElement()).intValue();
+			}
 
 			out.write(buf);
 			out.flush();
 
-			int versionNumber = in.read();
+			final int versionNumber = in.read();
 			selectedMethod = in.read();
 
-			if (versionNumber < 0 || selectedMethod < 0) {
+			if ((versionNumber < 0) || (selectedMethod < 0)) {
 				// EOF condition was reached
 				endSession();
 				throw (new SocksException(SOCKS_PROXY_IO_ERROR,
@@ -229,7 +233,8 @@ public class Socks5Proxy extends Proxy implements Cloneable {
 				throw (new SocksException(SOCKS_JUST_ERROR,
 						"Speciefied Authentication not found!"));
 			}
-			Object[] in_out = auth.doSocksAuthentication(selectedMethod, ps);
+			final Object[] in_out = auth.doSocksAuthentication(selectedMethod,
+					ps);
 			if (in_out == null) {
 				// Authentication failed by some reason
 				throw (new SocksException(SOCKS_AUTH_FAILURE));
@@ -242,16 +247,17 @@ public class Socks5Proxy extends Proxy implements Cloneable {
 
 			in = (InputStream) in_out[0];
 			out = (OutputStream) in_out[1];
-			if (in_out.length > 2)
+			if (in_out.length > 2) {
 				udp_encapsulation = (UDPEncapsulation) in_out[2];
+			}
 
-		} catch (SocksException s_ex) {
+		} catch (final SocksException s_ex) {
 			throw s_ex;
-		} catch (UnknownHostException uh_ex) {
+		} catch (final UnknownHostException uh_ex) {
 			throw (new SocksException(SOCKS_PROXY_NO_CONNECT));
-		} catch (SocketException so_ex) {
+		} catch (final SocketException so_ex) {
 			throw (new SocksException(SOCKS_PROXY_NO_CONNECT));
-		} catch (IOException io_ex) {
+		} catch (final IOException io_ex) {
 			// System.err.println(io_ex);
 			throw (new SocksException(SOCKS_PROXY_IO_ERROR, "" + io_ex));
 		}
@@ -263,10 +269,11 @@ public class Socks5Proxy extends Proxy implements Cloneable {
 
 	protected ProxyMessage formMessage(int cmd, String host, int port)
 			throws UnknownHostException {
-		if (resolveAddrLocally)
+		if (resolveAddrLocally) {
 			return formMessage(cmd, InetAddress.getByName(host), port);
-		else
+		} else {
 			return new Socks5Message(cmd, host, port);
+		}
 	}
 
 	protected ProxyMessage formMessage(InputStream in) throws SocksException,

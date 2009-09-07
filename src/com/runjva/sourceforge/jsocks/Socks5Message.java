@@ -50,8 +50,9 @@ class Socks5Message extends ProxyMessage {
 		if (ip == null) {
 			addr = new byte[4];
 			addr[0] = addr[1] = addr[2] = addr[3] = 0;
-		} else
+		} else {
 			addr = ip.getAddress();
+		}
 
 		addrType = addr.length == 4 ? SOCKS_ATYP_IPV4 : SOCKS_ATYP_IPV6;
 
@@ -85,7 +86,7 @@ class Socks5Message extends ProxyMessage {
 		// System.out.println("Doing ATYP_DOMAINNAME");
 
 		addrType = SOCKS_ATYP_DOMAINNAME;
-		byte addr[] = hostName.getBytes();
+		final byte addr[] = hostName.getBytes();
 
 		data = new byte[7 + addr.length];
 		data[0] = (byte) SOCKS_VERSION; // Version
@@ -171,14 +172,15 @@ class Socks5Message extends ProxyMessage {
 		data = null;
 		ip = null;
 
-		DataInputStream di = new DataInputStream(in);
+		final DataInputStream di = new DataInputStream(in);
 
 		version = di.readUnsignedByte();
 		command = di.readUnsignedByte();
-		if (clientMode && command != 0)
+		if (clientMode && (command != 0)) {
 			throw new SocksException(command);
+		}
 
-		int reserved = di.readUnsignedByte();
+		final int reserved = di.readUnsignedByte();
 		addrType = di.readUnsignedByte();
 
 		byte addr[];
@@ -206,10 +208,10 @@ class Socks5Message extends ProxyMessage {
 
 		port = di.readUnsignedShort();
 
-		if (addrType != SOCKS_ATYP_DOMAINNAME && doResolveIP) {
+		if ((addrType != SOCKS_ATYP_DOMAINNAME) && doResolveIP) {
 			try {
 				ip = InetAddress.getByName(host);
-			} catch (UnknownHostException uh_ex) {
+			} catch (final UnknownHostException uh_ex) {
 			}
 		}
 	}
@@ -224,13 +226,13 @@ class Socks5Message extends ProxyMessage {
 		if (data == null) {
 			Socks5Message msg;
 
-			if (addrType == SOCKS_ATYP_DOMAINNAME)
+			if (addrType == SOCKS_ATYP_DOMAINNAME) {
 				msg = new Socks5Message(command, host, port);
-			else {
+			} else {
 				if (ip == null) {
 					try {
 						ip = InetAddress.getByName(host);
-					} catch (UnknownHostException uh_ex) {
+					} catch (final UnknownHostException uh_ex) {
 						throw new SocksException(Proxy.SOCKS_JUST_ERROR);
 					}
 				}
@@ -250,8 +252,9 @@ class Socks5Message extends ProxyMessage {
 	 *             if host can't be resolved.
 	 */
 	public InetAddress getInetAddress() throws UnknownHostException {
-		if (ip != null)
+		if (ip != null) {
 			return ip;
+		}
 
 		return (ip = InetAddress.getByName(host));
 	}
@@ -260,9 +263,9 @@ class Socks5Message extends ProxyMessage {
 	 * Returns string representation of the message.
 	 */
 	public String toString() {
-		String s = "Socks5Message:" + "\n" + "VN   " + version + "\n" + "CMD  "
-				+ command + "\n" + "ATYP " + addrType + "\n" + "ADDR " + host
-				+ "\n" + "PORT " + port + "\n";
+		final String s = "Socks5Message:" + "\n" + "VN   " + version + "\n"
+				+ "CMD  " + command + "\n" + "ATYP " + addrType + "\n"
+				+ "ADDR " + host + "\n" + "PORT " + port + "\n";
 		return s;
 	}
 
@@ -283,7 +286,7 @@ class Socks5Message extends ProxyMessage {
 	 *@return Previous value.
 	 */
 	static public boolean resolveIP(boolean doResolve) {
-		boolean old = doResolveIP;
+		final boolean old = doResolveIP;
 		doResolveIP = doResolve;
 		return old;
 	}

@@ -27,16 +27,19 @@ public class UserPasswordAuthenticator extends ServerAuthenticatorNone {
 	}
 
 	public ServerAuthenticator startSession(Socket s) throws IOException {
-		InputStream in = s.getInputStream();
-		OutputStream out = s.getOutputStream();
+		final InputStream in = s.getInputStream();
+		final OutputStream out = s.getOutputStream();
 
-		if (in.read() != 5)
+		if (in.read() != 5) {
 			return null; // Drop non version 5 messages.
+		}
 
-		if (!selectSocks5Authentication(in, out, METHOD_ID))
+		if (!selectSocks5Authentication(in, out, METHOD_ID)) {
 			return null;
-		if (!doUserPasswordAuthentication(s, in, out))
+		}
+		if (!doUserPasswordAuthentication(s, in, out)) {
 			return null;
+		}
 
 		return new ServerAuthenticatorNone(in, out);
 	}
@@ -46,18 +49,21 @@ public class UserPasswordAuthenticator extends ServerAuthenticatorNone {
 
 	private boolean doUserPasswordAuthentication(Socket s, InputStream in,
 			OutputStream out) throws IOException {
-		int version = in.read();
-		if (version != 1)
+		final int version = in.read();
+		if (version != 1) {
 			return false;
-		int ulen = in.read();
-		if (ulen < 0)
+		}
+		final int ulen = in.read();
+		if (ulen < 0) {
 			return false;
-		byte[] user = new byte[ulen];
+		}
+		final byte[] user = new byte[ulen];
 		in.read(user);
-		int plen = in.read();
-		if (plen < 0)
+		final int plen = in.read();
+		if (plen < 0) {
 			return false;
-		byte[] password = new byte[plen];
+		}
+		final byte[] password = new byte[plen];
 		in.read(password);
 
 		if (validator.isUserValid(new String(user), new String(password), s)) {

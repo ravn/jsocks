@@ -61,13 +61,13 @@ public class TestService implements Runnable {
 	public void run() {
 		try {
 			serve(s, service);
-		} catch (IOException ioe) {
+		} catch (final IOException ioe) {
 			log("Exception:" + ioe);
 			ioe.printStackTrace();
 		}
 		try {
 			s.close();
-		} catch (IOException ioe) {
+		} catch (final IOException ioe) {
 		}
 	}
 
@@ -85,9 +85,11 @@ public class TestService implements Runnable {
 	 */
 	static public int getServiceId(String serviceName) {
 		serviceName = serviceName.toLowerCase();
-		for (int i = 0; i < serviceNames.length; ++i)
-			if (serviceName.equals(serviceNames[i]))
+		for (int i = 0; i < serviceNames.length; ++i) {
+			if (serviceName.equals(serviceNames[i])) {
 				return i;
+			}
+		}
 
 		// Couldn't find one.
 		return -1;
@@ -133,9 +135,9 @@ public class TestService implements Runnable {
 	 *            Socket on which to perform service.
 	 */
 	static public void echo(Socket s) throws IOException {
-		BufferedReader in = new BufferedReader(new InputStreamReader(s
+		final BufferedReader in = new BufferedReader(new InputStreamReader(s
 				.getInputStream()));
-		OutputStream out = s.getOutputStream();
+		final OutputStream out = s.getOutputStream();
 
 		log("Starting \"echo\" on " + s);
 
@@ -157,7 +159,7 @@ public class TestService implements Runnable {
 	 *            Socket on which to perform service.
 	 */
 	static public void discard(Socket s) throws IOException {
-		BufferedReader in = new BufferedReader(new InputStreamReader(s
+		final BufferedReader in = new BufferedReader(new InputStreamReader(s
 				.getInputStream()));
 		log("Starting discard on " + s);
 
@@ -191,10 +193,10 @@ public class TestService implements Runnable {
 	 */
 	static public void chargen(Socket s, long wait_time, long max_wait)
 			throws IOException {
-		byte[] buf = chargenSequence.getBytes();
+		final byte[] buf = chargenSequence.getBytes();
 		int pos = 0;
-		OutputStream out = s.getOutputStream();
-		InputStream in = s.getInputStream();
+		final OutputStream out = s.getOutputStream();
+		final InputStream in = s.getInputStream();
 		s.setSoTimeout(100); // 0.1 ms
 
 		log("Starting \"chargen\" on " + s);
@@ -205,16 +207,19 @@ public class TestService implements Runnable {
 			out.write("\n".getBytes());
 			pos++;
 			try {
-				if (wait_time > max_wait)
+				if (wait_time > max_wait) {
 					break;
+				}
 
 				log("Going to sleep for " + wait_time + " ms.");
-				Thread.currentThread().sleep(wait_time);
+				Thread.currentThread();
+				Thread.sleep(wait_time);
 				wait_time *= 2;
-				if (in.read() < 0)
+				if (in.read() < 0) {
 					break; // Connection closed
-			} catch (InterruptedException ie) {
-			} catch (InterruptedIOException ioe) {
+				}
+			} catch (final InterruptedException ie) {
+			} catch (final InterruptedIOException ioe) {
 			}
 		}
 		log("Chargen finished.");
@@ -238,16 +243,17 @@ public class TestService implements Runnable {
 		int port;
 		int service_id;
 
-		BufferedReader in = new BufferedReader(new InputStreamReader(s
+		final BufferedReader in = new BufferedReader(new InputStreamReader(s
 				.getInputStream()));
-		OutputStream out = s.getOutputStream();
+		final OutputStream out = s.getOutputStream();
 
 		log("Starting \"connect\" on " + s);
 		line = in.readLine();
-		if (line == null)
+		if (line == null) {
 			return; // They closed connection
+		}
 
-		java.util.StringTokenizer st = new java.util.StringTokenizer(line);
+		final java.util.StringTokenizer st = new java.util.StringTokenizer(line);
 		if (st.countTokens() < 2) { // We need at least 'port' and "id"
 			out.write("Expect: port serviceId.\n".getBytes());
 			log("Invalid arguments.");
@@ -256,7 +262,7 @@ public class TestService implements Runnable {
 		try {
 			port = Integer.parseInt(st.nextToken());
 			service_id = Integer.parseInt(st.nextToken());
-		} catch (NumberFormatException nfe) {
+		} catch (final NumberFormatException nfe) {
 			out.write("Expect: port serviceId.\n".getBytes());
 			log("Invalid arguments.");
 			return;
@@ -264,7 +270,7 @@ public class TestService implements Runnable {
 		try {
 			log("Connecting to " + s.getInetAddress() + ":" + port);
 			sock = new Socket(s.getInetAddress(), port);
-		} catch (IOException ioe) {
+		} catch (final IOException ioe) {
 			out
 					.write(("Connect to " + s.getInetAddress() + ":" + port + " failed")
 							.getBytes());
@@ -286,7 +292,7 @@ public class TestService implements Runnable {
 	 */
 	static public void pipe(InputStream in, OutputStream out)
 			throws IOException {
-		byte[] buf = new byte[BUF_SIZE];
+		final byte[] buf = new byte[BUF_SIZE];
 		int bread = 0;
 		while (bread >= 0) {
 			bread = in.read(buf);
@@ -298,8 +304,9 @@ public class TestService implements Runnable {
 	 * Performs logging.
 	 */
 	static synchronized void log(String s) {
-		if (log != null)
+		if (log != null) {
 			log.println(s);
+		}
 	}
 
 }

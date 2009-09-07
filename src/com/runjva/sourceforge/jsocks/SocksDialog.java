@@ -91,21 +91,22 @@ public class SocksDialog extends Dialog implements WindowListener,
 		guiInit();
 		setResizable(false);
 		addWindowListener(this);
-		Component[] comps = getComponents();
+		final Component[] comps = getComponents();
 		for (int i = 0; i < comps.length; ++i) {
-			if (comps[i] instanceof Button)
+			if (comps[i] instanceof Button) {
 				((Button) comps[i]).addActionListener(this);
-			else if (comps[i] instanceof TextField)
+			} else if (comps[i] instanceof TextField) {
 				((TextField) comps[i]).addActionListener(this);
-			else if (comps[i] instanceof Checkbox) {
+			} else if (comps[i] instanceof Checkbox) {
 				((Checkbox) comps[i]).addItemListener(this);
 			}
 		}
 		proxy = init_proxy;
-		if (proxy != null)
+		if (proxy != null) {
 			doInit(proxy);
-		else
+		} else {
 			ir = new InetRange();
+		}
 
 		dismiss_button.addActionListener(this);
 		warning_dialog.addWindowListener(this);
@@ -156,7 +157,7 @@ public class SocksDialog extends Dialog implements WindowListener,
 	}
 
 	public void windowClosing(java.awt.event.WindowEvent e) {
-		Window source = e.getWindow();
+		final Window source = e.getWindow();
 		if (source == this) {
 			onCancel();
 		} else if (source == warning_dialog) {
@@ -177,29 +178,31 @@ public class SocksDialog extends Dialog implements WindowListener,
 	// /////////////////////////
 	public void actionPerformed(ActionEvent ae) {
 
-		Object source = ae.getSource();
+		final Object source = ae.getSource();
 
-		if (source == cancel_button)
+		if (source == cancel_button) {
 			onCancel();
-		else if (source == add_button || source == direct_text)
+		} else if ((source == add_button) || (source == direct_text)) {
 			onAdd();
-		else if (source == remove_button)
+		} else if (source == remove_button) {
 			onRemove();
-		else if (source == dismiss_button)
+		} else if (source == dismiss_button) {
 			onDismiss();
-		else if (source == ok_button || source instanceof TextField)
+		} else if ((source == ok_button) || (source instanceof TextField)) {
 			onOK();
+		}
 	}
 
 	// ItemListener interface
 	// //////////////////////
 	public void itemStateChanged(ItemEvent ie) {
-		Object source = ie.getSource();
+		final Object source = ie.getSource();
 		// System.out.println("ItemEvent:"+source);
-		if (source == socks5radio || source == socks4radio)
+		if ((source == socks5radio) || (source == socks4radio)) {
 			onSocksChange();
-		else if (source == up_check)
+		} else if (source == up_check) {
 			onUPChange();
+		}
 
 	}
 
@@ -213,10 +216,12 @@ public class SocksDialog extends Dialog implements WindowListener,
 
 		if (!initProxy()) {
 			// Check if we have been aborted
-			if (mode != OK_MODE)
+			if (mode != OK_MODE) {
 				return;
-			if (net_thread != Thread.currentThread())
+			}
+			if (net_thread != Thread.currentThread()) {
 				return;
+			}
 
 			mode = COMMAND_MODE;
 			warning_label.setText("Look up failed.");
@@ -225,8 +230,9 @@ public class SocksDialog extends Dialog implements WindowListener,
 		}
 
 		// System.out.println("Done!");
-		while (!warning_dialog.isShowing())
+		while (!warning_dialog.isShowing()) {
 			; /* do nothing */
+		}
 		;
 
 		warning_dialog.dispose();
@@ -268,7 +274,7 @@ public class SocksDialog extends Dialog implements WindowListener,
 
 		try {
 			port = Integer.parseInt(port_text.getText());
-		} catch (NumberFormatException nfe) {
+		} catch (final NumberFormatException nfe) {
 			warn("Proxy port is invalid!");
 			return;
 		}
@@ -286,8 +292,9 @@ public class SocksDialog extends Dialog implements WindowListener,
 			mode = COMMAND_MODE;
 		}
 
-		if (mode == OK_MODE)
+		if (mode == OK_MODE) {
 			dispose();
+		}
 	}
 
 	private void onCancel() {
@@ -297,31 +304,35 @@ public class SocksDialog extends Dialog implements WindowListener,
 	}
 
 	private void onAdd() {
-		String s = direct_text.getText();
+		final String s = direct_text.getText();
 		s.trim();
-		if (s.length() == 0)
+		if (s.length() == 0) {
 			return;
+		}
 		// Check for Duplicate
-		String[] direct_hosts = direct_list.getItems();
-		for (int i = 0; i < direct_hosts.length; ++i)
-			if (direct_hosts[i].equals(s))
+		final String[] direct_hosts = direct_list.getItems();
+		for (int i = 0; i < direct_hosts.length; ++i) {
+			if (direct_hosts[i].equals(s)) {
 				return;
+			}
+		}
 
 		direct_list.add(s);
 		ir.add(s);
 	}
 
 	private void onRemove() {
-		int index = direct_list.getSelectedIndex();
-		if (index < 0)
+		final int index = direct_list.getSelectedIndex();
+		if (index < 0) {
 			return;
+		}
 		ir.remove(direct_list.getItem(index));
 		direct_list.remove(index);
 		direct_list.select(index);
 	}
 
 	private void onSocksChange() {
-		Object selected = socks_group.getSelectedCheckbox();
+		final Object selected = socks_group.getSelectedCheckbox();
 		if (selected == socks4radio) {
 			user_text.setEnabled(true);
 			password_text.setEnabled(false);
@@ -356,8 +367,9 @@ public class SocksDialog extends Dialog implements WindowListener,
 		warning_dialog.dispose();
 		if (mode == OK_MODE) {
 			mode = COMMAND_MODE;
-			if (net_thread != null)
+			if (net_thread != null) {
 				net_thread.interrupt();
+			}
 		}
 	}
 
@@ -365,9 +377,10 @@ public class SocksDialog extends Dialog implements WindowListener,
 		if (p.version == 5) {
 			socks_group.setSelectedCheckbox(socks5radio);
 			onSocksChange();
-			if (((Socks5Proxy) p).getAuthenticationMethod(0) != null)
+			if (((Socks5Proxy) p).getAuthenticationMethod(0) != null) {
 				none_check.setState(true);
-			UserPasswordAuthentication auth = (UserPasswordAuthentication) ((Socks5Proxy) p)
+			}
+			final UserPasswordAuthentication auth = (UserPasswordAuthentication) ((Socks5Proxy) p)
 					.getAuthenticationMethod(2);
 			if (auth != null) {
 				user_text.setText(auth.getUser());
@@ -381,10 +394,11 @@ public class SocksDialog extends Dialog implements WindowListener,
 			user_text.setText(((Socks4Proxy) p).user);
 		}
 		ir = (InetRange) (p.directHosts.clone());
-		String[] direct_hosts = ir.getAll();
+		final String[] direct_hosts = ir.getAll();
 		direct_list.removeAll();
-		for (int i = 0; i < direct_hosts.length; ++i)
+		for (int i = 0; i < direct_hosts.length; ++i) {
 			direct_list.add(direct_hosts[i]);
+		}
 
 		host_text.setText(p.proxyIP.getHostName());
 		port_text.setText("" + p.proxyPort);
@@ -395,14 +409,17 @@ public class SocksDialog extends Dialog implements WindowListener,
 		try {
 			if (socks_group.getSelectedCheckbox() == socks5radio) {
 				proxy = new Socks5Proxy(host, port);
-				if (up_check.getState())
+				if (up_check.getState()) {
 					((Socks5Proxy) proxy).setAuthenticationMethod(2,
 							new UserPasswordAuthentication(user, password));
-				if (!none_check.getState())
+				}
+				if (!none_check.getState()) {
 					((Socks5Proxy) proxy).setAuthenticationMethod(0, null);
-			} else
+				}
+			} else {
 				proxy = new Socks4Proxy(host, port, user);
-		} catch (java.net.UnknownHostException uhe) {
+			}
+		} catch (final java.net.UnknownHostException uhe) {
 			return false;
 		}
 		proxy.directHosts = ir;
@@ -440,7 +457,7 @@ public class SocksDialog extends Dialog implements WindowListener,
 		Container container;
 		Font font;
 
-		GridBagConstraints c = new GridBagConstraints();
+		final GridBagConstraints c = new GridBagConstraints();
 
 		font = new Font("Dialog", Font.PLAIN, 12);
 
@@ -642,7 +659,7 @@ public class SocksDialog extends Dialog implements WindowListener,
 		warning_label = new Label("", Label.CENTER);
 		warning_label.setFont(new Font("Dialog", Font.BOLD, 15));
 
-		Panel p = new Panel();
+		final Panel p = new Panel();
 		p.add(dismiss_button);
 		warning_dialog.add(p, BorderLayout.SOUTH);
 		warning_dialog.add(warning_label, BorderLayout.CENTER);

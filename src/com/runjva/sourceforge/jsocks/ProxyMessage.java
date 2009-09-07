@@ -98,8 +98,9 @@ public abstract class ProxyMessage {
 
 	static final String bytes2IPV4(byte[] addr, int offset) {
 		String hostName = "" + (addr[offset] & 0xFF);
-		for (int i = offset + 1; i < offset + 4; ++i)
+		for (int i = offset + 1; i < offset + 4; ++i) {
 			hostName += "." + (addr[i] & 0xFF);
+		}
 		return hostName;
 	}
 

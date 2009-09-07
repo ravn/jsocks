@@ -79,34 +79,38 @@ public class IdentAuthenticator extends ServerAuthenticatorNone {
 	 */
 	public ServerAuthenticator startSession(Socket s) throws IOException {
 
-		int ind = getRangeIndex(s.getInetAddress());
+		final int ind = getRangeIndex(s.getInetAddress());
 		String user = null;
 
 		// System.out.println("getRangeReturned:"+ind);
 
-		if (ind < 0)
+		if (ind < 0) {
 			return null; // Host is not on the list.
+		}
 
-		ServerAuthenticatorNone auth = (ServerAuthenticatorNone) super
+		final ServerAuthenticatorNone auth = (ServerAuthenticatorNone) super
 				.startSession(s);
 
 		// System.out.println("super.startSession() returned:"+auth);
-		if (auth == null)
+		if (auth == null) {
 			return null;
+		}
 
 		// do the authentication
 
-		Hashtable user_names = (Hashtable) users.elementAt(ind);
+		final Hashtable user_names = (Hashtable) users.elementAt(ind);
 
 		if (user_names != null) { // If need to do authentication
 			Ident ident;
 			ident = new Ident(s);
 			// If can't obtain user name, fail
-			if (!ident.successful)
+			if (!ident.successful) {
 				return null;
+			}
 			// If user name is not listed for this address, fail
-			if (!user_names.containsKey(ident.userName))
+			if (!user_names.containsKey(ident.userName)) {
 				return null;
+			}
 			user = ident.userName;
 		}
 		return new IdentAuthenticator(auth.in, auth.out, user);
@@ -120,11 +124,13 @@ public class IdentAuthenticator extends ServerAuthenticatorNone {
 	 */
 	public boolean checkRequest(ProxyMessage msg, java.net.Socket s) {
 		// If it's version 5 request, or if anybody is permitted, return true;
-		if (msg.version == 5 || user == null)
+		if ((msg.version == 5) || (user == null)) {
 			return true;
+		}
 
-		if (msg.version != 4)
+		if (msg.version != 4) {
 			return false; // Who knows?
+		}
 
 		return user.equals(msg.user);
 	}
@@ -133,9 +139,10 @@ public class IdentAuthenticator extends ServerAuthenticatorNone {
 	public String toString() {
 		String s = "";
 
-		for (int i = 0; i < hosts.size(); ++i)
+		for (int i = 0; i < hosts.size(); ++i) {
 			s += "Range:" + hosts.elementAt(i) + "\nUsers:" + userNames(i)
 					+ "\n";
+		}
 		return s;
 	}
 
@@ -143,26 +150,30 @@ public class IdentAuthenticator extends ServerAuthenticatorNone {
 	// ////////////////
 	private int getRangeIndex(InetAddress ip) {
 		int index = 0;
-		Enumeration enum = hosts.elements();
+		final Enumeration enum = hosts.elements();
 		while (enum.hasMoreElements()) {
-			InetRange ir = (InetRange) enum.nextElement();
-			if (ir.contains(ip))
+			final InetRange ir = (InetRange) enum.nextElement();
+			if (ir.contains(ip)) {
 				return index;
+			}
 			index++;
 		}
 		return -1; // Not found
 	}
 
 	private String userNames(int i) {
-		if (users.elementAt(i) == null)
+		if (users.elementAt(i) == null) {
 			return "Everybody is permitted.";
+		}
 
-		Enumeration enum = ((Hashtable) users.elementAt(i)).keys();
-		if (!enum.hasMoreElements())
+		final Enumeration enum = ((Hashtable) users.elementAt(i)).keys();
+		if (!enum.hasMoreElements()) {
 			return "";
+		}
 		String s = enum.nextElement().toString();
-		while (enum.hasMoreElements())
+		while (enum.hasMoreElements()) {
 			s += "; " + enum.nextElement();
+		}
 
 		return s;
 	}

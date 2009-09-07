@@ -110,8 +110,9 @@ public class SocksSocket extends Socket {
 	public SocksSocket(Proxy p, String host, int port) throws SocksException,
 			UnknownHostException {
 
-		if (p == null)
+		if (p == null) {
 			throw new SocksException(Proxy.SOCKS_NO_PROXY);
+		}
 		// proxy=p;
 		proxy = p.copy();
 		remoteHost = host;
@@ -119,8 +120,9 @@ public class SocksSocket extends Socket {
 		if (proxy.isDirect(host)) {
 			remoteIP = InetAddress.getByName(host);
 			doDirect();
-		} else
+		} else {
 			processReply(proxy.connect(host, port));
+		}
 	}
 
 	/**
@@ -148,16 +150,18 @@ public class SocksSocket extends Socket {
 	 *            Port to which to connect.
 	 */
 	public SocksSocket(Proxy p, InetAddress ip, int port) throws SocksException {
-		if (p == null)
+		if (p == null) {
 			throw new SocksException(Proxy.SOCKS_NO_PROXY);
+		}
 		this.proxy = p.copy();
 		this.remoteIP = ip;
 		this.remotePort = port;
 		this.remoteHost = ip.getHostName();
-		if (proxy.isDirect(remoteIP))
+		if (proxy.isDirect(remoteIP)) {
 			doDirect();
-		else
+		} else {
 			processReply(proxy.connect(ip, port));
+		}
 	}
 
 	/**
@@ -185,8 +189,9 @@ public class SocksSocket extends Socket {
 	 * Same as Socket
 	 */
 	public void close() throws IOException {
-		if (proxy != null)
+		if (proxy != null) {
 			proxy.endSession();
+		}
 		proxy = null;
 	}
 
@@ -233,7 +238,7 @@ public class SocksSocket extends Socket {
 		if (remoteIP == null) {
 			try {
 				remoteIP = InetAddress.getByName(remoteHost);
-			} catch (UnknownHostException e) {
+			} catch (final UnknownHostException e) {
 				return null;
 			}
 		}
@@ -262,7 +267,7 @@ public class SocksSocket extends Socket {
 		if (localIP == null) {
 			try {
 				localIP = InetAddress.getByName(localHost);
-			} catch (UnknownHostException e) {
+			} catch (final UnknownHostException e) {
 				return null;
 			}
 		}
@@ -326,8 +331,9 @@ public class SocksSocket extends Socket {
 	 * Get string representation of the socket.
 	 */
 	public String toString() {
-		if (directSock != null)
+		if (directSock != null) {
 			return "Direct connection:" + directSock;
+		}
 		return ("Proxy:" + proxy + ";" + "addr:" + remoteHost + ",port:"
 				+ remotePort + ",localport:" + localPort);
 
@@ -360,7 +366,7 @@ public class SocksSocket extends Socket {
 			proxy.proxySocket = directSock;
 			localIP = directSock.getLocalAddress();
 			localPort = directSock.getLocalPort();
-		} catch (IOException io_ex) {
+		} catch (final IOException io_ex) {
 			throw new SocksException(Proxy.SOCKS_DIRECT_FAILED,
 					"Direct connect failed:" + io_ex);
 		}

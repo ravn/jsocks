@@ -13,9 +13,9 @@ import java.net.UnknownHostException;
  */
 public class UDPEcho implements Runnable {
 
-	private int port;
-	private InetAddress hostIP;
-	private DatagramSocket sock;
+	private final int port;
+	private final InetAddress hostIP;
+	private final DatagramSocket sock;
 
 	private static final int BUF_SIZE = 1024;
 
@@ -31,14 +31,14 @@ public class UDPEcho implements Runnable {
 
 	public void send(String s) throws IOException {
 		System.out.println("Sending:" + s);
-		DatagramPacket packet = new DatagramPacket(s.getBytes(), s.length(),
-				hostIP, port);
+		final DatagramPacket packet = new DatagramPacket(s.getBytes(), s
+				.length(), hostIP, port);
 		sock.send(packet);
 	}
 
 	public void run() {
-		byte[] buf = new byte[BUF_SIZE];
-		DatagramPacket incomingData = new DatagramPacket(buf, buf.length);
+		final byte[] buf = new byte[BUF_SIZE];
+		final DatagramPacket incomingData = new DatagramPacket(buf, buf.length);
 		try {
 			while (true) {
 				sock.receive(incomingData);
@@ -50,7 +50,7 @@ public class UDPEcho implements Runnable {
 				System.out.flush();
 				incomingData.setLength(buf.length);
 			}
-		} catch (IOException io_ex) {
+		} catch (final IOException io_ex) {
 			io_ex.printStackTrace();
 		}
 	}
@@ -61,9 +61,9 @@ public class UDPEcho implements Runnable {
 	}
 
 	public static void doEcho(int port) throws IOException {
-		byte[] buf = new byte[BUF_SIZE];
-		DatagramPacket packet = new DatagramPacket(buf, buf.length);
-		DatagramSocket sock = new DatagramSocket(port);
+		final byte[] buf = new byte[BUF_SIZE];
+		final DatagramPacket packet = new DatagramPacket(buf, buf.length);
+		final DatagramSocket sock = new DatagramSocket(port);
 
 		System.out.println("Starting UDP echo on"
 				+ sock.getLocalAddress().getHostAddress() + ":"
@@ -81,7 +81,7 @@ public class UDPEcho implements Runnable {
 
 				packet.setLength(buf.length);
 				// packet = new DatagramPacket(buf,buf.length);
-			} catch (IOException io_ex) {
+			} catch (final IOException io_ex) {
 			}
 		}
 	}
@@ -96,11 +96,11 @@ public class UDPEcho implements Runnable {
 
 				doEcho(port);
 
-			} catch (IOException io_ex) {
+			} catch (final IOException io_ex) {
 				io_ex.printStackTrace();
 				System.exit(1);
 
-			} catch (NumberFormatException num_ex) {
+			} catch (final NumberFormatException num_ex) {
 				num_ex.printStackTrace();
 				System.exit(1);
 			}
@@ -109,30 +109,31 @@ public class UDPEcho implements Runnable {
 				host = args[0];
 				port = Integer.parseInt(args[1]);
 
-				UDPEcho ut = new UDPEcho(host, port);
-				Thread thread = new Thread(ut);
+				final UDPEcho ut = new UDPEcho(host, port);
+				final Thread thread = new Thread(ut);
 				thread.start();
 
-				BufferedReader in = new BufferedReader(new InputStreamReader(
-						System.in));
+				final BufferedReader in = new BufferedReader(
+						new InputStreamReader(System.in));
 				String s;
 				System.out.print("Enter datagram:");
 				s = in.readLine();
 				while (s != null) {
 					ut.send(s);
 					try {
-						Thread.currentThread().sleep(100);
-					} catch (InterruptedException i_ex) {
+						Thread.currentThread();
+						Thread.sleep(100);
+					} catch (final InterruptedException i_ex) {
 					}
 					System.out.print("Enter datagram:");
 					s = in.readLine();
 				}
 				System.exit(1);
 
-			} catch (IOException io_ex) {
+			} catch (final IOException io_ex) {
 				io_ex.printStackTrace();
 				System.exit(1);
-			} catch (NumberFormatException num_ex) {
+			} catch (final NumberFormatException num_ex) {
 				num_ex.printStackTrace();
 				System.exit(1);
 			}

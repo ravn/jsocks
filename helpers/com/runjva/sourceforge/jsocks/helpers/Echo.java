@@ -16,9 +16,9 @@ public class Echo implements Runnable {
 	private int port;
 	private InetAddress peerIp;
 
-	private Socket ss;
-	private InputStream in;
-	private OutputStream out;
+	private final Socket ss;
+	private final InputStream in;
+	private final OutputStream out;
 
 	private static final int BUF_SIZE = 1024;
 
@@ -57,14 +57,14 @@ public class Echo implements Runnable {
 	}
 
 	public void run() {
-		byte[] buf = new byte[1024];
+		final byte[] buf = new byte[1024];
 		int bytes_read;
 		try {
 			while ((bytes_read = in.read(buf)) > 0) {
 				System.out.write(buf, 0, bytes_read);
 				System.out.flush();
 			}
-		} catch (IOException io_ex) {
+		} catch (final IOException io_ex) {
 			io_ex.printStackTrace();
 		}
 	}
@@ -93,11 +93,11 @@ public class Echo implements Runnable {
 					echo = new Echo(host, port);
 				}
 
-				Thread thread = new Thread(echo);
+				final Thread thread = new Thread(echo);
 				thread.start();
 
-				BufferedReader in = new BufferedReader(new InputStreamReader(
-						System.in));
+				final BufferedReader in = new BufferedReader(
+						new InputStreamReader(System.in));
 				String s;
 
 				s = in.readLine();
@@ -106,19 +106,20 @@ public class Echo implements Runnable {
 					echo.send(s + "\r\n");
 					s = in.readLine();
 				}
-			} catch (IOException io_ex) {
+			} catch (final IOException io_ex) {
 				io_ex.printStackTrace();
 				System.exit(1);
-			} catch (NumberFormatException num_ex) {
+			} catch (final NumberFormatException num_ex) {
 				usage();
 				num_ex.printStackTrace();
 				System.exit(1);
 			} finally {
-				if (echo != null)
+				if (echo != null) {
 					try {
 						echo.ss.close();
-					} catch (Exception e) {
+					} catch (final Exception e) {
 					}
+				}
 			}
 
 		} else {

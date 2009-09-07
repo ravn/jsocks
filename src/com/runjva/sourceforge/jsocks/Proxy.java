@@ -41,8 +41,9 @@ public abstract class Proxy {
 		this.chainProxy = chainProxy;
 		this.proxyHost = proxyHost;
 
-		if (chainProxy == null)
+		if (chainProxy == null) {
 			this.proxyIP = InetAddress.getByName(proxyHost);
+		}
 
 		this.proxyPort = proxyPort;
 	}
@@ -288,38 +289,42 @@ public abstract class Proxy {
 		String proxy_password = null;
 		Proxy proxy;
 
-		java.util.StringTokenizer st = new java.util.StringTokenizer(
+		final java.util.StringTokenizer st = new java.util.StringTokenizer(
 				proxy_entry, ":");
-		if (st.countTokens() < 1)
+		if (st.countTokens() < 1) {
 			return null;
+		}
 
 		proxy_host = st.nextToken();
-		if (st.hasMoreTokens())
+		if (st.hasMoreTokens()) {
 			try {
 				proxy_port = Integer.parseInt(st.nextToken().trim());
-			} catch (NumberFormatException nfe) {
+			} catch (final NumberFormatException nfe) {
 			}
+		}
 
-		if (st.hasMoreTokens())
+		if (st.hasMoreTokens()) {
 			proxy_user = st.nextToken();
+		}
 
-		if (st.hasMoreTokens())
+		if (st.hasMoreTokens()) {
 			proxy_password = st.nextToken();
+		}
 
 		try {
-			if (proxy_user == null)
+			if (proxy_user == null) {
 				proxy = new Socks5Proxy(proxy_host, proxy_port);
-			else if (proxy_password == null)
+			} else if (proxy_password == null) {
 				proxy = new Socks4Proxy(proxy_host, proxy_port, proxy_user);
-			else {
+			} else {
 				proxy = new Socks5Proxy(proxy_host, proxy_port);
-				UserPasswordAuthentication upa = new UserPasswordAuthentication(
+				final UserPasswordAuthentication upa = new UserPasswordAuthentication(
 						proxy_user, proxy_password);
 
-				((Socks5Proxy) proxy).setAuthenticationMethod(upa.METHOD_ID,
-						upa);
+				((Socks5Proxy) proxy).setAuthenticationMethod(
+						UserPasswordAuthentication.METHOD_ID, upa);
 			}
-		} catch (UnknownHostException uhe) {
+		} catch (final UnknownHostException uhe) {
 			return null;
 		}
 
@@ -331,18 +336,19 @@ public abstract class Proxy {
 
 	protected void startSession() throws SocksException {
 		try {
-			if (chainProxy == null)
+			if (chainProxy == null) {
 				proxySocket = new Socket(proxyIP, proxyPort);
-			else if (proxyIP != null)
+			} else if (proxyIP != null) {
 				proxySocket = new SocksSocket(chainProxy, proxyIP, proxyPort);
-			else
+			} else {
 				proxySocket = new SocksSocket(chainProxy, proxyHost, proxyPort);
+			}
 
 			in = proxySocket.getInputStream();
 			out = proxySocket.getOutputStream();
-		} catch (SocksException se) {
+		} catch (final SocksException se) {
 			throw se;
-		} catch (IOException io_ex) {
+		} catch (final IOException io_ex) {
 			throw new SocksException(SOCKS_PROXY_IO_ERROR, "" + io_ex);
 		}
 	}
@@ -362,9 +368,10 @@ public abstract class Proxy {
 			throws SocksException {
 		try {
 			startSession();
-			ProxyMessage request = formMessage(SOCKS_CMD_CONNECT, ip, port);
+			final ProxyMessage request = formMessage(SOCKS_CMD_CONNECT, ip,
+					port);
 			return exchange(request);
-		} catch (SocksException se) {
+		} catch (final SocksException se) {
 			endSession();
 			throw se;
 		}
@@ -374,9 +381,10 @@ public abstract class Proxy {
 			throws UnknownHostException, SocksException {
 		try {
 			startSession();
-			ProxyMessage request = formMessage(SOCKS_CMD_CONNECT, host, port);
+			final ProxyMessage request = formMessage(SOCKS_CMD_CONNECT, host,
+					port);
 			return exchange(request);
-		} catch (SocksException se) {
+		} catch (final SocksException se) {
 			endSession();
 			throw se;
 		}
@@ -385,9 +393,9 @@ public abstract class Proxy {
 	protected ProxyMessage bind(InetAddress ip, int port) throws SocksException {
 		try {
 			startSession();
-			ProxyMessage request = formMessage(SOCKS_CMD_BIND, ip, port);
+			final ProxyMessage request = formMessage(SOCKS_CMD_BIND, ip, port);
 			return exchange(request);
-		} catch (SocksException se) {
+		} catch (final SocksException se) {
 			endSession();
 			throw se;
 		}
@@ -397,9 +405,9 @@ public abstract class Proxy {
 			throws UnknownHostException, SocksException {
 		try {
 			startSession();
-			ProxyMessage request = formMessage(SOCKS_CMD_BIND, host, port);
+			final ProxyMessage request = formMessage(SOCKS_CMD_BIND, host, port);
 			return exchange(request);
-		} catch (SocksException se) {
+		} catch (final SocksException se) {
 			endSession();
 			throw se;
 		}
@@ -409,9 +417,9 @@ public abstract class Proxy {
 		ProxyMessage msg;
 		try {
 			msg = formMessage(in);
-		} catch (InterruptedIOException iioe) {
+		} catch (final InterruptedIOException iioe) {
 			throw iioe;
-		} catch (IOException io_ex) {
+		} catch (final IOException io_ex) {
 			endSession();
 			throw new SocksException(SOCKS_PROXY_IO_ERROR,
 					"While Trying accept:" + io_ex);
@@ -423,11 +431,12 @@ public abstract class Proxy {
 			throws SocksException {
 		try {
 			startSession();
-			ProxyMessage request = formMessage(SOCKS_CMD_UDP_ASSOCIATE, ip,
-					port);
-			if (request != null)
+			final ProxyMessage request = formMessage(SOCKS_CMD_UDP_ASSOCIATE,
+					ip, port);
+			if (request != null) {
 				return exchange(request);
-		} catch (SocksException se) {
+			}
+		} catch (final SocksException se) {
 			endSession();
 			throw se;
 		}
@@ -441,11 +450,12 @@ public abstract class Proxy {
 			throws UnknownHostException, SocksException {
 		try {
 			startSession();
-			ProxyMessage request = formMessage(SOCKS_CMD_UDP_ASSOCIATE, host,
-					port);
-			if (request != null)
+			final ProxyMessage request = formMessage(SOCKS_CMD_UDP_ASSOCIATE,
+					host, port);
+			if (request != null) {
 				return exchange(request);
-		} catch (SocksException se) {
+			}
+		} catch (final SocksException se) {
 			endSession();
 			throw se;
 		}
@@ -457,10 +467,11 @@ public abstract class Proxy {
 
 	protected void endSession() {
 		try {
-			if (proxySocket != null)
+			if (proxySocket != null) {
 				proxySocket.close();
+			}
 			proxySocket = null;
-		} catch (IOException io_ex) {
+		} catch (final IOException io_ex) {
 		}
 	}
 
@@ -487,9 +498,9 @@ public abstract class Proxy {
 		try {
 			request.write(out);
 			reply = formMessage(in);
-		} catch (SocksException s_ex) {
+		} catch (final SocksException s_ex) {
 			throw s_ex;
-		} catch (IOException ioe) {
+		} catch (final IOException ioe) {
 			throw (new SocksException(SOCKS_PROXY_IO_ERROR, "" + ioe));
 		}
 		return reply;

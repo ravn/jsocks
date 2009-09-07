@@ -70,18 +70,21 @@ public class ServerAuthenticatorNone implements ServerAuthenticator {
 	 */
 	public ServerAuthenticator startSession(Socket s) throws IOException {
 
-		PushbackInputStream in = new PushbackInputStream(s.getInputStream());
-		OutputStream out = s.getOutputStream();
+		final PushbackInputStream in = new PushbackInputStream(s
+				.getInputStream());
+		final OutputStream out = s.getOutputStream();
 
-		int version = in.read();
+		final int version = in.read();
 		if (version == 5) {
-			if (!selectSocks5Authentication(in, out, 0))
+			if (!selectSocks5Authentication(in, out, 0)) {
 				return null;
+			}
 		} else if (version == 4) {
 			// Else it is the request message allready, version 4
 			in.unread(version);
-		} else
+		} else {
 			return null;
+		}
 
 		return new ServerAuthenticatorNone(in, out);
 	}
@@ -154,26 +157,29 @@ public class ServerAuthenticatorNone implements ServerAuthenticator {
 	static public boolean selectSocks5Authentication(InputStream in,
 			OutputStream out, int methodId) throws IOException {
 
-		int num_methods = in.read();
-		if (num_methods <= 0)
+		final int num_methods = in.read();
+		if (num_methods <= 0) {
 			return false;
-		byte method_ids[] = new byte[num_methods];
-		byte response[] = new byte[2];
+		}
+		final byte method_ids[] = new byte[num_methods];
+		final byte response[] = new byte[2];
 		boolean found = false;
 
 		response[0] = (byte) 5; // SOCKS version
 		response[1] = (byte) 0xFF; // Not found, we are pessimistic
 
 		int bread = 0; // bytes read so far
-		while (bread < num_methods)
+		while (bread < num_methods) {
 			bread += in.read(method_ids, bread, num_methods - bread);
+		}
 
-		for (int i = 0; i < num_methods; ++i)
+		for (int i = 0; i < num_methods; ++i) {
 			if (method_ids[i] == methodId) {
 				found = true;
 				response[1] = (byte) methodId;
 				break;
 			}
+		}
 
 		out.write(response);
 		return found;

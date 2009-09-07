@@ -80,31 +80,32 @@ public class Ident {
 		try {
 			sock = new Socket(s.getInetAddress(), 113);
 			sock.setSoTimeout(connectionTimeout);
-			byte[] request = ("" + s.getPort() + " , " + s.getLocalPort() + "\r\n")
+			final byte[] request = ("" + s.getPort() + " , " + s.getLocalPort() + "\r\n")
 					.getBytes();
 
 			sock.getOutputStream().write(request);
 
-			BufferedReader in = new BufferedReader(new InputStreamReader(sock
-					.getInputStream()));
+			final BufferedReader in = new BufferedReader(new InputStreamReader(
+					sock.getInputStream()));
 
 			parseResponse(in.readLine());
 
-		} catch (InterruptedIOException iioe) {
+		} catch (final InterruptedIOException iioe) {
 			errorCode = ERR_TIMEOUT;
 			errorMessage = "Connection to identd timed out.";
-		} catch (ConnectException ce) {
+		} catch (final ConnectException ce) {
 			errorCode = ERR_NO_CONNECT;
 			errorMessage = "Connection to identd server failed.";
 
-		} catch (IOException ioe) {
+		} catch (final IOException ioe) {
 			errorCode = ERR_NO_CONNECT;
 			errorMessage = "" + ioe;
 		} finally {
 			try {
-				if (sock != null)
+				if (sock != null) {
 					sock.close();
-			} catch (IOException ioe) {
+				}
+			} catch (final IOException ioe) {
 			}
 			;
 		}
@@ -117,7 +118,7 @@ public class Ident {
 			return;
 		}
 
-		StringTokenizer st = new StringTokenizer(response, ":");
+		final StringTokenizer st = new StringTokenizer(response, ":");
 		if (st.countTokens() < 3) {
 			errorCode = ERR_PROTOCOL_INCORRECT;
 			errorMessage = "Can't parse server response.";
@@ -125,9 +126,9 @@ public class Ident {
 		}
 
 		st.nextToken(); // Discard first token, it's basically what we have send
-		String command = st.nextToken().trim().toUpperCase();
+		final String command = st.nextToken().trim().toUpperCase();
 
-		if (command.equals("USERID") && st.countTokens() >= 2) {
+		if (command.equals("USERID") && (st.countTokens() >= 2)) {
 			successful = true;
 			hostType = st.nextToken().trim();
 			userName = st.nextToken("").substring(1);// Get all that is left

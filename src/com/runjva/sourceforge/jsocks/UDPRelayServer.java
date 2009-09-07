@@ -66,13 +66,15 @@ class UDPRelayServer implements Runnable {
 		relayPort = client_sock.getLocalPort();
 		relayIP = client_sock.getLocalAddress();
 
-		if (relayIP.getHostAddress().equals("0.0.0.0"))
+		if (relayIP.getHostAddress().equals("0.0.0.0")) {
 			relayIP = InetAddress.getLocalHost();
+		}
 
-		if (proxy == null)
+		if (proxy == null) {
 			remote_sock = new DatagramSocket();
-		else
+		} else {
 			remote_sock = new Socks5DatagramSocket(proxy, 0, null);
+		}
 	}
 
 	// Public methods
@@ -146,11 +148,12 @@ class UDPRelayServer implements Runnable {
 	// //////////////////
 	public void run() {
 		try {
-			if (Thread.currentThread().getName().equals("pipe1"))
+			if (Thread.currentThread().getName().equals("pipe1")) {
 				pipe(remote_sock, client_sock, false);
-			else
+			} else {
 				pipe(client_sock, remote_sock, true);
-		} catch (IOException ioe) {
+			}
+		} catch (final IOException ioe) {
 		} finally {
 			abort();
 			log("UDP Pipe thread " + Thread.currentThread().getName()
@@ -162,22 +165,25 @@ class UDPRelayServer implements Runnable {
 	// Private methods
 	// ///////////////
 	private synchronized void abort() {
-		if (pipe_thread1 == null)
+		if (pipe_thread1 == null) {
 			return;
+		}
 
 		log("Aborting UDP Relay Server");
 
 		remote_sock.close();
 		client_sock.close();
 
-		if (controlConnection != null)
+		if (controlConnection != null) {
 			try {
 				controlConnection.close();
-			} catch (IOException ioe) {
+			} catch (final IOException ioe) {
 			}
+		}
 
-		if (master_thread != null)
+		if (master_thread != null) {
 			master_thread.interrupt();
+		}
 
 		pipe_thread1.interrupt();
 		pipe_thread2.interrupt();
@@ -194,29 +200,33 @@ class UDPRelayServer implements Runnable {
 
 	private void pipe(DatagramSocket from, DatagramSocket to, boolean out)
 			throws IOException {
-		byte[] data = new byte[datagramSize];
-		DatagramPacket dp = new DatagramPacket(data, data.length);
+		final byte[] data = new byte[datagramSize];
+		final DatagramPacket dp = new DatagramPacket(data, data.length);
 
 		while (true) {
 			try {
 				from.receive(dp);
 				lastReadTime = System.currentTimeMillis();
 
-				if (auth.checkRequest(dp, out))
+				if (auth.checkRequest(dp, out)) {
 					to.send(dp);
+				}
 
-			} catch (UnknownHostException uhe) {
+			} catch (final UnknownHostException uhe) {
 				log("Dropping datagram for unknown host");
-			} catch (InterruptedIOException iioe) {
+			} catch (final InterruptedIOException iioe) {
 				// log("Interrupted: "+iioe);
 				// If we were interrupted by other thread.
-				if (iddleTimeout == 0)
+				if (iddleTimeout == 0) {
 					return;
+				}
 
 				// If last datagram was received, long time ago, return.
-				long timeSinceRead = System.currentTimeMillis() - lastReadTime;
-				if (timeSinceRead >= iddleTimeout - 100) // -100 for adjustment
+				final long timeSinceRead = System.currentTimeMillis()
+						- lastReadTime;
+				if (timeSinceRead >= iddleTimeout - 100) {
 					return;
+				}
 			}
 			dp.setLength(data.length);
 		}

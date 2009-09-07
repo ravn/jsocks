@@ -27,7 +27,7 @@ public class TestServer implements Runnable {
 	public void run() {
 		try {
 			server(service);
-		} catch (IOException ioe) {
+		} catch (final IOException ioe) {
 			log("Exception:" + ioe);
 			ioe.printStackTrace();
 		}
@@ -45,13 +45,14 @@ public class TestServer implements Runnable {
 	 * @return Never returns.
 	 */
 	static public void server(int service) throws IOException {
-		ServerSocket ss = new ServerSocket(TestService.servicePorts[service]);
+		final ServerSocket ss = new ServerSocket(
+				TestService.servicePorts[service]);
 		Socket s;
 
 		s = ss.accept();
 		while (s != null) {
-			TestService st = new TestService(s, service);
-			Thread t = new Thread(st);
+			final TestService st = new TestService(s, service);
+			final Thread t = new Thread(st);
 			t.start();
 			s = ss.accept();
 		}
@@ -61,8 +62,9 @@ public class TestServer implements Runnable {
 	 * Performs logging.
 	 */
 	static synchronized void log(String s) {
-		if (log != null)
+		if (log != null) {
 			log.println(s);
+		}
 	}
 
 	// Main Function
@@ -76,7 +78,7 @@ public class TestServer implements Runnable {
 			log("Starting service " + TestService.serviceNames[i] + " at port "
 					+ TestService.servicePorts[i] + ".");
 			st = new TestServer(i);
-			Thread t = new Thread(st);
+			final Thread t = new Thread(st);
 			t.start();
 		}
 	}
