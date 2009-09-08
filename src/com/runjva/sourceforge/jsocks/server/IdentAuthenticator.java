@@ -150,9 +150,9 @@ public class IdentAuthenticator extends ServerAuthenticatorNone {
 	// ////////////////
 	private int getRangeIndex(InetAddress ip) {
 		int index = 0;
-		final Enumeration enum = hosts.elements();
-		while (enum.hasMoreElements()) {
-			final InetRange ir = (InetRange) enum.nextElement();
+		final Enumeration enumx = hosts.elements();
+		while (enumx.hasMoreElements()) {
+			final InetRange ir = (InetRange) enumx.nextElement();
 			if (ir.contains(ip)) {
 				return index;
 			}
@@ -166,13 +166,13 @@ public class IdentAuthenticator extends ServerAuthenticatorNone {
 			return "Everybody is permitted.";
 		}
 
-		final Enumeration enum = ((Hashtable) users.elementAt(i)).keys();
-		if (!enum.hasMoreElements()) {
+		final Enumeration enumx = ((Hashtable) users.elementAt(i)).keys();
+		if (!enumx.hasMoreElements()) {
 			return "";
 		}
-		String s = enum.nextElement().toString();
-		while (enum.hasMoreElements()) {
-			s += "; " + enum.nextElement();
+		String s = enumx.nextElement().toString();
+		while (enumx.hasMoreElements()) {
+			s += "; " + enumx.nextElement();
 		}
 
 		return s;

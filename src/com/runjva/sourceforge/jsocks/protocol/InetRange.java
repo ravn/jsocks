@@ -260,9 +260,9 @@ public class InetRange implements Cloneable {
 	 * @return true if successfull.
 	 */
 	public synchronized boolean remove(String s) {
-		final Enumeration enum = all.elements();
-		while (enum.hasMoreElements()) {
-			final Object[] entry = (Object[]) enum.nextElement();
+		final Enumeration enumx = all.elements();
+		while (enumx.hasMoreElements()) {
+			final Object[] entry = (Object[]) enumx.nextElement();
 			if (s.equals(entry[0])) {
 				all.removeElement(entry);
 				end_names.removeElement(s);
@@ -303,9 +303,9 @@ public class InetRange implements Cloneable {
 	 * IPs, when checking subranges
 	 */
 	private synchronized boolean contains(long ip) {
-		final Enumeration enum = all.elements();
-		while (enum.hasMoreElements()) {
-			final Object[] obj = (Object[]) enum.nextElement();
+		final Enumeration enumx = all.elements();
+		while (enumx.hasMoreElements()) {
+			final Object[] obj = (Object[]) enumx.nextElement();
 			final Long from = obj[2] == null ? null : (Long) obj[2];
 			final Long to = obj[3] == null ? null : (Long) obj[3];
 			if ((from != null) && (from.longValue() <= ip)
@@ -322,9 +322,9 @@ public class InetRange implements Cloneable {
 	}
 
 	private boolean checkHostEnding(String host) {
-		final Enumeration enum = end_names.elements();
-		while (enum.hasMoreElements()) {
-			if (host.endsWith((String) enum.nextElement())) {
+		final Enumeration enumx = end_names.elements();
+		while (enumx.hasMoreElements()) {
+			if (host.endsWith((String) enumx.nextElement())) {
 				return true;
 			}
 		}
