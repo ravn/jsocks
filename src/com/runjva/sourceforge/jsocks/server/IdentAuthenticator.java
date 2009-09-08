@@ -24,10 +24,10 @@ import com.runjva.sourceforge.jsocks.protocol.ProxyMessage;
 
 public class IdentAuthenticator extends ServerAuthenticatorNone {
 	/** Vector of InetRanges */
-	Vector hosts;
+	Vector<InetRange> hosts;
 
 	/** Vector of user hashes */
-	Vector users;
+	Vector<Hashtable<?, ?>> users;
 
 	String user;
 
@@ -35,8 +35,8 @@ public class IdentAuthenticator extends ServerAuthenticatorNone {
 	 * Constructs empty IdentAuthenticator.
 	 */
 	public IdentAuthenticator() {
-		hosts = new Vector();
-		users = new Vector();
+		hosts = new Vector<InetRange>();
+		users = new Vector<Hashtable<?, ?>>();
 	}
 
 	/**
@@ -67,7 +67,7 @@ public class IdentAuthenticator extends ServerAuthenticatorNone {
 	 *            indicate that anybody is allowed to connect from the hosts
 	 *            within given range.
 	 */
-	public synchronized void add(InetRange hostRange, Hashtable users) {
+	public synchronized void add(InetRange hostRange, Hashtable<?, ?> users) {
 		this.hosts.addElement(hostRange);
 		this.users.addElement(users);
 	}
@@ -98,7 +98,7 @@ public class IdentAuthenticator extends ServerAuthenticatorNone {
 
 		// do the authentication
 
-		final Hashtable user_names = (Hashtable) users.elementAt(ind);
+		final Hashtable<?, ?> user_names = users.elementAt(ind);
 
 		if (user_names != null) { // If need to do authentication
 			Ident ident;
@@ -150,9 +150,9 @@ public class IdentAuthenticator extends ServerAuthenticatorNone {
 	// ////////////////
 	private int getRangeIndex(InetAddress ip) {
 		int index = 0;
-		final Enumeration enumx = hosts.elements();
+		final Enumeration<InetRange> enumx = hosts.elements();
 		while (enumx.hasMoreElements()) {
-			final InetRange ir = (InetRange) enumx.nextElement();
+			final InetRange ir = enumx.nextElement();
 			if (ir.contains(ip)) {
 				return index;
 			}
@@ -166,7 +166,7 @@ public class IdentAuthenticator extends ServerAuthenticatorNone {
 			return "Everybody is permitted.";
 		}
 
-		final Enumeration enumx = ((Hashtable) users.elementAt(i)).keys();
+		final Enumeration<?> enumx = ((Hashtable<?, ?>) users.elementAt(i)).keys();
 		if (!enumx.hasMoreElements()) {
 			return "";
 		}

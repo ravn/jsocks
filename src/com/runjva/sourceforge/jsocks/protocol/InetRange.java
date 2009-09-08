@@ -20,9 +20,9 @@ import java.util.Vector;
  */
 public class InetRange implements Cloneable {
 
-	Hashtable host_names;
-	Vector all;
-	Vector end_names;
+	Hashtable<String, Object[]> host_names;
+	Vector<Object[]> all;
+	Vector<String> end_names;
 
 	boolean useSeparateThread = true;
 
@@ -30,9 +30,9 @@ public class InetRange implements Cloneable {
 	 * Creates the empty range.
 	 */
 	public InetRange() {
-		all = new Vector();
-		host_names = new Hashtable();
-		end_names = new Vector();
+		all = new Vector<Object[]>();
+		host_names = new Hashtable<String, Object[]>();
+		end_names = new Vector<String>();
 	}
 
 	/**
@@ -246,7 +246,7 @@ public class InetRange implements Cloneable {
 		final String all_names[] = new String[size];
 
 		for (int i = 0; i < size; ++i) {
-			entry = (Object[]) all.elementAt(i);
+			entry = all.elementAt(i);
 			all_names[i] = (String) entry[0];
 		}
 		return all_names;
@@ -260,9 +260,9 @@ public class InetRange implements Cloneable {
 	 * @return true if successfull.
 	 */
 	public synchronized boolean remove(String s) {
-		final Enumeration enumx = all.elements();
+		final Enumeration<Object[]> enumx = all.elements();
 		while (enumx.hasMoreElements()) {
-			final Object[] entry = (Object[]) enumx.nextElement();
+			final Object[] entry = enumx.nextElement();
 			if (s.equals(entry[0])) {
 				all.removeElement(entry);
 				end_names.removeElement(s);
@@ -288,9 +288,10 @@ public class InetRange implements Cloneable {
 	}
 
 	/** Creates a clone of this Object */
+	@SuppressWarnings("unchecked")
 	public Object clone() {
 		final InetRange new_range = new InetRange();
-		new_range.all = (Vector) all.clone();
+		new_range.all = (Vector<Object[]>) all.clone();
 		new_range.end_names = (Vector) end_names.clone();
 		new_range.host_names = (Hashtable) host_names.clone();
 		return new_range;
@@ -303,9 +304,9 @@ public class InetRange implements Cloneable {
 	 * IPs, when checking subranges
 	 */
 	private synchronized boolean contains(long ip) {
-		final Enumeration enumx = all.elements();
+		final Enumeration<Object[]> enumx = all.elements();
 		while (enumx.hasMoreElements()) {
-			final Object[] obj = (Object[]) enumx.nextElement();
+			final Object[] obj = enumx.nextElement();
 			final Long from = obj[2] == null ? null : (Long) obj[2];
 			final Long to = obj[3] == null ? null : (Long) obj[3];
 			if ((from != null) && (from.longValue() <= ip)
@@ -322,9 +323,9 @@ public class InetRange implements Cloneable {
 	}
 
 	private boolean checkHostEnding(String host) {
-		final Enumeration enumx = end_names.elements();
+		final Enumeration<String> enumx = end_names.elements();
 		while (enumx.hasMoreElements()) {
-			if (host.endsWith((String) enumx.nextElement())) {
+			if (host.endsWith(enumx.nextElement())) {
 				return true;
 			}
 		}

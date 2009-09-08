@@ -1,12 +1,8 @@
 package com.runjva.sourceforge.jsocks.main;
 
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Hashtable;
@@ -17,8 +13,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.runjva.sourceforge.jsocks.protocol.InetRange;
-import com.runjva.sourceforge.jsocks.protocol.SocksProxyBase;
 import com.runjva.sourceforge.jsocks.protocol.ProxyServer;
+import com.runjva.sourceforge.jsocks.protocol.SocksProxyBase;
 import com.runjva.sourceforge.jsocks.server.IdentAuthenticator;
 
 public class SOCKS {
@@ -135,7 +131,7 @@ public class SOCKS {
 			return true;
 		}
 
-		final Hashtable uhash = new Hashtable();
+		final Hashtable<String, String> uhash = new Hashtable<String, String>();
 
 		final StringTokenizer st = new StringTokenizer(users, ";");
 		while (st.hasMoreTokens()) {

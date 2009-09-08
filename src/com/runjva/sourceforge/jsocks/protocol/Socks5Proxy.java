@@ -17,7 +17,7 @@ import java.util.Hashtable;
 public class Socks5Proxy extends SocksProxyBase implements Cloneable {
 
 	// Data members
-	private Hashtable authMethods = new Hashtable();
+	private Hashtable<Integer, Authentication> authMethods = new Hashtable<Integer, Authentication>();
 	private int selectedMethod;
 
 	boolean resolveAddrLocally = true;
@@ -156,11 +156,13 @@ public class Socks5Proxy extends SocksProxyBase implements Cloneable {
 	}
 
 	/**
-	 * Creates a clone of this Proxy.
+	 * Creates a clone of this Proxy. clone() returns an
 	 */
+	@SuppressWarnings("unchecked")
 	public Object clone() {
 		final Socks5Proxy newProxy = new Socks5Proxy(proxyIP, proxyPort);
-		newProxy.authMethods = (Hashtable) this.authMethods.clone();
+		newProxy.authMethods = (Hashtable<Integer, Authentication>) this.authMethods
+				.clone();
 		newProxy.directHosts = (InetRange) directHosts.clone();
 		newProxy.resolveAddrLocally = resolveAddrLocally;
 		newProxy.chainProxy = chainProxy;
@@ -194,16 +196,16 @@ public class Socks5Proxy extends SocksProxyBase implements Cloneable {
 		try {
 
 			final byte nMethods = (byte) authMethods.size(); // Number of
-																// methods
+			// methods
 
 			final byte[] buf = new byte[2 + nMethods]; // 2 is for VER,NMETHODS
 			buf[0] = (byte) version;
 			buf[1] = nMethods; // Number of methods
 			int i = 2;
 
-			final Enumeration ids = authMethods.keys();
+			final Enumeration<Integer> ids = authMethods.keys();
 			while (ids.hasMoreElements()) {
-				buf[i++] = (byte) ((Integer) ids.nextElement()).intValue();
+				buf[i++] = (byte) ids.nextElement().intValue();
 			}
 
 			out.write(buf);
