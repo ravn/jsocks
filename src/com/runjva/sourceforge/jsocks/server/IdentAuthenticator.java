@@ -22,7 +22,7 @@ import com.runjva.sourceforge.jsocks.protocol.ProxyMessage;
  * host address.
  */
 
-public class IdentAuthenticator extends ServerAuthenticatorNone {
+public class IdentAuthenticator extends ServerAuthenticatorBase {
 	/** Vector of InetRanges */
 	Vector<InetRange> hosts;
 
@@ -88,7 +88,7 @@ public class IdentAuthenticator extends ServerAuthenticatorNone {
 			return null; // Host is not on the list.
 		}
 
-		final ServerAuthenticatorNone auth = (ServerAuthenticatorNone) super
+		final ServerAuthenticatorBase auth = (ServerAuthenticatorBase) super
 				.startSession(s);
 
 		// System.out.println("super.startSession() returned:"+auth);

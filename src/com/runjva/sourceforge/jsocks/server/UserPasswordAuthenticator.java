@@ -9,7 +9,7 @@ import java.net.Socket;
  * This class implements SOCKS5 User/Password authentication scheme as defined
  * in rfc1929,the server side of it.
  */
-public class UserPasswordAuthenticator extends ServerAuthenticatorNone {
+public class UserPasswordAuthenticator extends ServerAuthenticatorBase {
 
 	static final int METHOD_ID = 2;
 
