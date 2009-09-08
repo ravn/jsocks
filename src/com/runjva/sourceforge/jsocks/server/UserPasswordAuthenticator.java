@@ -7,7 +7,7 @@ import java.net.Socket;
 
 /**
  * This class implements SOCKS5 User/Password authentication scheme as defined
- * in rfc1929,the server side of it.
+ * in rfc1929,the server side of it. (see docs/rfc1929.txt)
  */
 public class UserPasswordAuthenticator extends ServerAuthenticatorBase {
 
@@ -53,10 +53,12 @@ public class UserPasswordAuthenticator extends ServerAuthenticatorBase {
 		if (version != 1) {
 			return false;
 		}
+
 		final int ulen = in.read();
 		if (ulen < 0) {
 			return false;
 		}
+
 		final byte[] user = new byte[ulen];
 		in.read(user);
 		final int plen = in.read();

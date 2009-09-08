@@ -7,6 +7,9 @@ import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * SOCKS5 request/response message.
  */
@@ -16,6 +19,8 @@ class Socks5Message extends ProxyMessage {
 	public int addrType;
 
 	byte[] data;
+
+	private Logger log = LoggerFactory.getLogger(Socks5Message.class);
 
 	/**
 	 * Server error response.
@@ -42,7 +47,13 @@ class Socks5Message extends ProxyMessage {
 	 */
 	public Socks5Message(int cmd, InetAddress ip, int port) {
 		super(cmd, ip, port);
-		this.host = ip == null ? "0.0.0.0" : ip.getHostName();
+
+		if (ip == null) {
+			this.host = "0.0.0.0";
+		} else {
+			this.host = ip.getHostName();
+		}
+
 		this.version = SOCKS_VERSION;
 
 		byte[] addr;
@@ -54,7 +65,11 @@ class Socks5Message extends ProxyMessage {
 			addr = ip.getAddress();
 		}
 
-		addrType = addr.length == 4 ? SOCKS_ATYP_IPV4 : SOCKS_ATYP_IPV6;
+		if (addr.length == 4) {
+			addrType = SOCKS_ATYP_IPV4;
+		} else {
+			addrType = SOCKS_ATYP_IPV6;
+		}
 
 		data = new byte[6 + addr.length];
 		data[0] = (byte) SOCKS_VERSION; // Version
@@ -83,7 +98,7 @@ class Socks5Message extends ProxyMessage {
 		this.host = hostName;
 		this.version = SOCKS_VERSION;
 
-		// System.out.println("Doing ATYP_DOMAINNAME");
+		log.debug("Doing ATYP_DOMAINNAME");
 
 		addrType = SOCKS_ATYP_DOMAINNAME;
 		final byte addr[] = hostName.getBytes();
@@ -134,6 +149,7 @@ class Socks5Message extends ProxyMessage {
 	 */
 	public Socks5Message(InputStream in, boolean clientMode)
 			throws SocksException, IOException {
+
 		read(in, clientMode);
 	}
 
@@ -169,6 +185,7 @@ class Socks5Message extends ProxyMessage {
 	 */
 	public void read(InputStream in, boolean clientMode) throws SocksException,
 			IOException {
+
 		data = null;
 		ip = null;
 
@@ -176,6 +193,7 @@ class Socks5Message extends ProxyMessage {
 
 		version = di.readUnsignedByte();
 		command = di.readUnsignedByte();
+
 		if (clientMode && (command != 0)) {
 			throw new SocksException(command);
 		}
@@ -197,7 +215,7 @@ class Socks5Message extends ProxyMessage {
 			host = bytes2IPV6(addr, 0);
 			break;
 		case SOCKS_ATYP_DOMAINNAME:
-			// System.out.println("Reading ATYP_DOMAINNAME");
+			log.debug("Reading ATYP_DOMAINNAME");
 			addr = new byte[di.readUnsignedByte()];// Next byte shows the length
 			di.readFully(addr);
 			host = new String(addr);
@@ -233,7 +251,8 @@ class Socks5Message extends ProxyMessage {
 					try {
 						ip = InetAddress.getByName(host);
 					} catch (final UnknownHostException uh_ex) {
-						throw new SocksException(SocksProxyBase.SOCKS_JUST_ERROR);
+						throw new SocksException(
+								SocksProxyBase.SOCKS_JUST_ERROR);
 					}
 				}
 				msg = new Socks5Message(command, ip, port);
@@ -263,6 +282,7 @@ class Socks5Message extends ProxyMessage {
 	 * Returns string representation of the message.
 	 */
 	public String toString() {
+		// FIXME: Single line version, please.
 		final String s = "Socks5Message:" + "\n" + "VN   " + version + "\n"
 				+ "CMD  " + command + "\n" + "ATYP " + addrType + "\n"
 				+ "ADDR " + host + "\n" + "PORT " + port + "\n";

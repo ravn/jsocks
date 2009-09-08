@@ -31,8 +31,8 @@ public class Socks4Proxy extends SocksProxyBase implements Cloneable {
 	 * @throws UnknownHostException
 	 *             If proxyHost can't be resolved.
 	 */
-	public Socks4Proxy(SocksProxyBase p, String proxyHost, int proxyPort, String user)
-			throws UnknownHostException {
+	public Socks4Proxy(SocksProxyBase p, String proxyHost, int proxyPort,
+			String user) throws UnknownHostException {
 		super(p, proxyHost, proxyPort);
 		this.user = new String(user);
 		version = 4;
@@ -67,7 +67,8 @@ public class Socks4Proxy extends SocksProxyBase implements Cloneable {
 	 * @param user
 	 *            User name to use for identification purposes.
 	 */
-	public Socks4Proxy(SocksProxyBase p, InetAddress proxyIP, int proxyPort, String user) {
+	public Socks4Proxy(SocksProxyBase p, InetAddress proxyIP, int proxyPort,
+			String user) {
 		super(p, proxyIP, proxyPort);
 		this.user = new String(user);
 		version = 4;
@@ -130,11 +131,13 @@ public class Socks4Proxy extends SocksProxyBase implements Cloneable {
 
 	protected ProxyMessage formMessage(int cmd, String host, int port)
 			throws UnknownHostException {
+
 		return formMessage(cmd, InetAddress.getByName(host), port);
 	}
 
 	protected ProxyMessage formMessage(InputStream in) throws SocksException,
 			IOException {
+
 		return new Socks4Message(in, true);
 	}
 

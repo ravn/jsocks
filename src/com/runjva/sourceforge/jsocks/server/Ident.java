@@ -23,8 +23,10 @@ public class Ident {
 
 	/** Error Message can be null. */
 	public String errorMessage;
+
 	/** Host type as returned by daemon, can be null, if error happened */
 	public String hostType;
+
 	/** User name as returned by the identd daemon, or null, if it failed */
 	public String userName;
 
@@ -34,17 +36,22 @@ public class Ident {
 	 * corresponding message.
 	 */
 	public boolean successful;
+
 	/** Error code */
 	public int errorCode;
+
 	/** Identd on port 113 can't be contacted */
 	public static final int ERR_NO_CONNECT = 1;
+
 	/** Connection timed out */
 	public static final int ERR_TIMEOUT = 2;
+
 	/**
 	 * Identd daemon responded with ERROR, in this case errorMessage contains
 	 * the string explanation, as send by the daemon.
 	 */
 	public static final int ERR_PROTOCOL = 3;
+
 	/**
 	 * When parsing server response protocol error happened.
 	 */

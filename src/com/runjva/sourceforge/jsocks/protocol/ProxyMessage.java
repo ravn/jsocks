@@ -10,16 +10,22 @@ import java.net.UnknownHostException;
  * Abstract class which describes SOCKS4/5 response/request.
  */
 public abstract class ProxyMessage {
+
 	/** Host as an IP address */
 	public InetAddress ip = null;
+
 	/** SOCKS version, or version of the response for SOCKS4 */
 	public int version;
+
 	/** Port field of the request/response */
 	public int port;
+
 	/** Request/response code as an int */
 	public int command;
+
 	/** Host as string. */
 	public String host = null;
+
 	/** User field for SOCKS4 request messages */
 	public String user = null;
 
@@ -98,7 +104,7 @@ public abstract class ProxyMessage {
 
 	static final String bytes2IPV4(byte[] addr, int offset) {
 		String hostName = "" + (addr[offset] & 0xFF);
-		for (int i = offset + 1; i < offset + 4; ++i) {
+		for (int i = offset + 1; i < offset + 4; i++) {
 			hostName += "." + (addr[i] & 0xFF);
 		}
 		return hostName;

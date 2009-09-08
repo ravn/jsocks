@@ -80,7 +80,7 @@ public abstract class ServerAuthenticatorBase implements ServerAuthenticator {
 				return null;
 			}
 		} else if (version == 4) {
-			// Else it is the request message allready, version 4
+			// Else it is the request message already, version 4
 			in.unread(version);
 		} else {
 			return null;

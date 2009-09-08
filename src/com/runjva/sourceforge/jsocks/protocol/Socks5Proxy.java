@@ -40,6 +40,7 @@ public class Socks5Proxy extends SocksProxyBase implements Cloneable {
 	 */
 	public Socks5Proxy(SocksProxyBase p, String proxyHost, int proxyPort)
 			throws UnknownHostException {
+
 		super(p, proxyHost, proxyPort);
 		version = 5;
 		setAuthenticationMethod(0, new AuthenticationNone());
@@ -161,8 +162,10 @@ public class Socks5Proxy extends SocksProxyBase implements Cloneable {
 	@SuppressWarnings("unchecked")
 	public Object clone() {
 		final Socks5Proxy newProxy = new Socks5Proxy(proxyIP, proxyPort);
-		newProxy.authMethods = (Hashtable<Integer, Authentication>) this.authMethods
-				.clone();
+
+		final Object o = this.authMethods.clone();
+		newProxy.authMethods = (Hashtable<Integer, Authentication>) o;
+
 		newProxy.directHosts = (InetRange) directHosts.clone();
 		newProxy.resolveAddrLocally = resolveAddrLocally;
 		newProxy.chainProxy = chainProxy;
@@ -177,6 +180,7 @@ public class Socks5Proxy extends SocksProxyBase implements Cloneable {
 
 	protected SocksProxyBase copy() {
 		final Socks5Proxy copy = new Socks5Proxy(proxyIP, proxyPort);
+
 		copy.authMethods = this.authMethods; // same Hash, no copy
 		copy.directHosts = this.directHosts;
 		copy.chainProxy = this.chainProxy;
@@ -217,12 +221,14 @@ public class Socks5Proxy extends SocksProxyBase implements Cloneable {
 			if ((versionNumber < 0) || (selectedMethod < 0)) {
 				// EOF condition was reached
 				endSession();
-				throw (new SocksException(SOCKS_PROXY_IO_ERROR,
-						"Connection to proxy lost."));
+				final String s = "Connection to proxy lost.";
+				throw new SocksException(SOCKS_PROXY_IO_ERROR, s);
 			}
+
 			if (versionNumber < version) {
 				// What should we do??
 			}
+
 			if (selectedMethod == 0xFF) { // No method selected
 				ps.close();
 				throw (new SocksException(SOCKS_AUTH_NOT_SUPPORTED));
@@ -232,20 +238,24 @@ public class Socks5Proxy extends SocksProxyBase implements Cloneable {
 			if (auth == null) {
 				// This shouldn't happen, unless method was removed by other
 				// thread, or the server stuffed up
-				throw (new SocksException(SOCKS_JUST_ERROR,
-						"Speciefied Authentication not found!"));
+				final String s = "Specified Authentication not found!";
+				throw new SocksException(SOCKS_JUST_ERROR, s);
 			}
-			final Object[] in_out = auth.doSocksAuthentication(selectedMethod,
-					ps);
+
+			final Object[] in_out;
+			in_out = auth.doSocksAuthentication(selectedMethod, ps);
+
 			if (in_out == null) {
 				// Authentication failed by some reason
 				throw (new SocksException(SOCKS_AUTH_FAILURE));
 			}
-			// Most authentication methods are expected to return
-			// simply the input/output streams associated with
-			// the socket. However if the auth. method requires
-			// some kind of encryption/decryption being done on the
-			// connection it should provide classes to handle I/O.
+
+			/*
+			 * Most authentication methods are expected to return simply the
+			 * input/output streams associated with the socket. However if the
+			 * auth. method requires some kind of encryption/decryption being
+			 * done on the connection it should provide classes to handle I/O.
+			 */
 
 			in = (InputStream) in_out[0];
 			out = (OutputStream) in_out[1];
@@ -256,12 +266,11 @@ public class Socks5Proxy extends SocksProxyBase implements Cloneable {
 		} catch (final SocksException s_ex) {
 			throw s_ex;
 		} catch (final UnknownHostException uh_ex) {
-			throw (new SocksException(SOCKS_PROXY_NO_CONNECT));
+			throw new SocksException(SOCKS_PROXY_NO_CONNECT, uh_ex);
 		} catch (final SocketException so_ex) {
-			throw (new SocksException(SOCKS_PROXY_NO_CONNECT));
+			throw new SocksException(SOCKS_PROXY_NO_CONNECT, so_ex);
 		} catch (final IOException io_ex) {
-			// System.err.println(io_ex);
-			throw (new SocksException(SOCKS_PROXY_IO_ERROR, "" + io_ex));
+			throw new SocksException(SOCKS_PROXY_IO_ERROR, io_ex);
 		}
 	}
 

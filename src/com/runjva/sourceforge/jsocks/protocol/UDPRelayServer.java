@@ -59,12 +59,14 @@ class UDPRelayServer implements Runnable {
 	public UDPRelayServer(InetAddress clientIP, int clientPort,
 			Thread master_thread, Socket controlConnection,
 			ServerAuthenticator auth) throws IOException {
+
 		this.master_thread = master_thread;
 		this.controlConnection = controlConnection;
 		this.auth = auth;
 
 		client_sock = new Socks5DatagramSocket(true,
 				auth.getUdpEncapsulation(), clientIP, clientPort);
+
 		relayPort = client_sock.getLocalPort();
 		relayIP = client_sock.getLocalAddress();
 
@@ -122,9 +124,9 @@ class UDPRelayServer implements Runnable {
 		remote_sock.setSoTimeout(iddleTimeout);
 		client_sock.setSoTimeout(iddleTimeout);
 
-		log.info("Starting UDP relay server on " + relayIP + ":" + relayPort);
-		log.info("Remote socket " + remote_sock.getLocalAddress() + ":"
-				+ remote_sock.getLocalPort());
+		log.info("Starting UDP relay server on {}:{}", relayIP, relayPort);
+		log.info("Remote socket {}:{}", remote_sock.getLocalAddress(),
+				remote_sock.getLocalPort());
 
 		pipe_thread1 = new Thread(this, "pipe1");
 		pipe_thread2 = new Thread(this, "pipe2");

@@ -39,8 +39,7 @@ public class SOCKS {
 		InetAddress localIP = null;
 
 		if (args.length == 0) {
-			file_names = new String[1];
-			file_names[0] = "socks.properties";
+			file_names = new String[] { "socks.properties" };
 		} else {
 			file_names = args;
 		}

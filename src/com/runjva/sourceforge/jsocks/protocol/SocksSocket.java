@@ -8,6 +8,9 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * SocksSocket tryies to look very similar to normal Socket, while allowing
  * connections through the SOCKS4 or 5 proxy. To use this class you will have to
@@ -54,6 +57,7 @@ public class SocksSocket extends Socket {
 	protected int localPort, remotePort;
 
 	private Socket directSock = null;
+	private Logger log = LoggerFactory.getLogger(SocksSocket.class);
 
 	/**
 	 * Tryies to connect to given host and port using default proxy. If no
@@ -107,8 +111,8 @@ public class SocksSocket extends Socket {
 	 *             if anything is wrong with I/O.
 	 * @see Socks5Proxy#resolveAddrLocally
 	 */
-	public SocksSocket(SocksProxyBase p, String host, int port) throws SocksException,
-			UnknownHostException {
+	public SocksSocket(SocksProxyBase p, String host, int port)
+			throws SocksException, UnknownHostException {
 
 		if (p == null) {
 			throw new SocksException(SocksProxyBase.SOCKS_NO_PROXY);
@@ -149,7 +153,8 @@ public class SocksSocket extends Socket {
 	 * @param port
 	 *            Port to which to connect.
 	 */
-	public SocksSocket(SocksProxyBase p, InetAddress ip, int port) throws SocksException {
+	public SocksSocket(SocksProxyBase p, InetAddress ip, int port)
+			throws SocksException {
 		if (p == null) {
 			throw new SocksException(SocksProxyBase.SOCKS_NO_PROXY);
 		}
@@ -334,8 +339,17 @@ public class SocksSocket extends Socket {
 		if (directSock != null) {
 			return "Direct connection:" + directSock;
 		}
-		return ("Proxy:" + proxy + ";" + "addr:" + remoteHost + ",port:"
-				+ remotePort + ",localport:" + localPort);
+		StringBuffer sb = new StringBuffer();
+		sb.append("Proxy:");
+		sb.append(proxy);
+		sb.append(";");
+		sb.append("addr:");
+		sb.append(remoteHost);
+		sb.append(",port:");
+		sb.append(remotePort);
+		sb.append(",localport:");
+		sb.append(localPort);
+		return sb.toString();
 
 	}
 
@@ -359,7 +373,7 @@ public class SocksSocket extends Socket {
 
 	private void doDirect() throws SocksException {
 		try {
-			// System.out.println("IP:"+remoteIP+":"+remotePort);
+			log.debug("IP: {}_{}", remoteIP, remotePort);
 			directSock = new Socket(remoteIP, remotePort);
 			proxy.out = directSock.getOutputStream();
 			proxy.in = directSock.getInputStream();
@@ -367,8 +381,8 @@ public class SocksSocket extends Socket {
 			localIP = directSock.getLocalAddress();
 			localPort = directSock.getLocalPort();
 		} catch (final IOException io_ex) {
-			throw new SocksException(SocksProxyBase.SOCKS_DIRECT_FAILED,
-					"Direct connect failed:" + io_ex);
+			final int errCode = SocksProxyBase.SOCKS_DIRECT_FAILED;
+			throw new SocksException(errCode, "Direct connect failed:", io_ex);
 		}
 	}
 

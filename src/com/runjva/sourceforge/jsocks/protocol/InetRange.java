@@ -65,7 +65,7 @@ public class InetRange implements Cloneable {
 
 		Object[] entry;
 
-		if (s.charAt(s.length() - 1) == '.') {
+		if (s.endsWith(".")) {
 			// thing like: 111.222.33.
 			// it is being treated as range 111.222.33.000 - 111.222.33.255
 
@@ -76,7 +76,7 @@ public class InetRange implements Cloneable {
 			if (addr == null) {
 				return false;
 			}
-			for (int i = 0; i < 4; ++i) {
+			for (int i = 0; i < 4; i++) {
 				if (addr[i] >= 0) {
 					from += (((long) addr[i]) << 8 * (3 - i));
 				} else {
@@ -90,7 +90,7 @@ public class InetRange implements Cloneable {
 			entry = new Object[] { s, null, new Long(from), new Long(to) };
 			all.addElement(entry);
 
-		} else if (s.charAt(0) == '.') {
+		} else if (s.startsWith(".")) {
 			// Thing like: .myhost.com
 
 			end_names.addElement(s);
@@ -288,12 +288,13 @@ public class InetRange implements Cloneable {
 	}
 
 	/** Creates a clone of this Object */
+
 	@SuppressWarnings("unchecked")
 	public Object clone() {
 		final InetRange new_range = new InetRange();
 		new_range.all = (Vector<Object[]>) all.clone();
-		new_range.end_names = (Vector) end_names.clone();
-		new_range.host_names = (Hashtable) host_names.clone();
+		new_range.end_names = (Vector<String>) end_names.clone();
+		new_range.host_names = (Hashtable<String, Object[]>) host_names.clone();
 		return new_range;
 	}
 
@@ -437,11 +438,13 @@ class InetRangeResolver implements Runnable {
 
 	Object[] entry;
 
-	String from, to;
+	String from;
+	String to;
 
 	InetRangeResolver(Object[] entry) {
 		this.entry = entry;
-		from = to = null;
+		from = null;
+		to = null;
 	}
 
 	InetRangeResolver(Object[] entry, String from, String to) {
@@ -470,7 +473,8 @@ class InetRangeResolver implements Runnable {
 				final InetAddress ip = InetAddress.getByName((String) entry[0]);
 				entry[1] = ip;
 				final Long l = new Long(InetRange.ip2long(ip));
-				entry[2] = entry[3] = l;
+				entry[2] = l;
+				entry[3] = l;
 			} else {
 				final InetAddress f = InetAddress.getByName(from);
 				final InetAddress t = InetAddress.getByName(to);

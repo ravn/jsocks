@@ -9,6 +9,7 @@ public class SocksException extends java.io.IOException {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+
 	/**
 	 * Construct a SocksException with given errorcode.
 	 * <p>
@@ -19,16 +20,38 @@ public class SocksException extends java.io.IOException {
 	 */
 	public SocksException(int errCode) {
 		this.errCode = errCode;
+		lookupErrorString(errCode);
+	}
+
+	private void lookupErrorString(int errCode) {
 		if ((errCode >> 16) == 0) {
-			// Server reply error message
-			errString = errCode <= serverReplyMessage.length ? serverReplyMessage[errCode]
-					: UNASSIGNED_ERROR_MESSAGE;
+			if (errCode <= serverReplyMessage.length) {
+				errString = serverReplyMessage[errCode];
+			} else {
+				errString = UNASSIGNED_ERROR_MESSAGE;
+			}
 		} else {
 			// Local error
 			errCode = (errCode >> 16) - 1;
-			errString = errCode <= localErrorMessage.length ? localErrorMessage[errCode]
-					: UNASSIGNED_ERROR_MESSAGE;
+			if (errCode <= localErrorMessage.length) {
+				errString = localErrorMessage[errCode];
+			} else {
+				errString = UNASSIGNED_ERROR_MESSAGE;
+			}
 		}
+	}
+
+	/**
+	 * Construct a SocksException with given error code, and a Throwable cause
+	 * 
+	 * @param errCode
+	 * @param t
+	 *            Nested exception for debugging purposes.
+	 */
+	public SocksException(int errCode, Throwable t) {
+		super(t);
+		this.errCode = errCode;
+		lookupErrorString(errCode);
 	}
 
 	/**
@@ -42,6 +65,12 @@ public class SocksException extends java.io.IOException {
 	public SocksException(int errCode, String errString) {
 		this.errCode = errCode;
 		this.errString = errString;
+	}
+
+	public SocksException(int errCode, String string, Throwable t) {
+		super(string, t);
+		this.errCode = errCode;
+		this.errString = string;
 	}
 
 	/**
@@ -63,6 +92,7 @@ public class SocksException extends java.io.IOException {
 	}
 
 	static final String UNASSIGNED_ERROR_MESSAGE = "Unknown error message";
+
 	static final String serverReplyMessage[] = { "Succeeded",
 			"General SOCKS server failure",
 			"Connection not allowed by ruleset", "Network unreachable",

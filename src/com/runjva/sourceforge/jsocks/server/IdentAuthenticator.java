@@ -88,8 +88,8 @@ public class IdentAuthenticator extends ServerAuthenticatorBase {
 			return null; // Host is not on the list.
 		}
 
-		final ServerAuthenticatorBase auth = (ServerAuthenticatorBase) super
-				.startSession(s);
+		final ServerAuthenticator serverAuthenticator = super.startSession(s);
+		final ServerAuthenticatorBase auth = (ServerAuthenticatorBase) serverAuthenticator;
 
 		// System.out.println("super.startSession() returned:"+auth);
 		if (auth == null) {
@@ -166,7 +166,8 @@ public class IdentAuthenticator extends ServerAuthenticatorBase {
 			return "Everybody is permitted.";
 		}
 
-		final Enumeration<?> enumx = ((Hashtable<?, ?>) users.elementAt(i)).keys();
+		final Enumeration<?> enumx = ((Hashtable<?, ?>) users.elementAt(i))
+				.keys();
 		if (!enumx.hasMoreElements()) {
 			return "";
 		}

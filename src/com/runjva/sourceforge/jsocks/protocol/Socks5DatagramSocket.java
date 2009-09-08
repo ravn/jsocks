@@ -7,6 +7,9 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Datagram socket to interract through the firewall.<BR>
  * Can be used same way as the normal DatagramSocket. One should be carefull
@@ -40,6 +43,8 @@ public class Socks5DatagramSocket extends DatagramSocket {
 	Socks5Proxy proxy;
 	private boolean server_mode = false;
 	UDPEncapsulation encapsulation;
+
+	private Logger log = LoggerFactory.getLogger(Socks5DatagramSocket.class);
 
 	/**
 	 * Construct Datagram socket for communication over SOCKS5 proxy server.
@@ -85,39 +90,44 @@ public class Socks5DatagramSocket extends DatagramSocket {
 	 * <li>Authorization fails.
 	 * <li>Proxy does not want to perform udp forwarding, for any reason.
 	 * </ol>
-	 * Might throw IOException if binding dtagram socket to given address/port
+	 * Might throw IOException if binding datagram socket to given address/port
 	 * fails. See java.net.DatagramSocket for more details.
 	 */
 	public Socks5DatagramSocket(SocksProxyBase p, int port, InetAddress ip)
 			throws SocksException, IOException {
+
 		super(port, ip);
+
 		if (p == null) {
 			throw new SocksException(SocksProxyBase.SOCKS_NO_PROXY);
 		}
+
 		if (!(p instanceof Socks5Proxy)) {
-			throw new SocksException(-1,
-					"Datagram Socket needs Proxy version 5");
+			final String s = "Datagram Socket needs Proxy version 5";
+			throw new SocksException(-1, s);
 		}
 
 		if (p.chainProxy != null) {
-			throw new SocksException(SocksProxyBase.SOCKS_JUST_ERROR,
-					"Datagram Sockets do not support proxy chaining.");
+			final String s = "Datagram Sockets do not support proxy chaining.";
+			throw new SocksException(SocksProxyBase.SOCKS_JUST_ERROR, s);
 		}
 
 		proxy = (Socks5Proxy) p.copy();
 
 		final ProxyMessage msg = proxy.udpAssociate(super.getLocalAddress(),
 				super.getLocalPort());
+
 		relayIP = msg.ip;
 		if (relayIP.getHostAddress().equals("0.0.0.0")) {
+			// FIXME: What happens here?
 			relayIP = proxy.proxyIP;
 		}
 		relayPort = msg.port;
 
 		encapsulation = proxy.udp_encapsulation;
 
-		// debug("Datagram Socket:"+getLocalAddress()+":"+getLocalPort()+"\n");
-		// debug("Socks5Datagram: "+relayIP+":"+relayPort+"\n");
+		log.debug("Datagram Socket:{}:{}", getLocalAddress(), getLocalPort());
+		log.debug("Socks5Datagram: {}:{}", relayIP, relayPort);
 	}
 
 	/**
@@ -153,13 +163,14 @@ public class Socks5DatagramSocket extends DatagramSocket {
 		// If the host should be accessed directly, send it as is.
 		if (!server_mode && proxy.isDirect(dp.getAddress())) {
 			super.send(dp);
-			// debug("Sending directly:");
+			log.debug("Sending datagram packet directly:");
 			return;
 		}
 
 		final byte[] head = formHeader(dp.getAddress(), dp.getPort());
 		byte[] buf = new byte[head.length + dp.getLength()];
 		final byte[] data = dp.getData();
+
 		// Merge head and data
 		System.arraycopy(head, 0, buf, 0, head.length);
 		// System.arraycopy(data,dp.getOffset(),buf,head.length,dp.getLength());
@@ -248,8 +259,9 @@ public class Socks5DatagramSocket extends DatagramSocket {
 				// Make sure that it happens no matter how often unexpected
 				// packets arrive.
 				if (initTimeout != 0) {
-					final int newTimeout = initTimeout
-							- (int) (System.currentTimeMillis() - startTime);
+					final long passed = System.currentTimeMillis() - startTime;
+					final int newTimeout = initTimeout - (int) passed;
+
 					if (newTimeout <= 0) {
 						throw new InterruptedIOException(
 								"In Socks5DatagramSocket->receive()");
@@ -278,6 +290,7 @@ public class Socks5DatagramSocket extends DatagramSocket {
 			data = encapsulation.udpEncapsulate(data, false);
 		}
 
+		// FIXME: What is this?
 		final int offset = 0; // Java 1.1
 		// int offset = dp.getOffset(); //Java 1.2
 
@@ -373,6 +386,7 @@ public class Socks5DatagramSocket extends DatagramSocket {
 				if (eof < 0) {
 					return false; // EOF encountered.
 				} else {
+					log.warn("This really should not happen");
 					return true; // This really should not happen
 				}
 

@@ -353,6 +353,11 @@ public abstract class SocksProxyBase {
 		}
 	}
 
+	/**
+	 * Create a copy of this proxy for use by individual threads.
+	 * 
+	 * @return proxy
+	 */
 	protected abstract SocksProxyBase copy();
 
 	protected abstract ProxyMessage formMessage(int cmd, InetAddress ip,

@@ -28,6 +28,8 @@ import java.awt.event.WindowListener;
  * Socks configuration dialog.<br>
  * Class which provides GUI means of getting Proxy configuration from the user.
  */
+// FIXME: Only used by SocksEcho class
+
 public class SocksDialog extends Dialog implements WindowListener,
 		ItemListener, ActionListener, Runnable {
 

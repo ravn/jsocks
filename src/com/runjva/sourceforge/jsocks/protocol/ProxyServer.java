@@ -77,7 +77,7 @@ public class ProxyServer implements Runnable {
 	ProxyServer(ServerAuthenticator auth, Socket s) {
 		this.auth = auth;
 		this.sock = s;
-		mode = START_MODE;
+		this.mode = START_MODE;
 	}
 
 	// Public methods
@@ -96,6 +96,7 @@ public class ProxyServer implements Runnable {
 	 */
 	public static void setProxy(SocksProxyBase p) {
 		proxy = p;
+		// FIXME: Side effect.
 		UDPRelayServer.proxy = proxy;
 	}
 
@@ -166,13 +167,16 @@ public class ProxyServer implements Runnable {
 	public void start(int port, int backlog, InetAddress localIP) {
 		try {
 			ss = new ServerSocket(port, backlog, localIP);
-			log.info("Starting SOCKS Proxy on:"
-					+ ss.getInetAddress().getHostAddress() + ":"
-					+ ss.getLocalPort());
+			final String address = ss.getInetAddress().getHostAddress();
+			final int localPort = ss.getLocalPort();
+			log.info("Starting SOCKS Proxy on: {}:{}", address, localPort);
+
 			while (true) {
 				final Socket s = ss.accept();
-				log.info("Accepted from:" + s.getInetAddress().getHostName() + ":"
-						+ s.getPort());
+				final String hostName = s.getInetAddress().getHostName();
+				final int port2 = s.getPort();
+				log.info("Accepted from:{}:{}", hostName, port2);
+
 				final ProxyServer ps = new ProxyServer(auth, s);
 				(new Thread(ps)).start();
 			}
@@ -326,7 +330,8 @@ public class ProxyServer implements Runnable {
 			error_code = SocksProxyBase.SOCKS_TTL_EXPIRE;
 		}
 
-		if ((error_code > SocksProxyBase.SOCKS_ADDR_NOT_SUPPORTED) || (error_code < 0)) {
+		if ((error_code > SocksProxyBase.SOCKS_ADDR_NOT_SUPPORTED)
+				|| (error_code < 0)) {
 			error_code = SocksProxyBase.SOCKS_FAILURE;
 		}
 
@@ -335,7 +340,6 @@ public class ProxyServer implements Runnable {
 
 	private void onConnect(ProxyMessage msg) throws IOException {
 		Socket s;
-		ProxyMessage response = null;
 
 		if (proxy == null) {
 			s = new Socket(msg.ip, msg.port);
@@ -345,12 +349,16 @@ public class ProxyServer implements Runnable {
 
 		log.info("Connected to " + s.getInetAddress() + ":" + s.getPort());
 
+		ProxyMessage response = null;
+		final InetAddress localAddress = s.getLocalAddress();
+		final int localPort = s.getLocalPort();
+
 		if (msg instanceof Socks5Message) {
-			response = new Socks5Message(SocksProxyBase.SOCKS_SUCCESS, s
-					.getLocalAddress(), s.getLocalPort());
+			final int cmd = SocksProxyBase.SOCKS_SUCCESS;
+			response = new Socks5Message(cmd, localAddress, localPort);
 		} else {
-			response = new Socks4Message(Socks4Message.REPLY_OK, s
-					.getLocalAddress(), s.getLocalPort());
+			final int cmd = Socks4Message.REPLY_OK;
+			response = new Socks4Message(cmd, localAddress, localPort);
 
 		}
 		response.write(out);
@@ -368,14 +376,16 @@ public class ProxyServer implements Runnable {
 
 		ss.setSoTimeout(acceptTimeout);
 
-		log.info("Trying accept on " + ss.getInetAddress() + ":" + ss.getLocalPort());
+		final InetAddress inetAddress = ss.getInetAddress();
+		final int localPort = ss.getLocalPort();
+		log.info("Trying accept on {}:{}", inetAddress, localPort);
 
 		if (msg.version == 5) {
-			response = new Socks5Message(SocksProxyBase.SOCKS_SUCCESS, ss
-					.getInetAddress(), ss.getLocalPort());
+			final int cmd = SocksProxyBase.SOCKS_SUCCESS;
+			response = new Socks5Message(cmd, inetAddress, localPort);
 		} else {
-			response = new Socks4Message(Socks4Message.REPLY_OK, ss
-					.getInetAddress(), ss.getLocalPort());
+			final int cmd = Socks4Message.REPLY_OK;
+			response = new Socks4Message(cmd, inetAddress, localPort);
 		}
 		response.write(out);
 
@@ -400,14 +410,13 @@ public class ProxyServer implements Runnable {
 					break;
 				}
 			}
-		} catch (final EOFException eofe) {
-			// System.out.println("EOF exception");
-			return;// Connection closed while we were trying to accept.
-		} catch (final InterruptedIOException iioe) {
-			// Accept thread interrupted us.
-			// System.out.println("Interrupted");
+		} catch (final EOFException e) {
+			log.debug("Connection closed while we were trying to accept", e);
+			return;
+		} catch (final InterruptedIOException e) {
+			log.debug("Interrupted by unsucessful accept thread", e);
 			if (mode != PIPE_MODE) {
-				return;// If accept thread was not successfull return.
+				return;
 			}
 		} finally {
 			// System.out.println("Finnaly!");
@@ -427,14 +436,15 @@ public class ProxyServer implements Runnable {
 		if (msg.ip.getHostAddress().equals("0.0.0.0")) {
 			msg.ip = sock.getInetAddress();
 		}
-		log.info("Creating UDP relay server for " + msg.ip + ":" + msg.port);
+		log.info("Creating UDP relay server for {}:{}", msg.ip, msg.port);
+
 		relayServer = new UDPRelayServer(msg.ip, msg.port, Thread
 				.currentThread(), sock, auth);
 
 		ProxyMessage response;
 
-		response = new Socks5Message(SocksProxyBase.SOCKS_SUCCESS, relayServer.relayIP,
-				relayServer.relayPort);
+		response = new Socks5Message(SocksProxyBase.SOCKS_SUCCESS,
+				relayServer.relayIP, relayServer.relayPort);
 
 		response.write(out);
 
@@ -445,6 +455,7 @@ public class ProxyServer implements Runnable {
 		try {
 			while (in.read() >= 0) {
 				/* do nothing */;
+				// FIXME: Consider a slight delay here?
 			}
 		} catch (final EOFException eofe) {
 		}
@@ -454,7 +465,7 @@ public class ProxyServer implements Runnable {
 	// ////////////////
 
 	private void doAccept() throws IOException {
-		Socket s;
+		Socket s = null;
 		final long startTime = System.currentTimeMillis();
 
 		while (true) {
@@ -471,10 +482,11 @@ public class ProxyServer implements Runnable {
 				throw new SocksException(SocksProxyBase.SOCKS_FAILURE);
 			} else {
 				if (acceptTimeout != 0) { // If timeout is not infinit
-					final int newTimeout = acceptTimeout
-							- (int) (System.currentTimeMillis() - startTime);
+					final long passed = System.currentTimeMillis() - startTime;
+					final int newTimeout = acceptTimeout - (int) passed;
+
 					if (newTimeout <= 0) {
-						throw new InterruptedIOException("In doAccept()");
+						throw new InterruptedIOException("newTimeout <= 0");
 					}
 					ss.setSoTimeout(newTimeout);
 				}
@@ -490,16 +502,18 @@ public class ProxyServer implements Runnable {
 		// Set timeout
 		remote_sock.setSoTimeout(iddleTimeout);
 
-		log.info("Accepted from " + s.getInetAddress() + ":" + s.getPort());
+		final InetAddress inetAddress = s.getInetAddress();
+		final int port = s.getPort();
+		log.info("Accepted from {}:{}", s.getInetAddress(), port);
 
 		ProxyMessage response;
 
 		if (msg.version == 5) {
-			response = new Socks5Message(SocksProxyBase.SOCKS_SUCCESS, s
-					.getInetAddress(), s.getPort());
+			final int cmd = SocksProxyBase.SOCKS_SUCCESS;
+			response = new Socks5Message(cmd, inetAddress, port);
 		} else {
-			response = new Socks4Message(Socks4Message.REPLY_OK, s
-					.getInetAddress(), s.getPort());
+			final int cmd = Socks4Message.REPLY_OK;
+			response = new Socks4Message(cmd, inetAddress, port);
 		}
 		response.write(out);
 	}
@@ -583,12 +597,12 @@ public class ProxyServer implements Runnable {
 		}
 	}
 
-
 	static final void log(ProxyMessage msg) {
-		log.debug("Request version:" + msg.version + "\tCommand: "
-				+ command2String(msg.command));
-		log.debug("IP:" + msg.ip + "\tPort:" + msg.port
-				+ (msg.version == 4 ? "\tUser:" + msg.user : ""));
+		log.debug("Request version: {}, Command: ", msg.version,
+				command2String(msg.command));
+
+		final String user = msg.version == 4 ? ", User:" + msg.user : "";
+		log.debug("IP:" + msg.ip + ", Port:" + msg.port + user);
 	}
 
 	private void pipe(InputStream in, OutputStream out) throws IOException {
@@ -609,6 +623,7 @@ public class ProxyServer implements Runnable {
 				}
 				final long timeSinceRead = System.currentTimeMillis()
 						- lastReadTime;
+
 				if (timeSinceRead >= iddleTimeout - 1000) {
 					return;
 				}

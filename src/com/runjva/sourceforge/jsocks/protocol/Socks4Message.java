@@ -49,6 +49,7 @@ class Socks4Message extends ProxyMessage {
 	 */
 	public Socks4Message(int version, int cmd, InetAddress ip, int port,
 			String user) {
+
 		super(cmd, ip, port);
 		this.user = user;
 		this.version = version;
@@ -97,6 +98,7 @@ class Socks4Message extends ProxyMessage {
 		command = d_in.readUnsignedByte();
 		if (clientMode && (command != REPLY_OK)) {
 			String errMsg;
+			// FIXME: Range should be replaced with cases.
 			if ((command > REPLY_OK) && (command < REPLY_BAD_IDENTD)) {
 				errMsg = replyMessage[command - REPLY_OK];
 			} else {
@@ -111,7 +113,7 @@ class Socks4Message extends ProxyMessage {
 		host = ip.getHostName();
 		if (!clientMode) {
 			int b = in.read();
-			// Hope there are no idiots with user name bigger than this
+			// FIXME: Hope there are no idiots with user name bigger than this
 			final byte[] userBytes = new byte[256];
 			int i = 0;
 			for (i = 0; (i < userBytes.length) && (b > 0); ++i) {
@@ -124,8 +126,8 @@ class Socks4Message extends ProxyMessage {
 
 	public void write(OutputStream out) throws IOException {
 		if (msgBytes == null) {
-			final Socks4Message msg = new Socks4Message(version, command, ip,
-					port, user);
+			final Socks4Message msg;
+			msg = new Socks4Message(version, command, ip, port, user);
 			msgBytes = msg.msgBytes;
 			msgLength = msg.msgLength;
 		}
