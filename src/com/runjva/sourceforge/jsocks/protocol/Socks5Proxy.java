@@ -14,7 +14,7 @@ import java.util.Hashtable;
  * SOCKS5 Proxy.
  */
 
-public class Socks5Proxy extends Proxy implements Cloneable {
+public class Socks5Proxy extends SocksProxyBase implements Cloneable {
 
 	// Data members
 	private Hashtable authMethods = new Hashtable();
@@ -38,7 +38,7 @@ public class Socks5Proxy extends Proxy implements Cloneable {
 	 * @throws UnknownHostException
 	 *             If proxyHost can't be resolved.
 	 */
-	public Socks5Proxy(Proxy p, String proxyHost, int proxyPort)
+	public Socks5Proxy(SocksProxyBase p, String proxyHost, int proxyPort)
 			throws UnknownHostException {
 		super(p, proxyHost, proxyPort);
 		version = 5;
@@ -70,7 +70,7 @@ public class Socks5Proxy extends Proxy implements Cloneable {
 	 * @param proxyPort
 	 *            Port on which a Proxy server listens for connections.
 	 */
-	public Socks5Proxy(Proxy p, InetAddress proxyIP, int proxyPort) {
+	public Socks5Proxy(SocksProxyBase p, InetAddress proxyIP, int proxyPort) {
 		super(p, proxyIP, proxyPort);
 		version = 5;
 		setAuthenticationMethod(0, new AuthenticationNone());
@@ -173,7 +173,7 @@ public class Socks5Proxy extends Proxy implements Cloneable {
 	// Protected Methods
 	// =================
 
-	protected Proxy copy() {
+	protected SocksProxyBase copy() {
 		final Socks5Proxy copy = new Socks5Proxy(proxyIP, proxyPort);
 		copy.authMethods = this.authMethods; // same Hash, no copy
 		copy.directHosts = this.directHosts;

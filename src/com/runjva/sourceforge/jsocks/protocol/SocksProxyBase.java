@@ -14,7 +14,7 @@ import java.net.UnknownHostException;
  * package.
  */
 
-public abstract class Proxy {
+public abstract class SocksProxyBase {
 
 	// Data members
 	protected InetRange directHosts = new InetRange();
@@ -29,14 +29,14 @@ public abstract class Proxy {
 
 	protected int version;
 
-	protected Proxy chainProxy = null;
+	protected SocksProxyBase chainProxy = null;
 
 	// Protected static/class variables
-	protected static Proxy defaultProxy = null;
+	protected static SocksProxyBase defaultProxy = null;
 
 	// Constructors
 	// ====================
-	Proxy(Proxy chainProxy, String proxyHost, int proxyPort)
+	SocksProxyBase(SocksProxyBase chainProxy, String proxyHost, int proxyPort)
 			throws UnknownHostException {
 		this.chainProxy = chainProxy;
 		this.proxyHost = proxyHost;
@@ -48,21 +48,21 @@ public abstract class Proxy {
 		this.proxyPort = proxyPort;
 	}
 
-	Proxy(String proxyHost, int proxyPort) throws UnknownHostException {
+	SocksProxyBase(String proxyHost, int proxyPort) throws UnknownHostException {
 		this(null, proxyHost, proxyPort);
 	}
 
-	Proxy(Proxy chainProxy, InetAddress proxyIP, int proxyPort) {
+	SocksProxyBase(SocksProxyBase chainProxy, InetAddress proxyIP, int proxyPort) {
 		this.chainProxy = chainProxy;
 		this.proxyIP = proxyIP;
 		this.proxyPort = proxyPort;
 	}
 
-	Proxy(InetAddress proxyIP, int proxyPort) {
+	SocksProxyBase(InetAddress proxyIP, int proxyPort) {
 		this(null, proxyIP, proxyPort);
 	}
 
-	Proxy(Proxy p) {
+	SocksProxyBase(SocksProxyBase p) {
 		this.proxyIP = p.proxyIP;
 		this.proxyPort = p.proxyPort;
 		this.version = p.version;
@@ -165,7 +165,7 @@ public abstract class Proxy {
 	 * @param chainProxy
 	 *            Proxy to use to connect to this proxy.
 	 */
-	public void setChainProxy(Proxy chainProxy) {
+	public void setChainProxy(SocksProxyBase chainProxy) {
 		this.chainProxy = chainProxy;
 	}
 
@@ -175,7 +175,7 @@ public abstract class Proxy {
 	 * @return Proxy which is used to connect to this proxy, or null if proxy is
 	 *         to be contacted directly.
 	 */
-	public Proxy getChainProxy() {
+	public SocksProxyBase getChainProxy() {
 		return chainProxy;
 	}
 
@@ -254,7 +254,7 @@ public abstract class Proxy {
 	 * @param p
 	 *            Proxy to use as default proxy.
 	 */
-	public static void setDefaultProxy(Proxy p) {
+	public static void setDefaultProxy(SocksProxyBase p) {
 		defaultProxy = p;
 	}
 
@@ -263,7 +263,7 @@ public abstract class Proxy {
 	 * 
 	 * @return Current default proxy, or null if none is set.
 	 */
-	public static Proxy getDefaultProxy() {
+	public static SocksProxyBase getDefaultProxy() {
 		return defaultProxy;
 	}
 
@@ -281,13 +281,13 @@ public abstract class Proxy {
 	 * @return Proxy created from the string, null if entry was somehow
 	 *         invalid(host unknown for example, or empty string)
 	 */
-	public static Proxy parseProxy(String proxy_entry) {
+	public static SocksProxyBase parseProxy(String proxy_entry) {
 
 		String proxy_host;
 		int proxy_port = 1080;
 		String proxy_user = null;
 		String proxy_password = null;
-		Proxy proxy;
+		SocksProxyBase proxy;
 
 		final java.util.StringTokenizer st = new java.util.StringTokenizer(
 				proxy_entry, ":");
@@ -353,7 +353,7 @@ public abstract class Proxy {
 		}
 	}
 
-	protected abstract Proxy copy();
+	protected abstract SocksProxyBase copy();
 
 	protected abstract ProxyMessage formMessage(int cmd, InetAddress ip,
 			int port);

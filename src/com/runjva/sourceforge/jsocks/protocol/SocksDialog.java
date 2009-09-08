@@ -51,7 +51,7 @@ public class SocksDialog extends Dialog implements WindowListener,
 	// CheckboxGroups
 	CheckboxGroup socks_group = new CheckboxGroup();
 
-	Proxy proxy;
+	SocksProxyBase proxy;
 	InetRange ir;
 
 	final static int COMMAND_MODE = 0;
@@ -88,7 +88,7 @@ public class SocksDialog extends Dialog implements WindowListener,
 	/**
 	 * Creates SOCKS configuration dialog and initialises it to given proxy.
 	 */
-	public SocksDialog(Frame parent, Proxy init_proxy) {
+	public SocksDialog(Frame parent, SocksProxyBase init_proxy) {
 		super(parent, "Proxy Configuration", true);
 		warning_dialog = new Dialog(parent, "Warning", true);
 
@@ -125,7 +125,7 @@ public class SocksDialog extends Dialog implements WindowListener,
 	 * Returns initialised proxy object, or null if user cancels dialog by
 	 * either pressing Cancel or closing the dialog window.
 	 */
-	public Proxy getProxy() {
+	public SocksProxyBase getProxy() {
 		mode = COMMAND_MODE;
 		pack();
 		setVisible(true);
@@ -139,7 +139,7 @@ public class SocksDialog extends Dialog implements WindowListener,
 	 * Returns initialised proxy object, or null if user cancels dialog by
 	 * either pressing Cancel or closing the dialog window.
 	 */
-	public Proxy getProxy(Proxy p) {
+	public SocksProxyBase getProxy(SocksProxyBase p) {
 		if (p != null) {
 			doInit(p);
 		}
@@ -377,7 +377,7 @@ public class SocksDialog extends Dialog implements WindowListener,
 		}
 	}
 
-	private void doInit(Proxy p) {
+	private void doInit(SocksProxyBase p) {
 		if (p.version == 5) {
 			socks_group.setSelectedCheckbox(socks5radio);
 			onSocksChange();

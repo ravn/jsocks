@@ -13,7 +13,7 @@ import java.net.UnknownHostException;
  */
 public class SocksServerSocket extends ServerSocket {
 	// Data members
-	protected Proxy proxy;
+	protected SocksProxyBase proxy;
 	protected String localHost;
 	protected InetAddress localIP;
 	protected int localPort;
@@ -32,7 +32,7 @@ public class SocksServerSocket extends ServerSocket {
 	 */
 	public SocksServerSocket(String host, int port) throws SocksException,
 			UnknownHostException, IOException {
-		this(Proxy.defaultProxy, host, port);
+		this(SocksProxyBase.defaultProxy, host, port);
 	}
 
 	/**
@@ -46,12 +46,12 @@ public class SocksServerSocket extends ServerSocket {
 	 *@param port
 	 *            Port number of the primary connection.
 	 */
-	public SocksServerSocket(Proxy p, String host, int port)
+	public SocksServerSocket(SocksProxyBase p, String host, int port)
 			throws SocksException, UnknownHostException, IOException {
 
 		super(0);
 		if (p == null) {
-			throw new SocksException(Proxy.SOCKS_NO_PROXY);
+			throw new SocksException(SocksProxyBase.SOCKS_NO_PROXY);
 		}
 		// proxy=p;
 		proxy = p.copy();
@@ -75,7 +75,7 @@ public class SocksServerSocket extends ServerSocket {
 	 */
 	public SocksServerSocket(InetAddress ip, int port) throws SocksException,
 			IOException {
-		this(Proxy.defaultProxy, ip, port);
+		this(SocksProxyBase.defaultProxy, ip, port);
 	}
 
 	/**
@@ -89,12 +89,12 @@ public class SocksServerSocket extends ServerSocket {
 	 *@param port
 	 *            Port number of the primary connection.
 	 */
-	public SocksServerSocket(Proxy p, InetAddress ip, int port)
+	public SocksServerSocket(SocksProxyBase p, InetAddress ip, int port)
 			throws SocksException, IOException {
 		super(0);
 
 		if (p == null) {
-			throw new SocksException(Proxy.SOCKS_NO_PROXY);
+			throw new SocksException(SocksProxyBase.SOCKS_NO_PROXY);
 		}
 		this.proxy = p.copy();
 

@@ -56,7 +56,7 @@ public class ProxyServer implements Runnable {
 	static int acceptTimeout = 180000; // 3 minutes
 
 	static Logger log = LoggerFactory.getLogger(ProxyServer.class);
-	static Proxy proxy;
+	static SocksProxyBase proxy;
 
 	// Public Constructors
 	// ///////////////////
@@ -94,7 +94,7 @@ public class ProxyServer implements Runnable {
 	 * @param p
 	 *            Proxy which should be used to handle user requests.
 	 */
-	public static void setProxy(Proxy p) {
+	public static void setProxy(SocksProxyBase p) {
 		proxy = p;
 		UDPRelayServer.proxy = proxy;
 	}
@@ -104,7 +104,7 @@ public class ProxyServer implements Runnable {
 	 * 
 	 * @return Proxy wich is used to handle user requests.
 	 */
-	public static Proxy getProxy() {
+	public static SocksProxyBase getProxy() {
 		return proxy;
 	}
 
@@ -272,30 +272,30 @@ public class ProxyServer implements Runnable {
 
 	private void handleRequest(ProxyMessage msg) throws IOException {
 		if (!auth.checkRequest(msg)) {
-			throw new SocksException(Proxy.SOCKS_FAILURE);
+			throw new SocksException(SocksProxyBase.SOCKS_FAILURE);
 		}
 
 		if (msg.ip == null) {
 			if (msg instanceof Socks5Message) {
 				msg.ip = InetAddress.getByName(msg.host);
 			} else {
-				throw new SocksException(Proxy.SOCKS_FAILURE);
+				throw new SocksException(SocksProxyBase.SOCKS_FAILURE);
 			}
 		}
 		log(msg);
 
 		switch (msg.command) {
-		case Proxy.SOCKS_CMD_CONNECT:
+		case SocksProxyBase.SOCKS_CMD_CONNECT:
 			onConnect(msg);
 			break;
-		case Proxy.SOCKS_CMD_BIND:
+		case SocksProxyBase.SOCKS_CMD_BIND:
 			onBind(msg);
 			break;
-		case Proxy.SOCKS_CMD_UDP_ASSOCIATE:
+		case SocksProxyBase.SOCKS_CMD_UDP_ASSOCIATE:
 			onUDP(msg);
 			break;
 		default:
-			throw new SocksException(Proxy.SOCKS_CMD_NOT_SUPPORTED);
+			throw new SocksException(SocksProxyBase.SOCKS_CMD_NOT_SUPPORTED);
 		}
 	}
 
@@ -314,20 +314,20 @@ public class ProxyServer implements Runnable {
 			return;
 		}
 
-		int error_code = Proxy.SOCKS_FAILURE;
+		int error_code = SocksProxyBase.SOCKS_FAILURE;
 
 		if (ioe instanceof SocksException) {
 			error_code = ((SocksException) ioe).errCode;
 		} else if (ioe instanceof NoRouteToHostException) {
-			error_code = Proxy.SOCKS_HOST_UNREACHABLE;
+			error_code = SocksProxyBase.SOCKS_HOST_UNREACHABLE;
 		} else if (ioe instanceof ConnectException) {
-			error_code = Proxy.SOCKS_CONNECTION_REFUSED;
+			error_code = SocksProxyBase.SOCKS_CONNECTION_REFUSED;
 		} else if (ioe instanceof InterruptedIOException) {
-			error_code = Proxy.SOCKS_TTL_EXPIRE;
+			error_code = SocksProxyBase.SOCKS_TTL_EXPIRE;
 		}
 
-		if ((error_code > Proxy.SOCKS_ADDR_NOT_SUPPORTED) || (error_code < 0)) {
-			error_code = Proxy.SOCKS_FAILURE;
+		if ((error_code > SocksProxyBase.SOCKS_ADDR_NOT_SUPPORTED) || (error_code < 0)) {
+			error_code = SocksProxyBase.SOCKS_FAILURE;
 		}
 
 		sendErrorMessage(error_code);
@@ -346,7 +346,7 @@ public class ProxyServer implements Runnable {
 		log.info("Connected to " + s.getInetAddress() + ":" + s.getPort());
 
 		if (msg instanceof Socks5Message) {
-			response = new Socks5Message(Proxy.SOCKS_SUCCESS, s
+			response = new Socks5Message(SocksProxyBase.SOCKS_SUCCESS, s
 					.getLocalAddress(), s.getLocalPort());
 		} else {
 			response = new Socks4Message(Socks4Message.REPLY_OK, s
@@ -371,7 +371,7 @@ public class ProxyServer implements Runnable {
 		log.info("Trying accept on " + ss.getInetAddress() + ":" + ss.getLocalPort());
 
 		if (msg.version == 5) {
-			response = new Socks5Message(Proxy.SOCKS_SUCCESS, ss
+			response = new Socks5Message(SocksProxyBase.SOCKS_SUCCESS, ss
 					.getInetAddress(), ss.getLocalPort());
 		} else {
 			response = new Socks4Message(Socks4Message.REPLY_OK, ss
@@ -433,7 +433,7 @@ public class ProxyServer implements Runnable {
 
 		ProxyMessage response;
 
-		response = new Socks5Message(Proxy.SOCKS_SUCCESS, relayServer.relayIP,
+		response = new Socks5Message(SocksProxyBase.SOCKS_SUCCESS, relayServer.relayIP,
 				relayServer.relayPort);
 
 		response.write(out);
@@ -468,7 +468,7 @@ public class ProxyServer implements Runnable {
 				// We can't accept more then one connection
 				s.close();
 				ss.close();
-				throw new SocksException(Proxy.SOCKS_FAILURE);
+				throw new SocksException(SocksProxyBase.SOCKS_FAILURE);
 			} else {
 				if (acceptTimeout != 0) { // If timeout is not infinit
 					final int newTimeout = acceptTimeout
@@ -495,7 +495,7 @@ public class ProxyServer implements Runnable {
 		ProxyMessage response;
 
 		if (msg.version == 5) {
-			response = new Socks5Message(Proxy.SOCKS_SUCCESS, s
+			response = new Socks5Message(SocksProxyBase.SOCKS_SUCCESS, s
 					.getInetAddress(), s.getPort());
 		} else {
 			response = new Socks4Message(Socks4Message.REPLY_OK, s
@@ -522,7 +522,7 @@ public class ProxyServer implements Runnable {
 		} else if (version == 4) {
 			msg = new Socks4Message(push_in, false);
 		} else {
-			throw new SocksException(Proxy.SOCKS_FAILURE);
+			throw new SocksException(SocksProxyBase.SOCKS_FAILURE);
 		}
 		return msg;
 	}

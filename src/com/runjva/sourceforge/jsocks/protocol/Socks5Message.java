@@ -203,7 +203,7 @@ class Socks5Message extends ProxyMessage {
 			host = new String(addr);
 			break;
 		default:
-			throw (new SocksException(Proxy.SOCKS_JUST_ERROR));
+			throw (new SocksException(SocksProxyBase.SOCKS_JUST_ERROR));
 		}
 
 		port = di.readUnsignedShort();
@@ -233,7 +233,7 @@ class Socks5Message extends ProxyMessage {
 					try {
 						ip = InetAddress.getByName(host);
 					} catch (final UnknownHostException uh_ex) {
-						throw new SocksException(Proxy.SOCKS_JUST_ERROR);
+						throw new SocksException(SocksProxyBase.SOCKS_JUST_ERROR);
 					}
 				}
 				msg = new Socks5Message(command, ip, port);

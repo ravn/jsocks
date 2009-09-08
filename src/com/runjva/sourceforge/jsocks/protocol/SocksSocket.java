@@ -48,7 +48,7 @@ import java.net.UnknownHostException;
 
 public class SocksSocket extends Socket {
 	// Data members
-	protected Proxy proxy;
+	protected SocksProxyBase proxy;
 	protected String localHost, remoteHost;
 	protected InetAddress localIP, remoteIP;
 	protected int localPort, remotePort;
@@ -64,12 +64,12 @@ public class SocksSocket extends Socket {
 	 *            Machine to connect to.
 	 * @param port
 	 *            Port to which to connect.
-	 * @see SocksSocket#SocksSocket(Proxy,String,int)
+	 * @see SocksSocket#SocksSocket(SocksProxyBase,String,int)
 	 * @see Socks5Proxy#resolveAddrLocally
 	 */
 	public SocksSocket(String host, int port) throws SocksException,
 			UnknownHostException {
-		this(Proxy.defaultProxy, host, port);
+		this(SocksProxyBase.defaultProxy, host, port);
 	}
 
 	/**
@@ -107,11 +107,11 @@ public class SocksSocket extends Socket {
 	 *             if anything is wrong with I/O.
 	 * @see Socks5Proxy#resolveAddrLocally
 	 */
-	public SocksSocket(Proxy p, String host, int port) throws SocksException,
+	public SocksSocket(SocksProxyBase p, String host, int port) throws SocksException,
 			UnknownHostException {
 
 		if (p == null) {
-			throw new SocksException(Proxy.SOCKS_NO_PROXY);
+			throw new SocksException(SocksProxyBase.SOCKS_NO_PROXY);
 		}
 		// proxy=p;
 		proxy = p.copy();
@@ -133,10 +133,10 @@ public class SocksSocket extends Socket {
 	 *            Machine to connect to.
 	 * @param port
 	 *            Port to which to connect.
-	 * @see SocksSocket#SocksSocket(Proxy,String,int)
+	 * @see SocksSocket#SocksSocket(SocksProxyBase,String,int)
 	 */
 	public SocksSocket(InetAddress ip, int port) throws SocksException {
-		this(Proxy.defaultProxy, ip, port);
+		this(SocksProxyBase.defaultProxy, ip, port);
 	}
 
 	/**
@@ -149,9 +149,9 @@ public class SocksSocket extends Socket {
 	 * @param port
 	 *            Port to which to connect.
 	 */
-	public SocksSocket(Proxy p, InetAddress ip, int port) throws SocksException {
+	public SocksSocket(SocksProxyBase p, InetAddress ip, int port) throws SocksException {
 		if (p == null) {
-			throw new SocksException(Proxy.SOCKS_NO_PROXY);
+			throw new SocksException(SocksProxyBase.SOCKS_NO_PROXY);
 		}
 		this.proxy = p.copy();
 		this.remoteIP = ip;
@@ -168,7 +168,7 @@ public class SocksSocket extends Socket {
 	 * These 2 constructors are used by the SocksServerSocket. This socket
 	 * simply overrides remoteHost, remotePort
 	 */
-	protected SocksSocket(String host, int port, Proxy proxy) {
+	protected SocksSocket(String host, int port, SocksProxyBase proxy) {
 		this.remotePort = port;
 		this.proxy = proxy;
 		this.localIP = proxy.proxySocket.getLocalAddress();
@@ -176,7 +176,7 @@ public class SocksSocket extends Socket {
 		this.remoteHost = host;
 	}
 
-	protected SocksSocket(InetAddress ip, int port, Proxy proxy) {
+	protected SocksSocket(InetAddress ip, int port, SocksProxyBase proxy) {
 		remoteIP = ip;
 		remotePort = port;
 		this.proxy = proxy;
@@ -367,7 +367,7 @@ public class SocksSocket extends Socket {
 			localIP = directSock.getLocalAddress();
 			localPort = directSock.getLocalPort();
 		} catch (final IOException io_ex) {
-			throw new SocksException(Proxy.SOCKS_DIRECT_FAILED,
+			throw new SocksException(SocksProxyBase.SOCKS_DIRECT_FAILED,
 					"Direct connect failed:" + io_ex);
 		}
 	}

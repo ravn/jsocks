@@ -17,7 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.runjva.sourceforge.jsocks.protocol.InetRange;
-import com.runjva.sourceforge.jsocks.protocol.Proxy;
+import com.runjva.sourceforge.jsocks.protocol.SocksProxyBase;
 import com.runjva.sourceforge.jsocks.protocol.ProxyServer;
 import com.runjva.sourceforge.jsocks.server.IdentAuthenticator;
 
@@ -182,7 +182,7 @@ public class SOCKS {
 	 */
 	static void proxyInit(Properties props) {
 		String proxy_list;
-		Proxy proxy = null;
+		SocksProxyBase proxy = null;
 		StringTokenizer st;
 
 		proxy_list = (String) props.get("proxy");
@@ -194,7 +194,7 @@ public class SOCKS {
 		while (st.hasMoreTokens()) {
 			final String proxy_entry = st.nextToken();
 
-			final Proxy p = Proxy.parseProxy(proxy_entry);
+			final SocksProxyBase p = SocksProxyBase.parseProxy(proxy_entry);
 
 			if (p == null) {
 				exit("Can't parse proxy entry:" + proxy_entry);

@@ -24,7 +24,7 @@ import java.net.Socket;
 import java.net.URL;
 import java.net.UnknownHostException;
 
-import com.runjva.sourceforge.jsocks.protocol.Proxy;
+import com.runjva.sourceforge.jsocks.protocol.SocksProxyBase;
 import com.runjva.sourceforge.jsocks.protocol.Socks5DatagramSocket;
 import com.runjva.sourceforge.jsocks.protocol.Socks5Proxy;
 import com.runjva.sourceforge.jsocks.protocol.SocksDialog;
@@ -48,7 +48,7 @@ public class SocksEcho extends Frame implements ActionListener, Runnable,
 	SocksDialog socks_dialog;
 
 	// Network related members
-	Proxy proxy = null;
+	SocksProxyBase proxy = null;
 	int port;
 	String host;
 	Thread net_thread = null;
@@ -316,7 +316,7 @@ public class SocksEcho extends Frame implements ActionListener, Runnable,
 	}
 
 	private void onProxy() {
-		Proxy p;
+		SocksProxyBase p;
 		p = socks_dialog.getProxy(proxy);
 		if (p != null) {
 			proxy = p;

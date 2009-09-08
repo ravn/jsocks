@@ -49,7 +49,7 @@ public class Socks5DatagramSocket extends DatagramSocket {
 	 * SocksException.
 	 */
 	public Socks5DatagramSocket() throws SocksException, IOException {
-		this(Proxy.defaultProxy, 0, null);
+		this(SocksProxyBase.defaultProxy, 0, null);
 	}
 
 	/**
@@ -60,7 +60,7 @@ public class Socks5DatagramSocket extends DatagramSocket {
 	 * datagram forwarding, throws SocksException.
 	 */
 	public Socks5DatagramSocket(int port) throws SocksException, IOException {
-		this(Proxy.defaultProxy, port, null);
+		this(SocksProxyBase.defaultProxy, port, null);
 	}
 
 	/**
@@ -72,7 +72,7 @@ public class Socks5DatagramSocket extends DatagramSocket {
 	 */
 	public Socks5DatagramSocket(int port, InetAddress ip)
 			throws SocksException, IOException {
-		this(Proxy.defaultProxy, port, ip);
+		this(SocksProxyBase.defaultProxy, port, ip);
 	}
 
 	/**
@@ -88,11 +88,11 @@ public class Socks5DatagramSocket extends DatagramSocket {
 	 * Might throw IOException if binding dtagram socket to given address/port
 	 * fails. See java.net.DatagramSocket for more details.
 	 */
-	public Socks5DatagramSocket(Proxy p, int port, InetAddress ip)
+	public Socks5DatagramSocket(SocksProxyBase p, int port, InetAddress ip)
 			throws SocksException, IOException {
 		super(port, ip);
 		if (p == null) {
-			throw new SocksException(Proxy.SOCKS_NO_PROXY);
+			throw new SocksException(SocksProxyBase.SOCKS_NO_PROXY);
 		}
 		if (!(p instanceof Socks5Proxy)) {
 			throw new SocksException(-1,
@@ -100,7 +100,7 @@ public class Socks5DatagramSocket extends DatagramSocket {
 		}
 
 		if (p.chainProxy != null) {
-			throw new SocksException(Proxy.SOCKS_JUST_ERROR,
+			throw new SocksException(SocksProxyBase.SOCKS_JUST_ERROR,
 					"Datagram Sockets do not support proxy chaining.");
 		}
 
