@@ -16,4 +16,8 @@ launch configuration using slf4j-simple has
 been included, which also allows for creating
 runnable jars from inside Eclipse 3.5+
 
-/ravn - 2009-09-07
+/ravn - 2009-09-07¨
+
+Mavenized.  
+
+/ravn - 2012-11-07

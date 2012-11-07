@@ -1,6 +1,0 @@
-This is an Eclipse 3.5 project.
-
-Use File -> Export... -> Java -> Runnable jar
-to create a jar file suitable for running with
-"java -jar ...jar"
-

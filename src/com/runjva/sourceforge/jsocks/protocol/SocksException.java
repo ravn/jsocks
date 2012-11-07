@@ -49,7 +49,7 @@ public class SocksException extends java.io.IOException {
 	 *            Nested exception for debugging purposes.
 	 */
 	public SocksException(int errCode, Throwable t) {
-		super(t);
+		super(t);  // Java 1.6+
 		this.errCode = errCode;
 		lookupErrorString(errCode);
 	}
@@ -68,7 +68,7 @@ public class SocksException extends java.io.IOException {
 	}
 
 	public SocksException(int errCode, String string, Throwable t) {
-		super(string, t);
+		super(string, t);  // Java 1.6+
 		this.errCode = errCode;
 		this.errString = string;
 	}
