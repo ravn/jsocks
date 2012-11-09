@@ -19,7 +19,7 @@ class Socks4Message extends ProxyMessage {
 	/**
 	 * Server failed reply, cmd command for failed request
 	 */
-	public Socks4Message(int cmd) {
+	public Socks4Message(final int cmd) {
 		super(cmd, null, 0);
 		this.user = null;
 
@@ -33,22 +33,23 @@ class Socks4Message extends ProxyMessage {
 	/**
 	 * Server successfull reply
 	 */
-	public Socks4Message(int cmd, InetAddress ip, int port) {
+	public Socks4Message(final int cmd, final InetAddress ip, final int port) {
 		this(0, cmd, ip, port, null);
 	}
 
 	/**
 	 * Client request
 	 */
-	public Socks4Message(int cmd, InetAddress ip, int port, String user) {
+	public Socks4Message(final int cmd, final InetAddress ip, final int port,
+			final String user) {
 		this(SOCKS_VERSION, cmd, ip, port, user);
 	}
 
 	/**
 	 * Most general constructor
 	 */
-	public Socks4Message(int version, int cmd, InetAddress ip, int port,
-			String user) {
+	public Socks4Message(final int version, final int cmd,
+			final InetAddress ip, final int port, final String user) {
 
 		super(cmd, ip, port);
 		this.user = user;
@@ -80,19 +81,21 @@ class Socks4Message extends ProxyMessage {
 	}
 
 	/**
-	 *Initialise from the stream If clientMode is true attempts to read a
+	 * Initialise from the stream If clientMode is true attempts to read a
 	 * server response otherwise reads a client request see read for more detail
 	 */
-	public Socks4Message(InputStream in, boolean clientMode) throws IOException {
+	public Socks4Message(final InputStream in, final boolean clientMode)
+			throws IOException {
 		msgBytes = null;
 		read(in, clientMode);
 	}
 
-	public void read(InputStream in) throws IOException {
+	public void read(final InputStream in) throws IOException {
 		read(in, true);
 	}
 
-	public void read(InputStream in, boolean clientMode) throws IOException {
+	public void read(final InputStream in, final boolean clientMode)
+			throws IOException {
 		final DataInputStream d_in = new DataInputStream(in);
 		version = d_in.readUnsignedByte();
 		command = d_in.readUnsignedByte();
@@ -124,7 +127,7 @@ class Socks4Message extends ProxyMessage {
 		}
 	}
 
-	public void write(OutputStream out) throws IOException {
+	public void write(final OutputStream out) throws IOException {
 		if (msgBytes == null) {
 			final Socks4Message msg;
 			msg = new Socks4Message(version, command, ip, port, user);
@@ -135,7 +138,7 @@ class Socks4Message extends ProxyMessage {
 	}
 
 	// Class methods
-	static InetAddress bytes2IP(byte[] addr) {
+	static InetAddress bytes2IP(final byte[] addr) {
 		final String s = bytes2IPV4(addr, 0);
 		try {
 			return InetAddress.getByName(s);

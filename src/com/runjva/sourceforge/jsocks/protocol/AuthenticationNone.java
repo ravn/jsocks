@@ -8,8 +8,8 @@ import java.io.OutputStream;
  */
 public class AuthenticationNone implements Authentication {
 
-	public Object[] doSocksAuthentication(int methodId,
-			java.net.Socket proxySocket) throws java.io.IOException {
+	public Object[] doSocksAuthentication(final int methodId,
+			final java.net.Socket proxySocket) throws java.io.IOException {
 
 		if (methodId != 0) {
 			return null;

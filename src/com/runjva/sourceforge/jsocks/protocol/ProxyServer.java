@@ -67,14 +67,14 @@ public class ProxyServer implements Runnable {
 	 * @param auth
 	 *            Authentication scheme to be used.
 	 */
-	public ProxyServer(ServerAuthenticator auth) {
+	public ProxyServer(final ServerAuthenticator auth) {
 		this.auth = auth;
 	}
 
 	// Other constructors
 	// //////////////////
 
-	ProxyServer(ServerAuthenticator auth, Socket s) {
+	ProxyServer(final ServerAuthenticator auth, final Socket s) {
 		this.auth = auth;
 		this.sock = s;
 		this.mode = START_MODE;
@@ -94,7 +94,7 @@ public class ProxyServer implements Runnable {
 	 * @param p
 	 *            Proxy which should be used to handle user requests.
 	 */
-	public static void setProxy(SocksProxyBase p) {
+	public static void setProxy(final SocksProxyBase p) {
 		proxy = p;
 		// FIXME: Side effect.
 		UDPRelayServer.proxy = proxy;
@@ -115,7 +115,7 @@ public class ProxyServer implements Runnable {
 	 * Zero timeout implies infinity.<br>
 	 * Default timeout is 3 minutes.
 	 */
-	public static void setIddleTimeout(int timeout) {
+	public static void setIddleTimeout(final int timeout) {
 		iddleTimeout = timeout;
 	}
 
@@ -125,7 +125,7 @@ public class ProxyServer implements Runnable {
 	 * Zero timeout implies infinity.<br>
 	 * Default timeout is 3 minutes.
 	 */
-	public static void setAcceptTimeout(int timeout) {
+	public static void setAcceptTimeout(final int timeout) {
 		acceptTimeout = timeout;
 	}
 
@@ -134,7 +134,7 @@ public class ProxyServer implements Runnable {
 	 * Zero timeout implies infinity.<br>
 	 * Default timeout is 3 minutes.
 	 */
-	public static void setUDPTimeout(int timeout) {
+	public static void setUDPTimeout(final int timeout) {
 		UDPRelayServer.setTimeout(timeout);
 	}
 
@@ -143,7 +143,7 @@ public class ProxyServer implements Runnable {
 	 * Default size is 64K, a bit more than maximum possible size of the
 	 * datagram.
 	 */
-	public static void setDatagramSize(int size) {
+	public static void setDatagramSize(final int size) {
 		UDPRelayServer.setDatagramSize(size);
 	}
 
@@ -151,7 +151,7 @@ public class ProxyServer implements Runnable {
 	 * Start the Proxy server at given port.<br>
 	 * This methods blocks.
 	 */
-	public void start(int port) {
+	public void start(final int port) {
 		start(port, 5, null);
 	}
 
@@ -164,7 +164,8 @@ public class ProxyServer implements Runnable {
 	 * inclusive. <br>
 	 * This methods blocks.
 	 */
-	public void start(int port, int backlog, InetAddress localIP) {
+	public void start(final int port, final int backlog,
+			final InetAddress localIP) {
 		try {
 			ss = new ServerSocket(port, backlog, localIP);
 			final String address = ss.getInetAddress().getHostAddress();
@@ -274,7 +275,7 @@ public class ProxyServer implements Runnable {
 		handleRequest(msg);
 	}
 
-	private void handleRequest(ProxyMessage msg) throws IOException {
+	private void handleRequest(final ProxyMessage msg) throws IOException {
 		if (!auth.checkRequest(msg)) {
 			throw new SocksException(SocksProxyBase.SOCKS_FAILURE);
 		}
@@ -303,7 +304,7 @@ public class ProxyServer implements Runnable {
 		}
 	}
 
-	private void handleException(IOException ioe) {
+	private void handleException(final IOException ioe) {
 		// If we couldn't read the request, return;
 		if (msg == null) {
 			return;
@@ -338,7 +339,7 @@ public class ProxyServer implements Runnable {
 		sendErrorMessage(error_code);
 	}
 
-	private void onConnect(ProxyMessage msg) throws IOException {
+	private void onConnect(final ProxyMessage msg) throws IOException {
 		Socket s;
 
 		if (proxy == null) {
@@ -365,7 +366,7 @@ public class ProxyServer implements Runnable {
 		startPipe(s);
 	}
 
-	private void onBind(ProxyMessage msg) throws IOException {
+	private void onBind(final ProxyMessage msg) throws IOException {
 		ProxyMessage response = null;
 
 		if (proxy == null) {
@@ -432,14 +433,14 @@ public class ProxyServer implements Runnable {
 		pipe(in, remote_out);
 	}
 
-	private void onUDP(ProxyMessage msg) throws IOException {
+	private void onUDP(final ProxyMessage msg) throws IOException {
 		if (msg.ip.getHostAddress().equals("0.0.0.0")) {
 			msg.ip = sock.getInetAddress();
 		}
 		log.info("Creating UDP relay server for {}:{}", msg.ip, msg.port);
 
-		relayServer = new UDPRelayServer(msg.ip, msg.port, Thread
-				.currentThread(), sock, auth);
+		relayServer = new UDPRelayServer(msg.ip, msg.port,
+				Thread.currentThread(), sock, auth);
 
 		ProxyMessage response;
 
@@ -518,7 +519,7 @@ public class ProxyServer implements Runnable {
 		response.write(out);
 	}
 
-	private ProxyMessage readMsg(InputStream in) throws IOException {
+	private ProxyMessage readMsg(final InputStream in) throws IOException {
 		PushbackInputStream push_in;
 		if (in instanceof PushbackInputStream) {
 			push_in = (PushbackInputStream) in;
@@ -541,7 +542,7 @@ public class ProxyServer implements Runnable {
 		return msg;
 	}
 
-	private void startPipe(Socket s) {
+	private void startPipe(final Socket s) {
 		mode = PIPE_MODE;
 		remote_sock = s;
 		try {
@@ -555,7 +556,7 @@ public class ProxyServer implements Runnable {
 		}
 	}
 
-	private void sendErrorMessage(int error_code) {
+	private void sendErrorMessage(final int error_code) {
 		ProxyMessage err_msg;
 		if (msg instanceof Socks4Message) {
 			err_msg = new Socks4Message(Socks4Message.REPLY_REJECTED);
@@ -597,7 +598,7 @@ public class ProxyServer implements Runnable {
 		}
 	}
 
-	static final void log(ProxyMessage msg) {
+	static final void log(final ProxyMessage msg) {
 		log.debug("Request version: {}, Command: ", msg.version,
 				command2String(msg.command));
 
@@ -605,7 +606,8 @@ public class ProxyServer implements Runnable {
 		log.debug("IP:" + msg.ip + ", Port:" + msg.port + user);
 	}
 
-	private void pipe(InputStream in, OutputStream out) throws IOException {
+	private void pipe(final InputStream in, final OutputStream out)
+			throws IOException {
 		lastReadTime = System.currentTimeMillis();
 		final byte[] buf = new byte[BUF_SIZE];
 		int len = 0;

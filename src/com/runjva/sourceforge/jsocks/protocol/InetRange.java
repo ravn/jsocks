@@ -53,12 +53,12 @@ public class InetRange implements Cloneable {
 	 * That is two hostnames or ips separated by either whitespace or colon.
 	 * </UL>
 	 */
-	public synchronized boolean add(String s) {
-		if (s == null) {
+	public synchronized boolean add(final String s0) {
+		if (s0 == null) {
 			return false;
 		}
 
-		s = s.trim();
+		String s = s0.trim();
 		if (s.length() == 0) {
 			return false;
 		}
@@ -119,7 +119,7 @@ public class InetRange implements Cloneable {
 	 * @param ip
 	 *            IP os the host which should be added to this range.
 	 */
-	public synchronized void add(InetAddress ip) {
+	public synchronized void add(final InetAddress ip) {
 		long from, to;
 		from = to = ip2long(ip);
 		all.addElement(new Object[] { ip.getHostName(), ip, new Long(from),
@@ -136,7 +136,7 @@ public class InetRange implements Cloneable {
 	 * @param to
 	 *            IP where range ends(including).
 	 */
-	public synchronized void add(InetAddress from, InetAddress to) {
+	public synchronized void add(final InetAddress from, final InetAddress to) {
 		all.addElement(new Object[] {
 				from.getHostAddress() + ":" + to.getHostAddress(), null,
 				new Long(ip2long(from)), new Long(ip2long(to)) });
@@ -151,7 +151,7 @@ public class InetRange implements Cloneable {
 	 * @return true If host is in the range, false otherwise.
 	 * @see InetRange#contains(String,boolean)
 	 */
-	public synchronized boolean contains(String host) {
+	public synchronized boolean contains(final String host) {
 		return contains(host, true);
 	}
 
@@ -179,12 +179,13 @@ public class InetRange implements Cloneable {
 	 *            required.
 	 * @return true If host is in the range, false otherwise.
 	 */
-	public synchronized boolean contains(String host, boolean attemptResolve) {
+	public synchronized boolean contains(final String host0,
+			final boolean attemptResolve) {
 		if (all.size() == 0) {
 			return false; // Empty range
 		}
 
-		host = host.trim();
+		String host = host0.trim();
 		if (host.length() == 0) {
 			return false;
 		}
@@ -222,7 +223,7 @@ public class InetRange implements Cloneable {
 	 *            Address of the host to check.
 	 * @return true If host is in the range, false otherwise.
 	 */
-	public synchronized boolean contains(InetAddress ip) {
+	public synchronized boolean contains(final InetAddress ip) {
 		if (checkHostEnding(ip.getHostName())) {
 			return true;
 		}
@@ -259,7 +260,7 @@ public class InetRange implements Cloneable {
 	 *            Entry to remove.
 	 * @return true if successfull.
 	 */
-	public synchronized boolean remove(String s) {
+	public synchronized boolean remove(final String s) {
 		final Enumeration<Object[]> enumx = all.elements();
 		while (enumx.hasMoreElements()) {
 			final Object[] entry = enumx.nextElement();
@@ -304,7 +305,7 @@ public class InetRange implements Cloneable {
 	 * Same as previous but used internally, to avoid unnecessary convertion of
 	 * IPs, when checking subranges
 	 */
-	private synchronized boolean contains(long ip) {
+	private synchronized boolean contains(final long ip) {
 		final Enumeration<Object[]> enumx = all.elements();
 		while (enumx.hasMoreElements()) {
 			final Object[] obj = enumx.nextElement();
@@ -319,11 +320,11 @@ public class InetRange implements Cloneable {
 		return false;
 	}
 
-	private boolean checkHost(String host) {
+	private boolean checkHost(final String host) {
 		return host_names.containsKey(host);
 	}
 
-	private boolean checkHostEnding(String host) {
+	private boolean checkHostEnding(final String host) {
 		final Enumeration<String> enumx = end_names.elements();
 		while (enumx.hasMoreElements()) {
 			if (host.endsWith(enumx.nextElement())) {
@@ -333,7 +334,7 @@ public class InetRange implements Cloneable {
 		return false;
 	}
 
-	private void resolve(Object[] entry) {
+	private void resolve(final Object[] entry) {
 		// First check if it's in the form ddd.ddd.ddd.ddd.
 		final long ip = host2long((String) entry[0]);
 		if (ip >= 0) {
@@ -344,7 +345,8 @@ public class InetRange implements Cloneable {
 		}
 	}
 
-	private void resolve(Object[] entry, String from, String to) {
+	private void resolve(final Object[] entry, final String from,
+			final String to) {
 		long f, t;
 		if (((f = host2long(from)) >= 0) && ((t = host2long(to)) >= 0)) {
 			entry[2] = new Long(f);
@@ -360,7 +362,7 @@ public class InetRange implements Cloneable {
 
 	// Converts ipv4 to long value(unsigned int)
 	// /////////////////////////////////////////
-	static long ip2long(InetAddress ip) {
+	static long ip2long(final InetAddress ip) {
 		long l = 0;
 		final byte[] addr = ip.getAddress();
 
@@ -374,7 +376,7 @@ public class InetRange implements Cloneable {
 		return l;
 	}
 
-	long host2long(String host) {
+	long host2long(final String host) {
 		long ip = 0;
 
 		// check if it's ddd.ddd.ddd.ddd
@@ -394,7 +396,7 @@ public class InetRange implements Cloneable {
 		return ip;
 	}
 
-	static int[] ip2intarray(String host) {
+	static int[] ip2intarray(final String host) {
 		final int[] address = { -1, -1, -1, -1 };
 		int i = 0;
 		final StringTokenizer tokens = new StringTokenizer(host, ".");
@@ -441,13 +443,13 @@ class InetRangeResolver implements Runnable {
 	String from;
 	String to;
 
-	InetRangeResolver(Object[] entry) {
+	InetRangeResolver(final Object[] entry) {
 		this.entry = entry;
 		from = null;
 		to = null;
 	}
 
-	InetRangeResolver(Object[] entry, String from, String to) {
+	InetRangeResolver(final Object[] entry, final String from, final String to) {
 		this.entry = entry;
 		this.from = from;
 		this.to = to;
@@ -457,7 +459,7 @@ class InetRangeResolver implements Runnable {
 		resolve(true);
 	}
 
-	public final void resolve(boolean inSeparateThread) {
+	public final void resolve(final boolean inSeparateThread) {
 		if (inSeparateThread) {
 			final Thread t = new Thread(this);
 			t.start();
