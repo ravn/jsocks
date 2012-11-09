@@ -24,15 +24,20 @@ import java.net.Socket;
 import java.net.URL;
 import java.net.UnknownHostException;
 
-import com.runjva.sourceforge.jsocks.protocol.SocksProxyBase;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.runjva.sourceforge.jsocks.protocol.Socks5DatagramSocket;
 import com.runjva.sourceforge.jsocks.protocol.Socks5Proxy;
 import com.runjva.sourceforge.jsocks.protocol.SocksDialog;
+import com.runjva.sourceforge.jsocks.protocol.SocksProxyBase;
 import com.runjva.sourceforge.jsocks.protocol.SocksServerSocket;
 import com.runjva.sourceforge.jsocks.protocol.SocksSocket;
 
 public class SocksEcho extends Frame implements ActionListener, Runnable,
 		WindowListener {
+
+	Logger log = LoggerFactory.getLogger(SocksEcho.class);
 
 	/**
 	 * 
@@ -87,6 +92,7 @@ public class SocksEcho extends Frame implements ActionListener, Runnable,
 					setIconImage(createImage((java.awt.image.ImageProducer) content));
 				}
 			} catch (final IOException ioe) {
+				log.debug("Could not getContent() for {}", icon_url, ioe);
 			}
 		}
 
@@ -404,6 +410,7 @@ public class SocksEcho extends Frame implements ActionListener, Runnable,
 						udp_sock.close();
 					}
 				} catch (final IOException ioe) {
+					log.warn("abort_connection(): could not close socket", ioe);
 				}
 				net_thread.interrupt();
 				net_thread = null;

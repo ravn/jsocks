@@ -8,6 +8,9 @@ import java.net.ConnectException;
 import java.net.Socket;
 import java.util.StringTokenizer;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Class Ident provides means to obtain user name of the owner of the socket on
  * remote machine, providing remote machine runs identd daemon.
@@ -20,6 +23,8 @@ import java.util.StringTokenizer;
    </pre></tt>
  */
 public class Ident {
+
+	Logger log = LoggerFactory.getLogger(Ident.class);
 
 	/** Error Message can be null. */
 	public String errorMessage;
@@ -113,8 +118,8 @@ public class Ident {
 					sock.close();
 				}
 			} catch (final IOException ioe) {
+				log.warn("Could not close socket", ioe);
 			}
-			;
 		}
 	}
 
