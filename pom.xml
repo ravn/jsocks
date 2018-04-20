@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.github.ravn.jsocks</groupId>
 	<artifactId>jsocks</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.2-SNAPSHOT</version>
 	<name>SOCKS proxy</name>
 	<description>Cloned from http://sourceforge.net/projects/jsocks/</description>
 

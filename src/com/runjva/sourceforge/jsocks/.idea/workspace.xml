@@ -14,8 +14,8 @@
       <file leaf-file-name="ProxyServer.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/protocol/ProxyServer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="232">
-              <caret line="159" column="13" lean-forward="false" selection-start-line="159" selection-start-column="13" selection-end-line="159" selection-end-column="13" />
+            <state relative-caret-position="228">
+              <caret line="287" column="20" lean-forward="true" selection-start-line="287" selection-start-column="20" selection-end-line="287" selection-end-column="20" />
               <folding>
                 <element signature="e#2111#2112#0" expanded="true" />
                 <element signature="e#2134#2135#0" expanded="true" />
@@ -36,11 +36,21 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="SocksSocket.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/protocol/SocksSocket.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-1566">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="SocksProxyBase.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/protocol/SocksProxyBase.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="232">
-              <caret line="174" column="36" lean-forward="false" selection-start-line="174" selection-start-column="28" selection-end-line="174" selection-end-column="36" />
+            <state relative-caret-position="430">
+              <caret line="185" column="37" lean-forward="false" selection-start-line="185" selection-start-column="19" selection-end-line="185" selection-end-column="37" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#1623#1624#0" expanded="true" />
@@ -100,20 +110,6 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="SOCKS.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/main/SOCKS.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="224">
-              <caret line="36" column="55" lean-forward="false" selection-start-line="36" selection-start-column="55" selection-end-line="36" selection-end-column="55" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#6043#6044#0" expanded="true" />
-                <marker date="1524236022287" expanded="true" signature="6172:6276" ph="{...}" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="SocksServerSocket.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/protocol/SocksServerSocket.java">
           <provider selected="true" editor-type-id="text-editor">
@@ -127,14 +123,9 @@
       <file leaf-file-name="Socks5DatagramSocket.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/protocol/Socks5DatagramSocket.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="686">
-              <caret line="211" column="20" lean-forward="false" selection-start-line="211" selection-start-column="20" selection-end-line="211" selection-end-column="20" />
-              <folding>
-                <marker date="1524236022287" expanded="true" signature="13103:13371" ph="{...}" />
-                <marker date="1524236022287" expanded="true" signature="13374:13413" ph="//..." />
-                <marker date="1524236022287" expanded="true" signature="13468:13582" ph="{...}" />
-                <marker date="1524236022287" expanded="true" signature="13634:13750" ph="{...}" />
-              </folding>
+            <state relative-caret-position="232">
+              <caret line="202" column="42" lean-forward="false" selection-start-line="202" selection-start-column="24" selection-end-line="202" selection-end-column="42" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -142,8 +133,8 @@
       <file leaf-file-name="Socks5Proxy.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/protocol/Socks5Proxy.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="322">
-              <caret line="103" column="36" lean-forward="false" selection-start-line="103" selection-start-column="36" selection-end-line="103" selection-end-column="36" />
+            <state relative-caret-position="288">
+              <caret line="255" column="30" lean-forward="false" selection-start-line="255" selection-start-column="12" selection-end-line="255" selection-end-column="30" />
               <folding>
                 <element signature="e#2382#2383#0" expanded="true" />
                 <element signature="e#2419#2420#0" expanded="true" />
@@ -178,7 +169,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>&quot;gcbwpqlsmuvskwlw.onion&quot;, 80</find>
       <find>SocksServ</find>
       <find>jsocks</find>
       <find>doAccept</find>
@@ -194,20 +184,21 @@
       <find>start(</find>
       <find>serversocket</find>
       <find>starti</find>
-      <find>msg.ip</find>
       <find>msg.ip =</find>
       <find>msg.ip = InetAddress.getByName(msg.host);</find>
       <find>doResolve</find>
       <find>get</find>
       <find>resolveAddr</find>
-      <find>resolveAddrLocally</find>
       <find>ServerAuthenticatorBase</find>
-      <find>resolve</find>
       <find>public boo</find>
       <find>resolveADdr</find>
       <find>resolv</find>
       <find>ip</find>
       <find>resolveA</find>
+      <find>resolve</find>
+      <find>resolveAddrLocally</find>
+      <find>onConnect</find>
+      <find>msg.ip</find>
     </findStrings>
   </component>
   <component name="GradleLocalSettings">
@@ -269,7 +260,7 @@
     <property name="MemberChooser.sorted" value="false" />
     <property name="MemberChooser.showClasses" value="true" />
     <property name="MemberChooser.copyJavadoc" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../../.." />
     <property name="settings.editor.selected.configurable" value="configurable.group.build" />
   </component>
   <component name="RunDashboard">
@@ -440,19 +431,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/protocol/Socks5DatagramSocket.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="686">
-          <caret line="211" column="20" lean-forward="false" selection-start-line="211" selection-start-column="20" selection-end-line="211" selection-end-column="20" />
-          <folding>
-            <marker date="1524236022287" expanded="true" signature="13103:13371" ph="{...}" />
-            <marker date="1524236022287" expanded="true" signature="13374:13413" ph="//..." />
-            <marker date="1524236022287" expanded="true" signature="13468:13582" ph="{...}" />
-            <marker date="1524236022287" expanded="true" signature="13634:13750" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/main/SOCKS.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="224">
@@ -505,23 +483,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/protocol/Socks5Proxy.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="322">
-          <caret line="103" column="36" lean-forward="false" selection-start-line="103" selection-start-column="36" selection-end-line="103" selection-end-column="36" />
-          <folding>
-            <element signature="e#2382#2383#0" expanded="true" />
-            <element signature="e#2419#2420#0" expanded="true" />
-            <marker date="1524236124330" expanded="false" signature="6912:6917" ph=" { " />
-            <marker date="1524236124330" expanded="false" signature="6957:6960" ph=" }" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/protocol/SocksProxyBase.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="232">
-          <caret line="174" column="36" lean-forward="false" selection-start-line="174" selection-start-column="28" selection-end-line="174" selection-end-column="36" />
+        <state relative-caret-position="430">
+          <caret line="185" column="37" lean-forward="false" selection-start-line="185" selection-start-column="19" selection-end-line="185" selection-end-column="37" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#1623#1624#0" expanded="true" />
@@ -560,10 +525,39 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/protocol/ProxyServer.java">
+    <entry file="file://$PROJECT_DIR$/protocol/Socks5Proxy.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="288">
+          <caret line="255" column="30" lean-forward="false" selection-start-line="255" selection-start-column="12" selection-end-line="255" selection-end-column="30" />
+          <folding>
+            <element signature="e#2382#2383#0" expanded="true" />
+            <element signature="e#2419#2420#0" expanded="true" />
+            <marker date="1524236124330" expanded="false" signature="6912:6917" ph=" { " />
+            <marker date="1524236124330" expanded="false" signature="6957:6960" ph=" }" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/protocol/Socks5DatagramSocket.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="232">
-          <caret line="159" column="13" lean-forward="false" selection-start-line="159" selection-start-column="13" selection-end-line="159" selection-end-column="13" />
+          <caret line="202" column="42" lean-forward="false" selection-start-line="202" selection-start-column="24" selection-end-line="202" selection-end-column="42" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/protocol/SocksSocket.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1566">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/protocol/ProxyServer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="228">
+          <caret line="287" column="20" lean-forward="true" selection-start-line="287" selection-start-column="20" selection-end-line="287" selection-end-column="20" />
           <folding>
             <element signature="e#2111#2112#0" expanded="true" />
             <element signature="e#2134#2135#0" expanded="true" />
