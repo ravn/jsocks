@@ -282,7 +282,9 @@ public class ProxyServer implements Runnable {
 
 		if (msg.ip == null) {
 			if (msg instanceof Socks5Message) {
-				msg.ip = InetAddress.getByName(msg.host);
+
+				if (getProxy() == null || (getProxy() != null && getProxy().resolveAddrLocally()))
+					msg.ip = InetAddress.getByName(msg.host);
 			} else {
 				throw new SocksException(SocksProxyBase.SOCKS_FAILURE);
 			}
@@ -345,7 +347,10 @@ public class ProxyServer implements Runnable {
 		if (proxy == null) {
 			s = new Socket(msg.ip, msg.port);
 		} else {
-			s = new SocksSocket(proxy, msg.ip, msg.port);
+			if (proxy.resolveAddrLocally())
+				s = new SocksSocket(proxy, msg.ip, msg.port);
+			else
+				s = new SocksSocket(proxy, msg.host, msg.port);
 		}
 
 		log.info("Connected to " + s.getInetAddress() + ":" + s.getPort());
@@ -372,7 +377,11 @@ public class ProxyServer implements Runnable {
 		if (proxy == null) {
 			ss = new ServerSocket(0);
 		} else {
-			ss = new SocksServerSocket(proxy, msg.ip, msg.port);
+			if (proxy.resolveAddrLocally())
+				ss = new SocksServerSocket(proxy, msg.ip, msg.port);
+			else
+				ss = new SocksServerSocket(proxy, msg.host, msg.port);
+
 		}
 
 		ss.setSoTimeout(acceptTimeout);
