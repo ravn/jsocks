@@ -34,6 +34,7 @@ public abstract class SocksProxyBase {
 	// Protected static/class variables
 	protected static SocksProxyBase defaultProxy = null;
 
+	boolean resolveAddrLocally = true;
 	// Constructors
 	// ====================
 	SocksProxyBase(SocksProxyBase chainProxy, String proxyHost, int proxyPort)
@@ -157,6 +158,33 @@ public abstract class SocksProxyBase {
 	 */
 	public boolean isDirect(InetAddress host) {
 		return directHosts.contains(host);
+	}
+
+	/**
+	 * Wether to resolve address locally or to let proxy do so.
+	 * <p>
+	 * SOCKS5 protocol allows to send host names rather then IPs in the
+	 * requests, this option controls wether the hostnames should be send to the
+	 * proxy server as names, or should they be resolved locally.
+	 *
+	 * @param doResolve
+	 *            Wether to perform resolution locally.
+	 * @return Previous settings.
+	 */
+	public boolean resolveAddrLocally(boolean doResolve) {
+		final boolean old = resolveAddrLocally;
+		resolveAddrLocally = doResolve;
+		return old;
+	}
+
+	/**
+	 * Get current setting on how the addresses should be handled.
+	 *
+	 * @return Current setting for address resolution.
+	 * @see Socks5Proxy#resolveAddrLocally(boolean doResolve)
+	 */
+	public boolean resolveAddrLocally() {
+		return resolveAddrLocally;
 	}
 
 	/**

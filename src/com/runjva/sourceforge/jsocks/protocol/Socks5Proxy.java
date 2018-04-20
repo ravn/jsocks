@@ -20,7 +20,6 @@ public class Socks5Proxy extends SocksProxyBase implements Cloneable {
 	private Hashtable<Integer, Authentication> authMethods = new Hashtable<Integer, Authentication>();
 	private int selectedMethod;
 
-	boolean resolveAddrLocally = true;
 	UDPEncapsulation udp_encapsulation = null;
 
 	// Public Constructors
@@ -92,32 +91,6 @@ public class Socks5Proxy extends SocksProxyBase implements Cloneable {
 	// Public instance methods
 	// ========================
 
-	/**
-	 * Wether to resolve address locally or to let proxy do so.
-	 * <p>
-	 * SOCKS5 protocol allows to send host names rather then IPs in the
-	 * requests, this option controls wether the hostnames should be send to the
-	 * proxy server as names, or should they be resolved locally.
-	 * 
-	 * @param doResolve
-	 *            Wether to perform resolution locally.
-	 * @return Previous settings.
-	 */
-	public boolean resolveAddrLocally(boolean doResolve) {
-		final boolean old = resolveAddrLocally;
-		resolveAddrLocally = doResolve;
-		return old;
-	}
-
-	/**
-	 * Get current setting on how the addresses should be handled.
-	 * 
-	 * @return Current setting for address resolution.
-	 * @see Socks5Proxy#resolveAddrLocally(boolean doResolve)
-	 */
-	public boolean resolveAddrLocally() {
-		return resolveAddrLocally;
-	}
 
 	/**
 	 * Adds another authentication method.
