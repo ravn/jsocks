@@ -338,17 +338,8 @@ public class SocksSocket extends Socket {
 		if (directSock != null) {
 			return "Direct connection:" + directSock;
 		}
-		StringBuffer sb = new StringBuffer();
-		sb.append("Proxy:");
-		sb.append(proxy);
-		sb.append(";");
-		sb.append("addr:");
-		sb.append(remoteHost);
-		sb.append(",port:");
-		sb.append(remotePort);
-		sb.append(",localport:");
-		sb.append(localPort);
-		return sb.toString();
+        String sb = String.format("Proxy:%s;addr:%s,port:%d,localport:%d", proxy, remoteHost, remotePort, localPort);
+		return sb;
 
 	}
 

@@ -91,7 +91,7 @@ public class Ident {
 		try {
 			sock = new Socket(s.getInetAddress(), 113);
 			sock.setSoTimeout(connectionTimeout);
-			final byte[] request = ("" + s.getPort() + " , " + s.getLocalPort() + "\r\n")
+			final byte[] request = (s.getPort() + " , " + s.getLocalPort() + "\r\n")
 					.getBytes();
 
 			sock.getOutputStream().write(request);

@@ -149,11 +149,11 @@ public class Socks5Proxy extends SocksProxyBase implements Cloneable {
 	 * @return Implementation for given method or null, if one was not set.
 	 */
 	public Authentication getAuthenticationMethod(int methodId) {
-		final Object method = authMethods.get(new Integer(methodId));
+		final Authentication method = authMethods.get(new Integer(methodId));
 		if (method == null) {
 			return null;
 		}
-		return (Authentication) method;
+		return method;
 	}
 
 	/**

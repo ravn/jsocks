@@ -185,7 +185,7 @@ public abstract class SocksProxyBase {
 	 * @returns string in the form:proxyHost:proxyPort \t Version versionNumber
 	 */
 	public String toString() {
-		return ("" + proxyIP.getHostName() + ":" + proxyPort + "\tVersion " + version);
+		return (proxyIP.getHostName() + ":" + proxyPort + "\tVersion " + version);
 	}
 
 	// Public Static(Class) Methods

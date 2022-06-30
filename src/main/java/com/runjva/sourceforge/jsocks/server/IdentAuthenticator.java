@@ -166,8 +166,7 @@ public class IdentAuthenticator extends ServerAuthenticatorBase {
 			return "Everybody is permitted.";
 		}
 
-		final Enumeration<?> enumx = ((Hashtable<?, ?>) users.elementAt(i))
-				.keys();
+		final Enumeration<?> enumx = users.elementAt(i).keys();
 		if (!enumx.hasMoreElements()) {
 			return "";
 		}

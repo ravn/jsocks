@@ -34,7 +34,7 @@ public class Socks4Proxy extends SocksProxyBase implements Cloneable {
 	public Socks4Proxy(SocksProxyBase p, String proxyHost, int proxyPort,
 			String user) throws UnknownHostException {
 		super(p, proxyHost, proxyPort);
-		this.user = new String(user);
+		this.user = user;
 		version = 4;
 	}
 
@@ -70,7 +70,7 @@ public class Socks4Proxy extends SocksProxyBase implements Cloneable {
 	public Socks4Proxy(SocksProxyBase p, InetAddress proxyIP, int proxyPort,
 			String user) {
 		super(p, proxyIP, proxyPort);
-		this.user = new String(user);
+		this.user = user;
 		version = 4;
 	}
 

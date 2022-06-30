@@ -390,7 +390,7 @@ public class InetRange implements Cloneable {
 		}
 
 		for (int i = 0; i < addr.length; ++i) {
-			ip += ((long) (addr[i] >= 0 ? addr[i] : 0)) << 8 * (3 - i);
+			ip += ((long) (Math.max(addr[i], 0))) << 8 * (3 - i);
 		}
 
 		return ip;
