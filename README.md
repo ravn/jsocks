@@ -25,8 +25,7 @@ Mavenized.
 Updated for 2022.
 
 * Logging is reverted to java.util.logging to
-  keep Java 1.6 compatibility while still using the latest
-  libraries.  Compile with Java 8.
+  keep Java 1.6 compatibility.  Compile with Java 8.
 * IntelliJ and Eclipse does not report any warnings.
 * Creates a runnable jar.
 * GitHub Actions support.

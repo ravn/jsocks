@@ -50,7 +50,7 @@ public class SOCKS {
 			final Properties pr = loadProperties(file_names[i]);
 			if (pr == null) {
 				System.err.println("Loading of properties from "
-						+ file_names[i] + "failed.");
+						+ file_names[i] + " failed.");
 				usage();
 				return;
 			}
