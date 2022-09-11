@@ -9,20 +9,10 @@
 
 	<properties>
 		<project.build.sourceEncoding>ASCII</project.build.sourceEncoding>
+		<exec.mainClass>com.runjva.sourceforge.jsocks.main.SOCKS</exec.mainClass>
 	</properties>
 
 	<build>
-		<!--
-		<sourceDirectory>src</sourceDirectory>
-		<resources>
-			<resource>
-				<directory>src</directory>
-				<excludes>
-					<exclude>**/*.java</exclude>
-				</excludes>
-			</resource>
-		</resources>
-		-->
 		<plugins>
 			<!-- https://maven.apache.org/plugins/maven-compiler-plugin/compile-mojo.html -->
 			<plugin>
@@ -52,9 +42,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>
-								com.runjva.sourceforge.jsocks.main.SOCKS
-							</mainClass>
+							<mainClass>${exec.mainClass}</mainClass>
 						</manifest>
 					</archive>
 				</configuration>

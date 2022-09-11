@@ -33,6 +33,9 @@ Updated for 2022.
 * IntelliJ and Eclipse report fewer warnings.
 * Creates a runnable jar.
 * GitHub Actions support. Exposes runnable jar as build artifact.
-* Original source tree converted to Maven layout.
+* Original source tree converted to default Maven layout.
+* `mvn -q exec:java` should work.
+
+Suggestion and bug fixes welcome.
 
 /ravn - 2022-09-11
