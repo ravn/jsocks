@@ -7,9 +7,8 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.logging.Logger;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.runjva.sourceforge.jsocks.server.ServerAuthenticator;
 
@@ -33,7 +32,7 @@ class UDPRelayServer implements Runnable {
 
 	long lastReadTime;
 
-	static Logger log = LoggerFactory.getLogger(UDPRelayServer.class);
+	private static final Logger log = Logger.getLogger(UDPRelayServer.class.getName());
 	static SocksProxyBase proxy = null;
 	static int datagramSize = 0xFFFF;// 64K, a bit more than max udp size
 	static int iddleTimeout = 180000;// 3 minutes
@@ -124,8 +123,8 @@ class UDPRelayServer implements Runnable {
 		remote_sock.setSoTimeout(iddleTimeout);
 		client_sock.setSoTimeout(iddleTimeout);
 
-		log.info("Starting UDP relay server on {}:{}", relayIP, relayPort);
-		log.info("Remote socket {}:{}", remote_sock.getLocalAddress(),
+		log.info("Starting UDP relay server on " + relayIP + ":" + relayPort);
+		log.info("Remote socket "+  remote_sock.getLocalAddress() + ":" +
 				remote_sock.getLocalPort());
 
 		pipe_thread1 = new Thread(this, "pipe1");

@@ -7,9 +7,8 @@ import java.io.InterruptedIOException;
 import java.net.ConnectException;
 import java.net.Socket;
 import java.util.StringTokenizer;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Class Ident provides means to obtain user name of the owner of the socket on
@@ -24,7 +23,7 @@ import org.slf4j.LoggerFactory;
  */
 public class Ident {
 
-	Logger log = LoggerFactory.getLogger(Ident.class);
+	private static final Logger log = Logger.getLogger(Ident.class.getName());
 
 	/** Error Message can be null. */
 	public String errorMessage;
@@ -118,7 +117,7 @@ public class Ident {
 					sock.close();
 				}
 			} catch (final IOException ioe) {
-				log.warn("Could not close socket", ioe);
+				log.log(Level.WARNING, "Could not close socket", ioe);
 			}
 		}
 	}

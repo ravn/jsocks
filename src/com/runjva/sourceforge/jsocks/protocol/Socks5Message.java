@@ -6,9 +6,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.logging.Logger;
 
 /**
  * SOCKS5 request/response message.
@@ -20,7 +18,7 @@ class Socks5Message extends ProxyMessage {
 
 	byte[] data;
 
-	private Logger log = LoggerFactory.getLogger(Socks5Message.class);
+	private static final Logger log = Logger.getLogger(Socks5Message.class.getName());
 
 	/**
 	 * Server error response.
@@ -98,7 +96,7 @@ class Socks5Message extends ProxyMessage {
 		this.host = hostName;
 		this.version = SOCKS_VERSION;
 
-		log.debug("Doing ATYP_DOMAINNAME");
+		log.fine("Doing ATYP_DOMAINNAME");
 
 		addrType = SOCKS_ATYP_DOMAINNAME;
 		final byte addr[] = hostName.getBytes();
@@ -139,7 +137,7 @@ class Socks5Message extends ProxyMessage {
 	 * 
 	 * @param in
 	 *            Input stream to read response from.
-	 * @param clinetMode
+	 * @param clientMode
 	 *            If true read server response, else read client request.
 	 * @throws SocksException
 	 *             If server response code is not SOCKS_SUCCESS(0) and reading
@@ -175,7 +173,7 @@ class Socks5Message extends ProxyMessage {
 	 * 
 	 * @param in
 	 *            Input stream to read response from.
-	 * @param clinetMode
+	 * @param clientMode
 	 *            If true read server response, else read client request.
 	 * @throws SocksException
 	 *             If server response code is not SOCKS_SUCCESS(0) and reading
@@ -215,7 +213,7 @@ class Socks5Message extends ProxyMessage {
 			host = bytes2IPV6(addr, 0);
 			break;
 		case SOCKS_ATYP_DOMAINNAME:
-			log.debug("Reading ATYP_DOMAINNAME");
+			log.fine("Reading ATYP_DOMAINNAME");
 			addr = new byte[di.readUnsignedByte()];// Next byte shows the length
 			di.readFully(addr);
 			host = new String(addr);

@@ -8,9 +8,7 @@ import java.net.UnknownHostException;
 import java.util.Hashtable;
 import java.util.Properties;
 import java.util.StringTokenizer;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.logging.Logger;
 
 import com.runjva.sourceforge.jsocks.protocol.InetRange;
 import com.runjva.sourceforge.jsocks.protocol.ProxyServer;
@@ -20,7 +18,7 @@ import com.runjva.sourceforge.jsocks.server.IdentAuthenticator;
 public class SOCKS {
 
 	private static final int DEFAULT_LISTENING_PORT = 1080;
-	final private static Logger log = LoggerFactory.getLogger(SOCKS.class);
+	private static final Logger log = Logger.getLogger(SOCKS.class.getName());
 
 	static public void usage() {
 		System.out.println("Usage: java SOCKS [inifile1 inifile2 ...]\n"

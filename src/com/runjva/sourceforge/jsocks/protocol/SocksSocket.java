@@ -7,9 +7,7 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.logging.Logger;
 
 /**
  * SocksSocket tryies to look very similar to normal Socket, while allowing
@@ -57,7 +55,8 @@ public class SocksSocket extends Socket {
 	protected int localPort, remotePort;
 
 	private Socket directSock = null;
-	private Logger log = LoggerFactory.getLogger(SocksSocket.class);
+
+	private static final Logger log = Logger.getLogger(SocksSocket.class.getName());
 
 	/**
 	 * Tryies to connect to given host and port using default proxy. If no
@@ -107,7 +106,7 @@ public class SocksSocket extends Socket {
 	 *             <li>Any IO error occured.
 	 *             <li>Any protocol error occured.
 	 *             </ul>
-	 * @throws IOexception
+	 * @throws java.io.IOException
 	 *             if anything is wrong with I/O.
 	 * @see Socks5Proxy#resolveAddrLocally
 	 */
@@ -373,7 +372,7 @@ public class SocksSocket extends Socket {
 
 	private void doDirect() throws SocksException {
 		try {
-			log.debug("IP: {}_{}", remoteIP, remotePort);
+			log.fine("IP: "+ remoteIP + ":" +  remotePort);
 			directSock = new Socket(remoteIP, remotePort);
 			proxy.out = directSock.getOutputStream();
 			proxy.in = directSock.getInputStream();
