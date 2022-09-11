@@ -19,7 +19,7 @@ public class UserPasswordAuthenticator extends ServerAuthenticatorBase {
 	 * Construct a new UserPasswordAuthentication object, with given
 	 * UserVlaidation scheme.
 	 * 
-	 * @param v
+	 * @param validator
 	 *            UserValidation to use for validating users.
 	 */
 	public UserPasswordAuthenticator(UserValidation validator) {

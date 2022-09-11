@@ -1,6 +1,7 @@
 This project provides the revised source of the
 <http://sourceforge.net/projects/jsocks/> project as
-required by the LGPL.
+required by the LGPL. JSocks implement a SOCKS proxy
+(see <https://en.wikipedia.org/wiki/SOCKS>) in Java 6 and onwards.
 
 The git repository was started on a blank sheet,
 and then importing the sources, so all the
@@ -24,10 +25,13 @@ Mavenized.
 
 Updated for 2022.
 
+* Note: No code changes.
 * Logging is reverted to java.util.logging to
-  keep Java 1.6 compatibility.  Compile with Java 8.
-* IntelliJ and Eclipse does not report any warnings.
+  keep Java 1.6 compatibility and avoid dependencies for 
+  the runnable jar. Compile with Java 8.
+* IntelliJ and Eclipse report fewer warnings.
 * Creates a runnable jar.
 * GitHub Actions support.
+* Original source tree converted to Maven layout.
 
 /ravn - 2022-09-11

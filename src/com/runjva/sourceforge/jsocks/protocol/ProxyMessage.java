@@ -59,7 +59,7 @@ public abstract class ProxyMessage {
 	 * 
 	 * @param in
 	 *            Input stream to read response from.
-	 * @param clinetMode
+	 * @param client_mode
 	 *            If true read server response, else read client request.
 	 * @throws SocksException
 	 *             If server response code is not SOCKS_SUCCESS(0) and reading
@@ -76,7 +76,7 @@ public abstract class ProxyMessage {
 	 * @param out
 	 *            Output stream to which message should be written.
 	 */
-	public abstract void write(OutputStream out) throws SocksException,
+	public abstract void write(OutputStream out) throws
 			IOException;
 
 	/**

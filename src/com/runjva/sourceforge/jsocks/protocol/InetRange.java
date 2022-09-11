@@ -168,11 +168,11 @@ public class InetRange implements Cloneable {
 	 * previous attempts failed, try to resolve the hostname, and check wether
 	 * the ip associated with the host is in the range.It also repeats all
 	 * previos steps with the hostname obtained from InetAddress, but the name
-	 * is not allways the full name,it is quite likely to be the same. Well it
+	 * is not always the full name,it is quite likely to be the same. Well it
 	 * was on my machine.
 	 * </ol>
 	 * 
-	 * @param host
+	 * @param host0
 	 *            Host name to check.
 	 * @param attemptResolve
 	 *            Wether to lookup ip address which corresponds to the host,if

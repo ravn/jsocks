@@ -27,7 +27,7 @@ import com.runjva.sourceforge.jsocks.server.ServerAuthenticator;
  * this authentication scheme unless one have pretty good reason to do so. There
  * is a couple of other authentication schemes in socks.server package.
  *
- * @see socks.server.ServerAuthenticator
+ * @see ServerAuthenticator
  */
 public class ProxyServer implements Runnable {
 
