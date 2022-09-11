@@ -25,13 +25,14 @@ Mavenized.
 
 Updated for 2022.
 
-* Note: No code changes.
-* Logging is reverted to java.util.logging to
-  keep Java 1.6 compatibility and avoid dependencies for 
-  the runnable jar. Compile with Java 8.
+* Note: No code functionality changes.
+* Logging was reverted to java.util.logging to keep Java 1.6+ compatibility (slf4j 2.0 requires Java 8)
+  and avoid dependencies for
+  the runnable jar. If you need another logging framework, consider looking into the various slf4j tools
+  (<https://www.slf4j.org/legacy.html>)
 * IntelliJ and Eclipse report fewer warnings.
 * Creates a runnable jar.
-* GitHub Actions support.
+* GitHub Actions support. Exposes runnable jar as build artifact.
 * Original source tree converted to Maven layout.
 
 /ravn - 2022-09-11

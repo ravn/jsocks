@@ -34,7 +34,7 @@ jobs:
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
         with:
-          name: java-app
+          name: runnable-jar
           path: '${{ github.workspace }}/target/*.jar'
 
 #      - name: Publish to GitHub Packages Apache Maven

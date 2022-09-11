@@ -12,6 +12,7 @@
 	</properties>
 
 	<build>
+		<!--
 		<sourceDirectory>src</sourceDirectory>
 		<resources>
 			<resource>
@@ -21,6 +22,7 @@
 				</excludes>
 			</resource>
 		</resources>
+		-->
 		<plugins>
 			<!-- https://maven.apache.org/plugins/maven-compiler-plugin/compile-mojo.html -->
 			<plugin>
@@ -46,6 +48,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
+				<version>3.2.2</version>
 				<configuration>
 					<archive>
 						<manifest>
