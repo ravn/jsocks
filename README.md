@@ -36,6 +36,13 @@ Updated for 2022.
 * Original source tree converted to default Maven layout.
 * `mvn -q exec:java` should work.
 
+Pending:
+
+* Reformat sources according to a known style and add editor config and checkstyle config.
+* Handle SonarLint and IntelliJ reports.
+* Script running  tests in `helper/` against compiled server. Preferably on Java 6.
+
+
 Suggestion and bug fixes welcome.
 
-/ravn - 2022-09-11
+/ravn - 2022-12-17

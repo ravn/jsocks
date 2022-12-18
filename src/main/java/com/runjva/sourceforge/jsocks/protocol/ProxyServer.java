@@ -17,7 +17,7 @@ import java.util.logging.Logger;
 import com.runjva.sourceforge.jsocks.server.ServerAuthenticator;
 
 /**
- * SOCKS4 and SOCKS5 proxy, handles both protocols simultaniously. Implements
+ * SOCKS4 and SOCKS5 proxy, handles both protocols simultaneously. Implements
  * all SOCKS commands, including UDP relaying.
  * <p>
  * In order to use it you will need to implement ServerAuthenticator interface.
@@ -602,7 +602,7 @@ public class ProxyServer implements Runnable {
                 command2String(msg.command));
 
         final String user = msg.version == 4 ? ", User:" + msg.user : "";
-        log.fine("IP:" + msg.ip + ", Port:" + msg.port + user);
+        log.fine(String.format("IP:%s, Port:%d%s", msg.ip, msg.port, user));
     }
 
     private void pipe(final InputStream in, final OutputStream out)
