@@ -18,9 +18,8 @@ public class Socks5Proxy extends SocksProxyBase implements Cloneable {
 
 	// Data members
 	private Hashtable<Integer, Authentication> authMethods = new Hashtable<Integer, Authentication>();
-	private int selectedMethod;
 
-	boolean resolveAddrLocally = true;
+    boolean resolveAddrLocally = true;
 	UDPEncapsulation udp_encapsulation = null;
 
 	// Public Constructors
@@ -216,7 +215,7 @@ public class Socks5Proxy extends SocksProxyBase implements Cloneable {
 			out.flush();
 
 			final int versionNumber = in.read();
-			selectedMethod = in.read();
+            int selectedMethod = in.read();
 
 			if ((versionNumber < 0) || (selectedMethod < 0)) {
 				// EOF condition was reached
@@ -225,6 +224,7 @@ public class Socks5Proxy extends SocksProxyBase implements Cloneable {
 				throw new SocksException(SOCKS_PROXY_IO_ERROR, s);
 			}
 
+			//noinspection StatementWithEmptyBody
 			if (versionNumber < version) {
 				// What should we do??
 			}
@@ -287,8 +287,8 @@ public class Socks5Proxy extends SocksProxyBase implements Cloneable {
 		}
 	}
 
-	protected ProxyMessage formMessage(InputStream in) throws SocksException,
-			IOException {
+	protected ProxyMessage formMessage(InputStream in) throws
+            IOException {
 		return new Socks5Message(in);
 	}
 

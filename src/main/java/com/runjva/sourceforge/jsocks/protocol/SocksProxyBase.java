@@ -182,7 +182,7 @@ public abstract class SocksProxyBase {
 	/**
 	 * Get string representation of this proxy.
 	 * 
-	 * @returns string in the form:proxyHost:proxyPort \t Version versionNumber
+	 * @return string in the form:proxyHost:proxyPort \t Version versionNumber
 	 */
 	public String toString() {
 		return (proxyIP.getHostName() + ":" + proxyPort + "\tVersion " + version);
@@ -367,7 +367,7 @@ public abstract class SocksProxyBase {
 			throws UnknownHostException;
 
 	protected abstract ProxyMessage formMessage(InputStream in)
-			throws SocksException, IOException;
+			throws IOException;
 
 	protected ProxyMessage connect(InetAddress ip, int port)
 			throws SocksException {
@@ -418,7 +418,7 @@ public abstract class SocksProxyBase {
 		}
 	}
 
-	protected ProxyMessage accept() throws IOException, SocksException {
+	protected ProxyMessage accept() throws IOException {
 		ProxyMessage msg;
 		try {
 			msg = formMessage(in);
@@ -483,14 +483,14 @@ public abstract class SocksProxyBase {
 	/**
 	 *Sends the request to SOCKS server
 	 */
-	protected void sendMsg(ProxyMessage msg) throws SocksException, IOException {
+	protected void sendMsg(ProxyMessage msg) throws IOException {
 		msg.write(out);
 	}
 
 	/**
 	 * Reads the reply from the SOCKS server
 	 */
-	protected ProxyMessage readMsg() throws SocksException, IOException {
+	protected ProxyMessage readMsg() throws IOException {
 		return formMessage(in);
 	}
 

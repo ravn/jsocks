@@ -43,7 +43,7 @@ public class SocksDialog extends Dialog implements WindowListener,
 	List direct_list;
 	Checkbox socks4radio, socks5radio, none_check, up_check, gssapi_check;
 
-	Dialog warning_dialog;
+	final Dialog warning_dialog;
 	Label warning_label;
 
 	String host, user, password;
@@ -51,7 +51,7 @@ public class SocksDialog extends Dialog implements WindowListener,
 	Thread net_thread = null;
 
 	// CheckboxGroups
-	CheckboxGroup socks_group = new CheckboxGroup();
+    final CheckboxGroup socks_group = new CheckboxGroup();
 
 	SocksProxyBase proxy;
 	InetRange ir;
@@ -235,6 +235,7 @@ public class SocksDialog extends Dialog implements WindowListener,
 		}
 
 		// System.out.println("Done!");
+		//noinspection StatementWithEmptyBody
 		while (!warning_dialog.isShowing()) {
             /* do nothing */
 		}
@@ -308,8 +309,7 @@ public class SocksDialog extends Dialog implements WindowListener,
 	}
 
 	private void onAdd() {
-		final String s = direct_text.getText();
-		s.trim();
+		final String s = direct_text.getText().trim();
 		if (s.isEmpty()) {
 			return;
 		}

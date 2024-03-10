@@ -24,7 +24,7 @@ public class InetRange implements Cloneable {
 	Vector<Object[]> all;
 	Vector<String> end_names;
 
-	boolean useSeparateThread = true;
+	final boolean useSeparateThread = true;
 
 	/**
 	 * Creates the empty range.
@@ -82,7 +82,7 @@ public class InetRange implements Cloneable {
 				} else {
 					to = from;
 					while (i < 4) {
-						to += 255l << 8 * (3 - i++);
+						to += 255L << 8 * (3 - i++);
 					}
 					break;
 				}
@@ -280,11 +280,11 @@ public class InetRange implements Cloneable {
 			return "";
 		}
 
-		String s = all[0];
+		StringBuilder s = new StringBuilder(all[0]);
 		for (int i = 1; i < all.length; ++i) {
-			s += "; " + all[i];
+			s.append(String.format("; %s", all[i]));
 		}
-		return s;
+		return s.toString();
 	}
 
 	/** Creates a clone of this Object */
@@ -436,10 +436,10 @@ public class InetRange implements Cloneable {
 
 class InetRangeResolver implements Runnable {
 
-	Object[] entry;
+	final Object[] entry;
 
-	String from;
-	String to;
+	final String from;
+	final String to;
 
 	InetRangeResolver(final Object[] entry) {
 		this.entry = entry;
@@ -472,7 +472,7 @@ class InetRangeResolver implements Runnable {
 			if (from == null) {
 				final InetAddress ip = InetAddress.getByName((String) entry[0]);
 				entry[1] = ip;
-				final Long l = InetRange.ip2long(ip);
+				final long l = InetRange.ip2long(ip);
 				entry[2] = l;
 				entry[3] = l;
 			} else {

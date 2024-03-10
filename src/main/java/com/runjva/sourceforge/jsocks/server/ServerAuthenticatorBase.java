@@ -38,8 +38,8 @@ public abstract class ServerAuthenticatorBase implements ServerAuthenticator {
 
 	static final byte[] socks5response = { 5, 0 };
 
-	InputStream in;
-	OutputStream out;
+	final InputStream in;
+	final OutputStream out;
 
 	/**
 	 * Creates new instance of the ServerAuthenticatorNone.

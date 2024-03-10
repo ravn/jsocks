@@ -13,7 +13,7 @@ public class UserPasswordAuthenticator extends ServerAuthenticatorBase {
 
 	static final int METHOD_ID = 2;
 
-	UserValidation validator;
+	final UserValidation validator;
 
 	/**
 	 * Construct a new UserPasswordAuthentication object, with given

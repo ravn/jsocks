@@ -135,8 +135,8 @@ public class Socks4Proxy extends SocksProxyBase implements Cloneable {
 		return formMessage(cmd, InetAddress.getByName(host), port);
 	}
 
-	protected ProxyMessage formMessage(InputStream in) throws SocksException,
-			IOException {
+	protected ProxyMessage formMessage(InputStream in) throws
+            IOException {
 
 		return new Socks4Message(in, true);
 	}

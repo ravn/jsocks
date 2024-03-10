@@ -30,8 +30,8 @@ public class SocksServerSocket extends ServerSocket {
 	 *@param port
 	 *            Port number of the primary connection.
 	 */
-	public SocksServerSocket(String host, int port) throws SocksException,
-			UnknownHostException, IOException {
+	public SocksServerSocket(String host, int port) throws
+            IOException {
 		this(SocksProxyBase.defaultProxy, host, port);
 	}
 
@@ -47,7 +47,7 @@ public class SocksServerSocket extends ServerSocket {
 	 *            Port number of the primary connection.
 	 */
 	public SocksServerSocket(SocksProxyBase p, String host, int port)
-			throws SocksException, UnknownHostException, IOException {
+			throws IOException {
 
 		super(0);
 		if (p == null) {
@@ -73,8 +73,8 @@ public class SocksServerSocket extends ServerSocket {
 	 *@param port
 	 *            Port number of the primary connection.
 	 */
-	public SocksServerSocket(InetAddress ip, int port) throws SocksException,
-			IOException {
+	public SocksServerSocket(InetAddress ip, int port) throws
+            IOException {
 		this(SocksProxyBase.defaultProxy, ip, port);
 	}
 
@@ -90,7 +90,7 @@ public class SocksServerSocket extends ServerSocket {
 	 *            Port number of the primary connection.
 	 */
 	public SocksServerSocket(SocksProxyBase p, InetAddress ip, int port)
-			throws SocksException, IOException {
+			throws IOException {
 		super(0);
 
 		if (p == null) {
@@ -210,7 +210,7 @@ public class SocksServerSocket extends ServerSocket {
 	// Private Methods
 	// ////////////////
 
-	private void processReply(ProxyMessage reply) throws SocksException {
+	private void processReply(ProxyMessage reply) {
 		localPort = reply.port;
 		/*
 		 * If the server have assigned same host as it was contacted on it might

@@ -49,7 +49,7 @@ public class SocksEcho extends Frame implements ActionListener, Runnable,
 	TextArea output_textarea;
 	Label status_label;
 
-	SocksDialog socks_dialog;
+	final SocksDialog socks_dialog;
 
 	// Network related members
 	SocksProxyBase proxy = null;
@@ -62,7 +62,7 @@ public class SocksEcho extends Frame implements ActionListener, Runnable,
 	ServerSocket server_sock = null;
 	Socks5DatagramSocket udp_sock;
 
-	Object net_lock = new Object();
+	final Object net_lock = new Object();
 	int mode = COMMAND_MODE;
 
 	// Possible mode states.
@@ -352,8 +352,7 @@ public class SocksEcho extends Frame implements ActionListener, Runnable,
 	}
 
 	private boolean readHost() {
-		host = host_text.getText();
-		host.trim();
+		host = host_text.getText().trim();
 		if (host.isEmpty()) {
 			warn("Host is not set");
 			return false;

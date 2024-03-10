@@ -28,7 +28,7 @@ class UDPRelayServer implements Runnable {
 	Thread pipe_thread1, pipe_thread2;
 	Thread master_thread;
 
-	ServerAuthenticator auth;
+	final ServerAuthenticator auth;
 
 	long lastReadTime;
 

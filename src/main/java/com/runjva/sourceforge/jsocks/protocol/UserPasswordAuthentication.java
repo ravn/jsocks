@@ -8,7 +8,8 @@ public class UserPasswordAuthentication implements Authentication {
 	/** SOCKS ID for User/Password authentication method */
 	public final static int METHOD_ID = 2;
 
-	String userName, password;
+	final String userName;
+    final String password;
 	byte[] request;
 
 	/**

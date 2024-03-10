@@ -137,13 +137,12 @@ public class IdentAuthenticator extends ServerAuthenticatorBase {
 
 	/** Get String representaion of the IdentAuthenticator. */
 	public String toString() {
-		String s = "";
+		StringBuilder s = new StringBuilder();
 
 		for (int i = 0; i < hosts.size(); ++i) {
-			s += "(Range:" + hosts.elementAt(i) + "," + //
-					" Users:" + userNames(i) + ") ";
+            s.append(String.format("(Range:%s, Users:%s) ", hosts.elementAt(i), userNames(i)));
 		}
-		return s;
+		return s.toString();
 	}
 
 	// Private Methods
@@ -170,12 +169,12 @@ public class IdentAuthenticator extends ServerAuthenticatorBase {
 		if (!enumx.hasMoreElements()) {
 			return "";
 		}
-		String s = enumx.nextElement().toString();
+		StringBuilder s = new StringBuilder(enumx.nextElement().toString());
 		while (enumx.hasMoreElements()) {
-			s += "; " + enumx.nextElement();
+			s.append("; ").append(enumx.nextElement());
 		}
 
-		return s;
+		return s.toString();
 	}
 
 }

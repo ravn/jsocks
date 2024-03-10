@@ -51,7 +51,7 @@ public class Socks5DatagramSocket extends DatagramSocket {
      * to version4 proxy, which does not support datagram forwarding, throws
      * SocksException.
      */
-    public Socks5DatagramSocket() throws SocksException, IOException {
+    public Socks5DatagramSocket() throws IOException {
         this(SocksProxyBase.defaultProxy, 0, null);
     }
 
@@ -62,7 +62,7 @@ public class Socks5DatagramSocket extends DatagramSocket {
      * is not set or it is set to version4 proxy, which does not support
      * datagram forwarding, throws SocksException.
      */
-    public Socks5DatagramSocket(int port) throws SocksException, IOException {
+    public Socks5DatagramSocket(int port) throws IOException {
         this(SocksProxyBase.defaultProxy, port, null);
     }
 
@@ -74,7 +74,7 @@ public class Socks5DatagramSocket extends DatagramSocket {
      * support datagram forwarding, throws SocksException.
      */
     public Socks5DatagramSocket(int port, InetAddress ip)
-            throws SocksException, IOException {
+            throws IOException {
         this(SocksProxyBase.defaultProxy, port, ip);
     }
 
@@ -92,7 +92,7 @@ public class Socks5DatagramSocket extends DatagramSocket {
      * fails. See java.net.DatagramSocket for more details.
      */
     public Socks5DatagramSocket(SocksProxyBase p, int port, InetAddress ip)
-            throws SocksException, IOException {
+            throws IOException {
 
         super(port, ip);
 

@@ -102,15 +102,15 @@ public abstract class ProxyMessage {
 	// Package methods
 	// ////////////////
 
-	static final String bytes2IPV4(byte[] addr, int offset) {
-		String hostName = "" + (addr[offset] & 0xFF);
+	static String bytes2IPV4(byte[] addr, int offset) {
+		StringBuilder hostName = new StringBuilder("" + (addr[offset] & 0xFF));
 		for (int i = offset + 1; i < offset + 4; i++) {
-			hostName += "." + (addr[i] & 0xFF);
+			hostName.append(".").append(addr[i] & 0xFF);
 		}
-		return hostName;
+		return hostName.toString();
 	}
 
-	static final String bytes2IPV6(byte[] addr, int offset) {
+	static String bytes2IPV6(byte[] addr, int offset) {
 		// Have no idea how they look like!
 		return null;
 	}

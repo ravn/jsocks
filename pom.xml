@@ -5,7 +5,7 @@
 	<artifactId>jsocks</artifactId>
 	<version>0.0.2-SNAPSHOT</version>
 	<name>SOCKS proxy</name>
-	<description>Cloned from http://sourceforge.net/projects/jsocks/</description>
+	<description>Cloned from https://sourceforge.net/projects/jsocks/</description>
 
 	<properties>
 		<project.build.sourceEncoding>ASCII</project.build.sourceEncoding>

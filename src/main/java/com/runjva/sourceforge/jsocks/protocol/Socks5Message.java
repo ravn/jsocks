@@ -41,7 +41,7 @@ class Socks5Message extends ProxyMessage {
 	 *            - Request/Response code.
 	 * @param ip
 	 *            - IP field.
-	 * @paarm port - port field.
+	 * @param port - port field.
 	 */
 	public Socks5Message(int cmd, InetAddress ip, int port) {
 		super(cmd, ip, port);
@@ -89,7 +89,7 @@ class Socks5Message extends ProxyMessage {
 	 *            - Request/Response code.
 	 * @param hostName
 	 *            - IP field as hostName, uses ADDR_TYPE of HOSTNAME.
-	 * @paarm port - port field.
+	 * @param port - port field.
 	 */
 	public Socks5Message(int cmd, String hostName, int port) {
 		super(cmd, null, port);
@@ -238,7 +238,7 @@ class Socks5Message extends ProxyMessage {
 	 * @param out
 	 *            Output stream to which message should be written.
 	 */
-	public void write(OutputStream out) throws SocksException, IOException {
+	public void write(OutputStream out) throws IOException {
 		if (data == null) {
 			Socks5Message msg;
 
@@ -280,11 +280,7 @@ class Socks5Message extends ProxyMessage {
 	 * Returns string representation of the message.
 	 */
 	public String toString() {
-		// FIXME: Single line version, please.
-		final String s = "Socks5Message:" + "\n" + "VN   " + version + "\n"
-				+ "CMD  " + command + "\n" + "ATYP " + addrType + "\n"
-				+ "ADDR " + host + "\n" + "PORT " + port + "\n";
-		return s;
+        return String.format("Socks5Message:\nVN   %d\nCMD  %d\nATYP %d\nADDR %s\nPORT %d\n", version, command, addrType, host, port);
 	}
 
 	/**

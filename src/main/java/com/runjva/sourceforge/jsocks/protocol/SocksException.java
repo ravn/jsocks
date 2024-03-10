@@ -44,7 +44,7 @@ public class SocksException extends java.io.IOException {
 	/**
 	 * Construct a SocksException with given error code, and a Throwable cause
 	 * 
-	 * @param errCode
+	 * @param errCode error code, adds corresponding error string.
 	 * @param t
 	 *            Nested exception for debugging purposes.
 	 */
@@ -105,7 +105,7 @@ public class SocksException extends java.io.IOException {
 			"Authentication failed", "General SOCKS fault" };
 
 	String errString;
-	int errCode;
+	final int errCode;
 
 }// End of SocksException class
 

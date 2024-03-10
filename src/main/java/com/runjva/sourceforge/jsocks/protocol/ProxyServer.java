@@ -348,7 +348,7 @@ public class ProxyServer implements Runnable {
 
         log.info("Connected to " + s.getInetAddress() + ":" + s.getPort());
 
-        ProxyMessage response = null;
+        final ProxyMessage response;
         final InetAddress localAddress = s.getLocalAddress();
         final int localPort = s.getLocalPort();
 
@@ -365,7 +365,7 @@ public class ProxyServer implements Runnable {
     }
 
     private void onBind(final ProxyMessage msg) throws IOException {
-        ProxyMessage response = null;
+        final ProxyMessage response;
 
         if (proxy == null) {
             ss = new ServerSocket(0);
@@ -449,9 +449,10 @@ public class ProxyServer implements Runnable {
 
         relayServer.start();
 
-        // Make timeout infinit.
+        // Make timeout infinite.
         sock.setSoTimeout(0);
         try {
+            //noinspection StatementWithEmptyBody
             while (in.read() >= 0) {
                 /* do nothing */
                 // FIXME: Consider a slight delay here?
@@ -464,7 +465,7 @@ public class ProxyServer implements Runnable {
     // ////////////////
 
     private void doAccept() throws IOException {
-        Socket s = null;
+        Socket s;
         final long startTime = System.currentTimeMillis();
 
         while (true) {
@@ -596,7 +597,7 @@ public class ProxyServer implements Runnable {
         }
     }
 
-    static final void log(final ProxyMessage msg) {
+    static void log(final ProxyMessage msg) {
         log.fine("Request version: " + msg.version + ", Command: " +
                 command2String(msg.command));
 
@@ -635,7 +636,7 @@ public class ProxyServer implements Runnable {
 
     static final String[] command_names = {"CONNECT", "BIND", "UDP_ASSOCIATE"};
 
-    static final String command2String(int cmd) {
+    static String command2String(int cmd) {
         if ((cmd > 0) && (cmd < 4)) {
             return command_names[cmd - 1];
         } else {

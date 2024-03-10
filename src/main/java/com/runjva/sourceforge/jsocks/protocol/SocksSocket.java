@@ -106,8 +106,6 @@ public class SocksSocket extends Socket {
 	 *             <li>Any IO error occured.
 	 *             <li>Any protocol error occured.
 	 *             </ul>
-	 * @throws java.io.IOException
-	 *             if anything is wrong with I/O.
 	 * @see Socks5Proxy#resolveAddrLocally
 	 */
 	public SocksSocket(SocksProxyBase p, String host, int port)
@@ -192,7 +190,7 @@ public class SocksSocket extends Socket {
 	/**
 	 * Same as Socket
 	 */
-	public void close() throws IOException {
+	public void close() {
 		if (proxy != null) {
 			proxy.endSession();
 		}
@@ -338,15 +336,14 @@ public class SocksSocket extends Socket {
 		if (directSock != null) {
 			return "Direct connection:" + directSock;
 		}
-        String sb = String.format("Proxy:%s;addr:%s,port:%d,localport:%d", proxy, remoteHost, remotePort, localPort);
-		return sb;
+        return String.format("Proxy:%s;addr:%s,port:%d,localport:%d", proxy, remoteHost, remotePort, localPort);
 
 	}
 
 	// Private Methods
 	// ////////////////
 
-	private void processReply(ProxyMessage reply) throws SocksException {
+	private void processReply(ProxyMessage reply) {
 		localPort = reply.port;
 		/*
 		 * If the server have assigned same host as it was contacted on it might
