@@ -134,9 +134,9 @@ public class Socks5Proxy extends SocksProxyBase implements Cloneable {
 		}
 		if (method == null) {
 			// Want to remove a particular method
-			return (authMethods.remove(new Integer(methodId)) != null);
+			return (authMethods.remove(methodId) != null);
 		} else {// Add the method, or rewrite old one
-			authMethods.put(new Integer(methodId), method);
+			authMethods.put(methodId, method);
 		}
 		return true;
 	}
@@ -149,7 +149,7 @@ public class Socks5Proxy extends SocksProxyBase implements Cloneable {
 	 * @return Implementation for given method or null, if one was not set.
 	 */
 	public Authentication getAuthenticationMethod(int methodId) {
-		final Authentication method = authMethods.get(new Integer(methodId));
+		final Authentication method = authMethods.get(methodId);
 		if (method == null) {
 			return null;
 		}

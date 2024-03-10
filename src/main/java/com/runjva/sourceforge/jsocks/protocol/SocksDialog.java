@@ -97,16 +97,15 @@ public class SocksDialog extends Dialog implements WindowListener,
 		guiInit();
 		setResizable(false);
 		addWindowListener(this);
-		final Component[] comps = getComponents();
-		for (int i = 0; i < comps.length; ++i) {
-			if (comps[i] instanceof Button) {
-				((Button) comps[i]).addActionListener(this);
-			} else if (comps[i] instanceof TextField) {
-				((TextField) comps[i]).addActionListener(this);
-			} else if (comps[i] instanceof Checkbox) {
-				((Checkbox) comps[i]).addItemListener(this);
-			}
-		}
+        for (Component comp : getComponents()) {
+            if (comp instanceof Button) {
+                ((Button) comp).addActionListener(this);
+            } else if (comp instanceof TextField) {
+                ((TextField) comp).addActionListener(this);
+            } else if (comp instanceof Checkbox) {
+                ((Checkbox) comp).addItemListener(this);
+            }
+        }
 		proxy = init_proxy;
 		if (proxy != null) {
 			doInit(proxy);
@@ -316,12 +315,11 @@ public class SocksDialog extends Dialog implements WindowListener,
 			return;
 		}
 		// Check for Duplicate
-		final String[] direct_hosts = direct_list.getItems();
-		for (int i = 0; i < direct_hosts.length; ++i) {
-			if (direct_hosts[i].equals(s)) {
-				return;
-			}
-		}
+        for (String directHost : direct_list.getItems()) {
+            if (directHost.equals(s)) {
+                return;
+            }
+        }
 
 		direct_list.add(s);
 		ir.add(s);
@@ -402,9 +400,9 @@ public class SocksDialog extends Dialog implements WindowListener,
 		ir = (InetRange) (p.directHosts.clone());
 		final String[] direct_hosts = ir.getAll();
 		direct_list.removeAll();
-		for (int i = 0; i < direct_hosts.length; ++i) {
-			direct_list.add(direct_hosts[i]);
-		}
+        for (String directHost : direct_hosts) {
+            direct_list.add(directHost);
+        }
 
 		host_text.setText(p.proxyIP.getHostName());
 		port_text.setText("" + p.proxyPort);

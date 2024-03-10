@@ -96,14 +96,13 @@ public class SocksEcho extends Frame implements ActionListener, Runnable,
 		}
 
 		addWindowListener(this);
-		final Component component[] = getComponents();
-		for (int i = 0; i < component.length; ++i) {
-			if (component[i] instanceof Button) {
-				((Button) component[i]).addActionListener(this);
-			} else if (component[i] instanceof TextField) {
-				((TextField) component[i]).addActionListener(this);
-			}
-		}
+        for (Component value : getComponents()) {
+            if (value instanceof Button) {
+                ((Button) value).addActionListener(this);
+            } else if (value instanceof TextField) {
+                ((TextField) value).addActionListener(this);
+            }
+        }
 
 	}
 

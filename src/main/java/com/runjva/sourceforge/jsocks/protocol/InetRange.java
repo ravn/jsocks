@@ -87,7 +87,7 @@ public class InetRange implements Cloneable {
 					break;
 				}
 			}
-			entry = new Object[] { s, null, new Long(from), new Long(to) };
+			entry = new Object[] { s, null, from, to};
 			all.addElement(entry);
 
 		} else if (s.startsWith(".")) {
@@ -122,8 +122,7 @@ public class InetRange implements Cloneable {
 	public synchronized void add(final InetAddress ip) {
 		long from, to;
 		from = to = ip2long(ip);
-		all.addElement(new Object[] { ip.getHostName(), ip, new Long(from),
-				new Long(to) });
+		all.addElement(new Object[] { ip.getHostName(), ip, from, to});
 	}
 
 	/**
@@ -139,7 +138,7 @@ public class InetRange implements Cloneable {
 	public synchronized void add(final InetAddress from, final InetAddress to) {
 		all.addElement(new Object[] {
 				from.getHostAddress() + ":" + to.getHostAddress(), null,
-				new Long(ip2long(from)), new Long(ip2long(to)) });
+                ip2long(from), ip2long(to)});
 	}
 
 	/**
@@ -311,8 +310,7 @@ public class InetRange implements Cloneable {
 			final Object[] obj = enumx.nextElement();
 			final Long from = obj[2] == null ? null : (Long) obj[2];
 			final Long to = obj[3] == null ? null : (Long) obj[3];
-			if ((from != null) && (from.longValue() <= ip)
-					&& (to.longValue() >= ip)) {
+			if ((from != null) && (from <= ip) && (to >= ip)) {
 				return true;
 			}
 
@@ -338,7 +336,7 @@ public class InetRange implements Cloneable {
 		// First check if it's in the form ddd.ddd.ddd.ddd.
 		final long ip = host2long((String) entry[0]);
 		if (ip >= 0) {
-			entry[2] = entry[3] = new Long(ip);
+			entry[2] = entry[3] = ip;
 		} else {
 			final InetRangeResolver res = new InetRangeResolver(entry);
 			res.resolve(useSeparateThread);
@@ -349,8 +347,8 @@ public class InetRange implements Cloneable {
 			final String to) {
 		long f, t;
 		if (((f = host2long(from)) >= 0) && ((t = host2long(to)) >= 0)) {
-			entry[2] = new Long(f);
-			entry[3] = new Long(t);
+			entry[2] = f;
+			entry[3] = t;
 		} else {
 			final InetRangeResolver res = new InetRangeResolver(entry, from, to);
 			res.resolve(useSeparateThread);
@@ -474,14 +472,14 @@ class InetRangeResolver implements Runnable {
 			if (from == null) {
 				final InetAddress ip = InetAddress.getByName((String) entry[0]);
 				entry[1] = ip;
-				final Long l = new Long(InetRange.ip2long(ip));
+				final Long l = InetRange.ip2long(ip);
 				entry[2] = l;
 				entry[3] = l;
 			} else {
 				final InetAddress f = InetAddress.getByName(from);
 				final InetAddress t = InetAddress.getByName(to);
-				entry[2] = new Long(InetRange.ip2long(f));
-				entry[3] = new Long(InetRange.ip2long(t));
+				entry[2] = InetRange.ip2long(f);
+				entry[3] = InetRange.ip2long(t);
 
 			}
 		} catch (final UnknownHostException uhe) {
