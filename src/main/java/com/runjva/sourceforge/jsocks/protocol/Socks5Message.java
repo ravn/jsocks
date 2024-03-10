@@ -99,7 +99,7 @@ class Socks5Message extends ProxyMessage {
 		log.fine("Doing ATYP_DOMAINNAME");
 
 		addrType = SOCKS_ATYP_DOMAINNAME;
-		final byte addr[] = hostName.getBytes();
+		final byte[] addr = hostName.getBytes();
 
 		data = new byte[7 + addr.length];
 		data[0] = (byte) SOCKS_VERSION; // Version
@@ -199,7 +199,7 @@ class Socks5Message extends ProxyMessage {
 		di.readUnsignedByte();
 		addrType = di.readUnsignedByte();
 
-		byte addr[];
+		byte[] addr;
 
 		switch (addrType) {
 		case SOCKS_ATYP_IPV4:

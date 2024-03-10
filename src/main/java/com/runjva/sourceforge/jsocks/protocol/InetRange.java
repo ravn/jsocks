@@ -59,7 +59,7 @@ public class InetRange implements Cloneable {
 		}
 
 		String s = s0.trim();
-		if (s.length() == 0) {
+		if (s.isEmpty()) {
 			return false;
 		}
 
@@ -180,12 +180,12 @@ public class InetRange implements Cloneable {
 	 */
 	public synchronized boolean contains(final String host0,
 			final boolean attemptResolve) {
-		if (all.size() == 0) {
+		if (all.isEmpty()) {
 			return false; // Empty range
 		}
 
 		String host = host0.trim();
-		if (host.length() == 0) {
+		if (host.isEmpty()) {
 			return false;
 		}
 
@@ -242,8 +242,8 @@ public class InetRange implements Cloneable {
 	 */
 	public synchronized String[] getAll() {
 		final int size = all.size();
-		Object entry[];
-		final String all_names[] = new String[size];
+		Object[] entry;
+		final String[] all_names = new String[size];
 
 		for (int i = 0; i < size; ++i) {
 			entry = all.elementAt(i);
@@ -275,7 +275,7 @@ public class InetRange implements Cloneable {
 
 	/** Get string representaion of this Range. */
 	public String toString() {
-		final String all[] = getAll();
+		final String[] all = getAll();
 		if (all.length == 0) {
 			return "";
 		}

@@ -236,11 +236,10 @@ public class SocksDialog extends Dialog implements WindowListener,
 
 		// System.out.println("Done!");
 		while (!warning_dialog.isShowing()) {
-			; /* do nothing */
+            /* do nothing */
 		}
-		;
 
-		warning_dialog.dispose();
+        warning_dialog.dispose();
 		// dispose(); //End Dialog
 	}
 
@@ -251,23 +250,23 @@ public class SocksDialog extends Dialog implements WindowListener,
 		user = user_text.getText();
 		password = password_text.getText();
 
-		if (host.length() == 0) {
+		if (host.isEmpty()) {
 			warn("Proxy host is not set!");
 			return;
 		}
 		if (socks_group.getSelectedCheckbox() == socks4radio) {
-			if (user.length() == 0) {
+			if (user.isEmpty()) {
 				warn("User name is not set");
 				return;
 			}
 
 		} else {
 			if (up_check.getState()) {
-				if (user.length() == 0) {
+				if (user.isEmpty()) {
 					warn("User name is not set.");
 					return;
 				}
-				if (password.length() == 0) {
+				if (password.isEmpty()) {
 					warn("Password is not set.");
 					return;
 				}
@@ -311,7 +310,7 @@ public class SocksDialog extends Dialog implements WindowListener,
 	private void onAdd() {
 		final String s = direct_text.getText();
 		s.trim();
-		if (s.length() == 0) {
+		if (s.isEmpty()) {
 			return;
 		}
 		// Check for Duplicate

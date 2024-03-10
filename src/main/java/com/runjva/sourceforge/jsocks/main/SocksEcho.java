@@ -354,7 +354,7 @@ public class SocksEcho extends Frame implements ActionListener, Runnable,
 	private boolean readHost() {
 		host = host_text.getText();
 		host.trim();
-		if (host.length() < 1) {
+		if (host.isEmpty()) {
 			warn("Host is not set");
 			return false;
 		}

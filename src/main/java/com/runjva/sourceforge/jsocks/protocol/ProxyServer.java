@@ -454,7 +454,6 @@ public class ProxyServer implements Runnable {
         try {
             while (in.read() >= 0) {
                 /* do nothing */
-                ;
                 // FIXME: Consider a slight delay here?
             }
         } catch (final EOFException eofe) {
@@ -634,7 +633,7 @@ public class ProxyServer implements Runnable {
         }
     }
 
-    static final String command_names[] = {"CONNECT", "BIND", "UDP_ASSOCIATE"};
+    static final String[] command_names = {"CONNECT", "BIND", "UDP_ASSOCIATE"};
 
     static final String command2String(int cmd) {
         if ((cmd > 0) && (cmd < 4)) {

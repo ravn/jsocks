@@ -93,13 +93,13 @@ public class SocksException extends java.io.IOException {
 
 	static final String UNASSIGNED_ERROR_MESSAGE = "Unknown error message";
 
-	static final String serverReplyMessage[] = { "Succeeded",
+	static final String[] serverReplyMessage = { "Succeeded",
 			"General SOCKS server failure",
 			"Connection not allowed by ruleset", "Network unreachable",
 			"Host unreachable", "Connection refused", "TTL expired",
 			"Command not supported", "Address type not supported" };
 
-	static final String localErrorMessage[] = { "SOCKS server not specified",
+	static final String[] localErrorMessage = { "SOCKS server not specified",
 			"Unable to contact SOCKS server", "IO error",
 			"None of Authentication methods are supported",
 			"Authentication failed", "General SOCKS fault" };

@@ -161,8 +161,8 @@ public abstract class ServerAuthenticatorBase implements ServerAuthenticator {
 		if (num_methods <= 0) {
 			return false;
 		}
-		final byte method_ids[] = new byte[num_methods];
-		final byte response[] = new byte[2];
+		final byte[] method_ids = new byte[num_methods];
+		final byte[] response = new byte[2];
 		boolean found = false;
 
 		response[0] = (byte) 5; // SOCKS version
